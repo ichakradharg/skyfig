@@ -7,6 +7,7 @@ on:
       - "Package.swift"
       - "Package.resolved"
       - "Sources/Skyfig/**"
+      - "Docs/pages-index.html"
       - ".github/workflows/publish-docc.yml"
   workflow_dispatch:
 
@@ -37,6 +38,9 @@ jobs:
             --transform-for-static-hosting \
             --hosting-base-path skyfig \
             --output-path .build/docc-site
+
+      - name: Add documentation home redirect
+        run: cp Docs/pages-index.html .build/docc-site/index.html
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
