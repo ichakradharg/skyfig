@@ -7,3 +7,6 @@ swift run SkyfigShowcase
 ```
 
 Toggle the system appearance to see the same typed color tokens resolve for light and dark themes.
+# Examples
+
+- [Skyfig consumer sample](SkyfigConsumer/README.md) is a standalone iOS 26+ SwiftUI app that imports Skyfig through a separate package boundary.

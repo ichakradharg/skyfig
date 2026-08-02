@@ -23,6 +23,14 @@ jobs:
         run: swift package dump-package >/dev/null
       - name: Build
         run: swift build
+      - name: Build iOS consumer sample
+        run: |
+          xcodebuild build \
+            -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
+            -scheme SkyfigConsumer \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
       - name: Test
         run: swift test --parallel
       - name: Verify canonical and generated tokens

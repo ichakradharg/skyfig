@@ -1,0 +1,17 @@
+# Skyfig consumer sample
+
+This is a small iOS 26+ SwiftUI app that consumes the `Skyfig` library through a separate iOS app project. It demonstrates the generated `SkyfigTokens` API in a five-tab navigation interface, including the dedicated search tab, an app-bar add button, a design-system preview screen, and token-driven content in every tab. The target supports both iPhone and iPad.
+
+## Run it
+
+1. Open `Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj` in Xcode.
+2. Select an iOS 26 iPhone or iPad simulator and run the `SkyfigConsumer` scheme.
+3. Switch the simulator between light and dark appearance to see generated color tokens resolve automatically.
+
+The sample temporarily uses a local package dependency so this repository can test the consumer boundary before Skyfig has a released version. After the first release, replace that dependency with the public GitHub package URL and version requirement used by your app.
+
+## What it proves
+
+- A separate package can import the public `Skyfig` library product.
+- A SwiftUI app can use generated colors, typography, spacing, corner radii, borders, and elevation shadows across a full tab interface.
+- The generated API remains the sole visual-value source; the sample has no copied token values.
