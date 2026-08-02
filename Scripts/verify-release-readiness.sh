@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-doc_output="${RUNNER_TEMP:-/tmp}/skyfig-docc"
+doc_output=".build/release-docc"
 rm -rf "$doc_output"
 
 swift build

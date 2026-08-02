@@ -49,8 +49,10 @@ jobs:
           git diff --check
       - name: Build rendered documentation
         run: |
-          swift package generate-documentation --target Skyfig --output-path "$RUNNER_TEMP/skyfig-docc"
-          test -f "$RUNNER_TEMP/skyfig-docc/documentation/skyfig/index.html"
+          output_path="$GITHUB_WORKSPACE/.build/docc-site"
+          rm -rf "$output_path"
+          swift package generate-documentation --target Skyfig --output-path "$output_path"
+          test -f "$output_path/documentation/skyfig/index.html"
       - name: Check local Markdown links
         run: python3 Scripts/check-markdown-links.py
 

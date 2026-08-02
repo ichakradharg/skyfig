@@ -2,7 +2,6 @@
 
 @Metadata {
     @DisplayName("Skyfig")
-    @TechnologyRoot
 }
 
 Reviewed, typed SwiftUI design tokens for iOS, macOS, and tvOS apps.
