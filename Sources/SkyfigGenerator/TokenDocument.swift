@@ -1,5 +1,6 @@
 import Foundation
 
+/// The canonical, schema-backed token document consumed by the generator.
 public struct TokenDocument: Codable, Equatable, Sendable {
     public let schemaURL: String
     public let schemaVersion: String
@@ -34,6 +35,7 @@ public struct TokenDocument: Codable, Equatable, Sendable {
     }
 }
 
+/// The supported token families in a canonical token document.
 public struct TokenCollection: Codable, Equatable, Sendable {
     public let colors: [String: ColorToken]
     public let typography: [String: TypographyToken]
@@ -59,6 +61,7 @@ public struct TokenCollection: Codable, Equatable, Sendable {
     }
 }
 
+/// A color token with canonical light and dark color values.
 public struct ColorToken: Codable, Equatable, Sendable {
     public let description: String?
     public let values: [String: String]
@@ -69,6 +72,7 @@ public struct ColorToken: Codable, Equatable, Sendable {
     }
 }
 
+/// A single dimension token measured in points.
 public struct DimensionToken: Codable, Equatable, Sendable {
     public let description: String?
     public let value: Double
@@ -79,6 +83,7 @@ public struct DimensionToken: Codable, Equatable, Sendable {
     }
 }
 
+/// A typography token and its component value.
 public struct TypographyToken: Codable, Equatable, Sendable {
     public let description: String?
     public let value: TypographyValue
@@ -89,6 +94,7 @@ public struct TypographyToken: Codable, Equatable, Sendable {
     }
 }
 
+/// The font metrics stored by a typography token.
 public struct TypographyValue: Codable, Equatable, Sendable {
     public let fontFamily: String
     public let fontSize: Double
@@ -111,6 +117,7 @@ public struct TypographyValue: Codable, Equatable, Sendable {
     }
 }
 
+/// A shadow token containing ordered shadow layers.
 public struct ShadowToken: Codable, Equatable, Sendable {
     public let description: String?
     public let value: [ShadowLayer]
@@ -121,6 +128,7 @@ public struct ShadowToken: Codable, Equatable, Sendable {
     }
 }
 
+/// The canonical representation of one shadow layer.
 public struct ShadowLayer: Codable, Equatable, Sendable {
     public enum Kind: String, Codable, Equatable, Sendable {
         case drop

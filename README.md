@@ -39,6 +39,13 @@ The raw Figma response exists only in the Actions runner's temporary directory. 
 
 The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confined to the public runtime conveniences and showcase.
 
+## Documentation
+
+- [Codebase guide](Docs/CODEBASE_GUIDE.md) explains the repository structure, token flow, and public API boundaries.
+- [CLI reference](Docs/CLI_REFERENCE.md) documents validation, normalization, generation, and generated-source checks.
+- [Figma token-source options](FIGMA_TOKEN_SOURCE_OPTIONS.md) explains fixture and live-sync workflows.
+- [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) describe package publication for iOS consumers.
+
 ## iOS consumer quick start
 
 Skyfig is designed to be the central, versioned source of typed design tokens. App repositories do not need Figma credentials or a token-generation workflow.

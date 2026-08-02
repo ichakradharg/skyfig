@@ -1,5 +1,6 @@
 import Foundation
 
+/// Generates deterministic typed Swift source from a validated token document.
 public enum SwiftEmitter {
     public static func generate(_ document: TokenDocument) throws -> String {
         try document.validate()
@@ -41,6 +42,7 @@ public enum SwiftEmitter {
     }
 }
 
+/// Errors reported while generating or checking generated Swift source.
 public enum GeneratorError: Error, CustomStringConvertible, Equatable {
     case invalidColor(String)
     case staleOutput(String)

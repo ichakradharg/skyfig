@@ -2,6 +2,7 @@
 import SwiftUI
 
 public extension SkyfigRGBAColor {
+    /// Converts this sRGB value into a SwiftUI color.
     var color: Color {
         Color(
             .sRGB,
@@ -14,12 +15,14 @@ public extension SkyfigRGBAColor {
 }
 
 public extension SkyfigColorToken {
+    /// Resolves this token for a SwiftUI color scheme.
     func color(for colorScheme: ColorScheme) -> Color {
         value(for: colorScheme == .dark ? .dark : .light).color
     }
 }
 
 public extension SkyfigTypographyToken {
+    /// Converts this token into a SwiftUI font.
     var font: Font {
         if fontFamily.caseInsensitiveCompare("system") == .orderedSame {
             return .system(size: fontSize, weight: fontWeight.swiftUIWeight)
@@ -27,12 +30,14 @@ public extension SkyfigTypographyToken {
         return .custom(fontFamily, size: fontSize).weight(fontWeight.swiftUIWeight)
     }
 
+    /// The additional SwiftUI line spacing implied by the token's line height.
     var lineSpacing: Double {
         max(0, lineHeight - fontSize)
     }
 }
 
 public extension SkyfigFontWeight {
+    /// Converts this token weight into the matching SwiftUI font weight.
     var swiftUIWeight: Font.Weight {
         switch self {
         case .ultraLight: .ultraLight
