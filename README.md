@@ -59,6 +59,16 @@ Skyfig is designed to be the central, versioned source of typed design tokens. A
 
 The package exposes typed token values; it does not contact Figma at app runtime. See [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) for how new token versions are published.
 
+## See it in a real iOS app
+
+The repository includes [SkyfigConsumer](Examples/SkyfigConsumer/README.md), an iOS 26+ SwiftUI sample that imports Skyfig through a separate app project. It is a practical reference for package consumers and demonstrates:
+
+- a modern, full-screen iPhone presentation and an adaptive iPad layout;
+- five token-driven tabs: Home, Library, Activity, Profile, and Search;
+- a native search-tab role, an app-bar add button, and generated colors, typography, spacing, corner radii, and elevation shadows.
+
+Open `Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj`, select an iOS 26 iPhone or iPad simulator, and run the `SkyfigConsumer` scheme. The [sample guide](Examples/SkyfigConsumer/README.md) includes the full verification steps.
+
 ## Add Skyfig to an app
 
 After the first tagged release, add the package URL in Xcode or in `Package.swift`:
