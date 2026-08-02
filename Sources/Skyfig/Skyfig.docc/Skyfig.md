@@ -21,6 +21,7 @@ Skyfig's maintainer workflow is deliberately separate: a protected central repos
 - <doc:TokenUpdates>
 - <doc:ConsumerSample>
 - <doc:Troubleshooting>
+- <doc:Architecture>
 
 ### Generated tokens
 

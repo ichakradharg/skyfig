@@ -10,3 +10,4 @@ Toggle the system appearance to see the same typed color tokens resolve for ligh
 # Examples
 
 - [Skyfig consumer sample](SkyfigConsumer/README.md) is a standalone iOS 26+ SwiftUI app that imports Skyfig through a separate package boundary.
+- [Skyfig package consumer](SkyfigPackageConsumer/README.md) is a minimal package-level smoke test for the public API.

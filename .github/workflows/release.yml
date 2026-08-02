@@ -59,12 +59,10 @@ jobs:
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           printf '### Proposed release\n- Tag: `%s`\n- Commit: `%s`\n' "$tag" "$sha" >> "$GITHUB_STEP_SUMMARY"
-      - name: Build and test
-        run: |
-          swift build
-          swift test --parallel
-          swift run skyfig validate --input Tokens/skyfig.tokens.json
-          swift run skyfig generate --input Tokens/skyfig.tokens.json --output Sources/Skyfig/Generated --check
+      - name: Verify release readiness
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_26.0.1.app/Contents/Developer
+        run: bash Scripts/verify-release-readiness.sh
 
   publish:
     needs: prepare
