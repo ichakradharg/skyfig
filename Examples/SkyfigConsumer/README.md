@@ -1,6 +1,6 @@
 # Skyfig consumer sample
 
-This is a small iOS 26+ SwiftUI app that consumes the `Skyfig` library through a separate iOS app project. It demonstrates the generated `SkyfigTokens` API in a five-tab navigation interface, including the dedicated search tab, an app-bar add button, a design-system preview screen, and token-driven content in every tab. The target supports both iPhone and iPad.
+This is a small iOS 26+ SwiftUI app that consumes the `Skyfig` library through a separate iOS app project. It demonstrates the generated `SkyfigTokens` API in a five-tab navigation interface, including the dedicated search tab, an app-bar add button, a design-system preview screen, and token-driven content in every tab. The adaptive tab style keeps the familiar tab bar on iPhone and uses iPad's floating tab bar/sidebar presentation.
 
 ## Run it
 

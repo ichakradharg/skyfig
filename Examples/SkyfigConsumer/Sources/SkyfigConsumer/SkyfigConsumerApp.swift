@@ -14,44 +14,52 @@ private struct ConsumerTabShell: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        TabView {
-            Tab("Home", systemImage: "house.fill") {
-                HomePreview()
-            }
+        ZStack {
+            SkyfigTokens.Colors.Surface.secondary.color(for: colorScheme)
+                .ignoresSafeArea()
 
-            Tab("Library", systemImage: "square.grid.2x2.fill") {
-                TabPlaceholder(
-                    title: "Library",
-                    symbol: "books.vertical.fill",
-                    message: "A package consumer can reuse the same generated tokens across every tab."
-                )
-            }
+            TabView {
+                Tab("Home", systemImage: "house") {
+                    HomePreview()
+                }
 
-            Tab("Activity", systemImage: "bell.fill") {
-                TabPlaceholder(
-                    title: "Activity",
-                    symbol: "bell.badge.fill",
-                    message: "Notifications, badges, and surfaces inherit the same design-system values."
-                )
-            }
+                Tab("Library", systemImage: "square.grid.2x2") {
+                    TabPlaceholder(
+                        title: "Library",
+                        symbol: "books.vertical",
+                        message: "A package consumer can reuse the same generated tokens across every tab."
+                    )
+                }
 
-            Tab("Profile", systemImage: "person.crop.circle.fill") {
-                TabPlaceholder(
-                    title: "Profile",
-                    symbol: "person.crop.circle.fill",
-                    message: "The profile experience uses the same public token API as the rest of the app."
-                )
-            }
+                Tab("Activity", systemImage: "bell") {
+                    TabPlaceholder(
+                        title: "Activity",
+                        symbol: "bell.badge",
+                        message: "Notifications, badges, and surfaces inherit the same design-system values."
+                    )
+                }
 
-            Tab("Search", systemImage: "magnifyingglass", role: .search) {
-                TabPlaceholder(
-                    title: "Search",
-                    symbol: "magnifyingglass",
-                    message: "The fifth tab uses the dedicated iOS search role and its floating presentation."
-                )
+                Tab("Profile", systemImage: "person.crop.circle") {
+                    TabPlaceholder(
+                        title: "Profile",
+                        symbol: "person.crop.circle",
+                        message: "The profile experience uses the same public token API as the rest of the app."
+                    )
+                }
+
+                Tab("Search", systemImage: "magnifyingglass", role: .search) {
+                    TabPlaceholder(
+                        title: "Search",
+                        symbol: "magnifyingglass",
+                        message: "The fifth tab uses the dedicated iOS search role and its floating presentation."
+                    )
+                }
             }
+            .tabViewStyle(.sidebarAdaptable)
+            .tabBarMinimizeBehavior(.onScrollDown)
         }
         .tint(SkyfigTokens.Colors.accent.color(for: colorScheme))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -89,7 +97,7 @@ private struct HomePreview: View {
                 }
                 .padding(SkyfigTokens.Spacing.lg)
             }
-            .background(secondarySurface)
+                .background(secondarySurface.ignoresSafeArea())
             .navigationTitle("Skyfig")
             .toolbar {
                 #if os(iOS)
@@ -315,7 +323,7 @@ private struct TabPlaceholder: View {
                 }
                 .padding(SkyfigTokens.Spacing.lg)
             }
-            .background(background)
+            .background(background.ignoresSafeArea())
             .navigationTitle(title)
         }
     }
