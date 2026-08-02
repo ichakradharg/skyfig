@@ -1,0 +1,115 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Stable SemVer without the v prefix (for example 1.2.3)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skyfig-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: macos-15
+    timeout-minutes: 20
+    outputs:
+      sha: ${{ steps.meta.outputs.sha }}
+      tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+      - id: meta
+        shell: bash
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          [[ "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || {
+            echo '::error::Version must be stable SemVer X.Y.Z'; exit 1;
+          }
+          tag="v$VERSION"
+          sha="$(git rev-parse HEAD)"
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            [[ "$(git rev-list -n 1 "$tag")" == "$sha" ]] || {
+              echo '::error::Tag already points to another commit'; exit 1;
+            }
+          else
+            latest=''
+            while IFS= read -r candidate; do
+              if [[ "$candidate" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then latest="$candidate"; break; fi
+            done < <(git tag --list 'v*' --sort=-version:refname)
+            if [[ -n "$latest" ]]; then
+              IFS=. read -r a b c <<< "$VERSION"
+              IFS=. read -r x y z <<< "${latest#v}"
+              (( a > x || (a == x && b > y) || (a == x && b == y && c > z) )) || {
+                echo "::error::$tag must be greater than $latest"; exit 1;
+              }
+            fi
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          printf '### Proposed release\n- Tag: `%s`\n- Commit: `%s`\n' "$tag" "$sha" >> "$GITHUB_STEP_SUMMARY"
+      - name: Build and test
+        run: |
+          swift build
+          swift test --parallel
+          swift run skyfig validate --input Tokens/skyfig.tokens.json
+          swift run skyfig generate --input Tokens/skyfig.tokens.json --output Sources/Skyfig/Generated --check
+
+  publish:
+    needs: prepare
+    runs-on: macos-15
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    environment:
+      name: release
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Create immutable tag and GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          SHA: ${{ needs.prepare.outputs.sha }}
+        run: |
+          set -euo pipefail
+          [[ "$(git rev-parse HEAD)" == "$SHA" ]] || exit 1
+          git fetch --force --tags origin
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            [[ "$(git rev-list -n 1 "$TAG")" == "$SHA" ]] || { echo '::error::Tag collision'; exit 1; }
+          else
+            latest=''
+            while IFS= read -r candidate; do
+              if [[ "$candidate" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then latest="$candidate"; break; fi
+            done < <(git tag --list 'v*' --sort=-version:refname)
+            if [[ -n "$latest" ]]; then
+              IFS=. read -r a b c <<< "${TAG#v}"
+              IFS=. read -r x y z <<< "${latest#v}"
+              (( a > x || (a == x && b > y) || (a == x && b == y && c > z) )) || {
+                echo "::error::$TAG must be greater than $latest"; exit 1;
+              }
+            fi
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git tag -a "$TAG" -m "Skyfig $TAG" "$SHA"
+          fi
+          gh auth setup-git
+          git push origin "refs/tags/$TAG"
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --verify-tag --title "Skyfig $TAG" --generate-notes
+          fi

@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "variableCollections": {
+      "collection": {
+        "defaultModeId": "light-mode",
+        "modes": [
+          {
+            "modeId": "light-mode",
+            "name": "Light"
+          },
+          {
+            "modeId": "dark-mode",
+            "name": "Dark"
+          }
+        ],
+        "name": "Theme"
+      }
+    },
+    "variables": {
+      "accent": {
+        "name": "colors/accent",
+        "resolvedType": "COLOR",
+        "valuesByMode": {
+          "dark-mode": {
+            "a": 1,
+            "b": 1,
+            "g": 0.64,
+            "r": 0.4
+          },
+          "light-mode": {
+            "a": 1,
+            "b": 1,
+            "g": 0.4,
+            "r": 0
+          }
+        },
+        "variableCollectionId": "collection"
+      },
+      "brand": {
+        "name": "colors/brand",
+        "resolvedType": "COLOR",
+        "valuesByMode": {
+          "dark-mode": {
+            "id": "accent",
+            "type": "VARIABLE_ALIAS"
+          },
+          "light-mode": {
+            "id": "accent",
+            "type": "VARIABLE_ALIAS"
+          }
+        },
+        "variableCollectionId": "collection"
+      },
+      "shadow-blur": {
+        "name": "shadows/card/blur",
+        "resolvedType": "FLOAT",
+        "valuesByMode": {
+          "light-mode": 12
+        },
+        "variableCollectionId": "collection"
+      },
+      "shadow-color": {
+        "name": "shadows/card/color",
+        "resolvedType": "COLOR",
+        "valuesByMode": {
+          "dark-mode": {
+            "a": 0.4,
+            "b": 0,
+            "g": 0,
+            "r": 0
+          },
+          "light-mode": {
+            "a": 0.2,
+            "b": 0,
+            "g": 0,
+            "r": 0
+          }
+        },
+        "variableCollectionId": "collection"
+      },
+      "shadow-spread": {
+        "name": "shadows/card/spread",
+        "resolvedType": "FLOAT",
+        "valuesByMode": {
+          "light-mode": 0
+        },
+        "variableCollectionId": "collection"
+      },
+      "shadow-x": {
+        "name": "shadows/card/x",
+        "resolvedType": "FLOAT",
+        "valuesByMode": {
+          "light-mode": 0
+        },
+        "variableCollectionId": "collection"
+      },
+      "shadow-y": {
+        "name": "shadows/card/y",
+        "resolvedType": "FLOAT",
+        "valuesByMode": {
+          "light-mode": 4
+        },
+        "variableCollectionId": "collection"
+      },
+      "spacing": {
+        "name": "spacing/md",
+        "resolvedType": "FLOAT",
+        "valuesByMode": {
+          "light-mode": 16
+        },
+        "variableCollectionId": "collection"
+      },
+      "type-family": {
+        "name": "typography/body/fontFamily",
+        "resolvedType": "STRING",
+        "valuesByMode": {
+          "light-mode": "Inter"
+        },
+        "variableCollectionId": "collection"
+      },
+      "type-letter-spacing": {
+        "name": "typography/body/letterSpacing",
+        "resolvedType": "FLOAT",
+        "valuesByMode": {
+          "light-mode": 0
+        },
+        "variableCollectionId": "collection"
+      },
+      "type-line-height": {
+        "name": "typography/body/lineHeight",
+        "resolvedType": "FLOAT",
+        "valuesByMode": {
+          "light-mode": 24
+        },
+        "variableCollectionId": "collection"
+      },
+      "type-size": {
+        "name": "typography/body/fontSize",
+        "resolvedType": "FLOAT",
+        "valuesByMode": {
+          "light-mode": 16
+        },
+        "variableCollectionId": "collection"
+      },
+      "type-weight": {
+        "name": "typography/body/fontWeight",
+        "resolvedType": "STRING",
+        "valuesByMode": {
+          "light-mode": "Semibold"
+        },
+        "variableCollectionId": "collection"
+      }
+    }
+  }
+}

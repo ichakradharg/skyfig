@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Swift version
+        run: swift --version
+      - name: Validate package
+        run: swift package dump-package >/dev/null
+      - name: Build
+        run: swift build
+      - name: Test
+        run: swift test --parallel
+      - name: Verify canonical and generated tokens
+        shell: bash
+        run: |
+          set -euo pipefail
+          swift run skyfig validate --input Tokens/skyfig.tokens.json
+          swift run skyfig generate \
+            --input Tokens/skyfig.tokens.json \
+            --output Sources/Skyfig/Generated \
+            --check
+          git diff --check
+
+  linux-toolchain:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Swift version
+        run: swift --version
+      - name: Build and test
+        run: |
+          swift build
+          swift test --parallel
+      - name: Verify generator toolchain
+        run: |
+          swift run skyfig validate --input Tokens/skyfig.tokens.json
+          swift run skyfig generate \
+            --input Tokens/skyfig.tokens.json \
+            --output Sources/Skyfig/Generated \
+            --check

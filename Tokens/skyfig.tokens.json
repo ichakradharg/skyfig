@@ -1,0 +1,115 @@
+{
+  "$schema": "../Schema/skyfig.tokens.schema.json",
+  "defaultTheme": "light",
+  "name": "Skyfig Example",
+  "schemaVersion": "1.0.0",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "tokens": {
+    "borderWidths": {
+      "focus": {
+        "description": "Focus ring width",
+        "value": 2
+      },
+      "thin": {
+        "value": 1
+      }
+    },
+    "colors": {
+      "accent": {
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0369A1FF"
+        }
+      },
+      "surface.primary": {
+        "values": {
+          "dark": "#111827FF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "surface.secondary": {
+        "values": {
+          "dark": "#1F2937FF",
+          "light": "#F1F5F9FF"
+        }
+      },
+      "text.primary": {
+        "values": {
+          "dark": "#F8FAFCFF",
+          "light": "#0F172AFF"
+        }
+      },
+      "text.secondary": {
+        "values": {
+          "dark": "#CBD5E1FF",
+          "light": "#475569FF"
+        }
+      }
+    },
+    "cornerRadii": {
+      "card": {
+        "value": 20
+      },
+      "control": {
+        "value": 10
+      }
+    },
+    "shadows": {
+      "card": {
+        "value": [
+          {
+            "blur": 18,
+            "color": {
+              "dark": "#00000066",
+              "light": "#0F172A24"
+            },
+            "kind": "drop",
+            "spread": 0,
+            "x": 0,
+            "y": 8
+          }
+        ]
+      }
+    },
+    "spacing": {
+      "lg": {
+        "value": 24
+      },
+      "md": {
+        "value": 16
+      },
+      "sm": {
+        "value": 8
+      },
+      "xl": {
+        "value": 32
+      },
+      "xs": {
+        "value": 4
+      }
+    },
+    "typography": {
+      "body": {
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 16,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 24
+        }
+      },
+      "headline": {
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 28,
+          "fontWeight": 700,
+          "letterSpacing": -0.4,
+          "lineHeight": 34
+        }
+      }
+    }
+  }
+}
