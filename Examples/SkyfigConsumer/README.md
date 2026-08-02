@@ -6,7 +6,8 @@ This is a small iOS 26+ SwiftUI app that consumes the `Skyfig` library through a
 
 1. Open `Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj` in Xcode.
 2. Select an iOS 26 iPhone or iPad simulator and run the `SkyfigConsumer` scheme.
-3. Switch the simulator between light and dark appearance to see generated color tokens resolve automatically.
+3. Confirm that the app fills the display, including the area around the Dynamic Island or the iPad safe area. The project generates the standard iOS launch screen, so iOS treats it as a modern, full-screen app rather than letterboxing it in legacy compatibility mode.
+4. Switch the simulator between light and dark appearance to see generated color tokens resolve automatically.
 
 The sample temporarily uses a local package dependency so this repository can test the consumer boundary before Skyfig has a released version. After the first release, replace that dependency with the public GitHub package URL and version requirement used by your app.
 
