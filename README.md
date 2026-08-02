@@ -76,6 +76,28 @@ Run the example on macOS:
 swift run SkyfigShowcase
 ```
 
+## Verify the token pipeline
+
+Skyfig includes fixture data so the complete token-to-Swift pipeline can be verified without Figma credentials. From a clean checkout, run:
+
+```bash
+# Run the package and generator test suites.
+swift test --parallel
+
+# Validate the canonical fixture-backed token document.
+swift run skyfig validate --input Tokens/skyfig.tokens.json
+
+# Confirm committed Swift output exactly matches the token document.
+swift run skyfig generate \
+  --input Tokens/skyfig.tokens.json \
+  --output Sources/Skyfig/Generated \
+  --check
+```
+
+The generated, typed Swift API lives at `Sources/Skyfig/Generated/Tokens.generated.swift`. The showcase uses that API directly, so running `swift run SkyfigShowcase` is a visual demonstration of the generated tokens in SwiftUI.
+
+For an iOS app, add Skyfig as a package dependency, import `Skyfig`, and use `SkyfigTokens` in SwiftUI views as shown above. See [Figma token-source options](FIGMA_TOKEN_SOURCE_OPTIONS.md) for the fixture path and the later live-Figma setup.
+
 ## Canonical tokens
 
 `Tokens/skyfig.tokens.json` is the source of truth after import. Version 1 uses literal values only, exact `light` and `dark` themes, uppercase eight-digit sRGB colors, and dot-separated lower-camel token paths.
