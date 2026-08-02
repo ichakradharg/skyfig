@@ -8,6 +8,7 @@ swift build
 swift test --parallel
 swift run skyfig validate --input Tokens/skyfig.tokens.json
 swift run skyfig generate --input Tokens/skyfig.tokens.json --output Sources/Skyfig/Generated --check
+Scripts/test-cli-integration.sh
 swift run --package-path Examples/SkyfigPackageConsumer
 swift package --allow-writing-to-directory "$doc_output" \
   generate-documentation --target Skyfig --output-path "$doc_output"

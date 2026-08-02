@@ -17,6 +17,13 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+      - name: Cache Swift package dependencies
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            ~/.cache/org.swift.swiftpm
+            ~/.swiftpm
+          key: ${{ runner.os }}-swiftpm-${{ hashFiles('Package.swift') }}
       - name: Swift version
         run: swift --version
       - name: Validate package
@@ -47,6 +54,23 @@ jobs:
             --output Sources/Skyfig/Generated \
             --check
           git diff --check
+      - name: Run CLI integration tests
+        run: bash Scripts/test-cli-integration.sh
+
+  documentation:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Cache Swift package dependencies
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            ~/.cache/org.swift.swiftpm
+            ~/.swiftpm
+          key: ${{ runner.os }}-swiftpm-${{ hashFiles('Package.swift') }}
       - name: Build rendered documentation
         run: |
           output_path="$GITHUB_WORKSPACE/.build/docc-site"
@@ -64,6 +88,13 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+      - name: Cache Swift package dependencies
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            ~/.cache/org.swift.swiftpm
+            ~/.swiftpm
+          key: ${{ runner.os }}-swiftpm-${{ hashFiles('Package.swift') }}
       - name: Swift version
         run: swift --version
       - name: Build and test
@@ -77,6 +108,8 @@ jobs:
             --input Tokens/skyfig.tokens.json \
             --output Sources/Skyfig/Generated \
             --check
+      - name: Run CLI integration tests
+        run: bash Scripts/test-cli-integration.sh
       - name: Build package consumer smoke test
         run: swift run --package-path Examples/SkyfigPackageConsumer
       - name: Check local Markdown links
