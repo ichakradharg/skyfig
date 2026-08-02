@@ -8,6 +8,8 @@ After this workflow is merged, configure **Settings > Pages** for the repository
 
 The repository site is served below the `skyfig` path, so DocC's static-hosting transform is configured with that base path. This keeps page navigation and deep links correct on GitHub Pages.
 
+DocC's generated content begins at `documentation/skyfig`. The Pages workflow copies `Docs/pages-index.html` into the rendered site root so the repository URL redirects there instead of showing a 404 page.
+
 ## Preview locally
 
 Use the DocC plugin's local preview server while editing documentation:
