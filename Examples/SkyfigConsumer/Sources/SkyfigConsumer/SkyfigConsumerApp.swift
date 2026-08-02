@@ -6,6 +6,13 @@ struct SkyfigConsumerApp: App {
     var body: some Scene {
         WindowGroup {
             ConsumerTabShell()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(
+                    SkyfigTokens.Colors.Surface.secondary
+                        .color(for: .light)
+                        .ignoresSafeArea()
+                )
+                .ignoresSafeArea()
         }
     }
 }
@@ -14,10 +21,7 @@ private struct ConsumerTabShell: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        ZStack {
-            SkyfigTokens.Colors.Surface.secondary.color(for: colorScheme)
-                .ignoresSafeArea()
-
+        GeometryReader { _ in
             TabView {
                 Tab("Home", systemImage: "house") {
                     HomePreview()
@@ -57,9 +61,12 @@ private struct ConsumerTabShell: View {
             }
             .tabViewStyle(.sidebarAdaptable)
             .tabBarMinimizeBehavior(.onScrollDown)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(SkyfigTokens.Colors.Surface.secondary.color(for: colorScheme))
         }
         .tint(SkyfigTokens.Colors.accent.color(for: colorScheme))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(SkyfigTokens.Colors.Surface.secondary.color(for: colorScheme))
     }
 }
 
