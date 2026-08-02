@@ -51,7 +51,8 @@ jobs:
         run: |
           output_path="$GITHUB_WORKSPACE/.build/docc-site"
           rm -rf "$output_path"
-          swift package generate-documentation --target Skyfig --output-path "$output_path"
+          swift package --allow-writing-to-directory "$output_path" \
+            generate-documentation --target Skyfig --output-path "$output_path"
           test -f "$output_path/documentation/skyfig/index.html"
       - name: Check local Markdown links
         run: python3 Scripts/check-markdown-links.py
