@@ -9,8 +9,17 @@ import Glibc
 
 do {
     try run(arguments: Array(CommandLine.arguments.dropFirst()))
+} catch let error as CLIError {
+    writeError(error.description)
+    exit(EXIT_FAILURE)
+} catch let error as SkyfigValidationError {
+    writeError(error.description)
+    exit(EXIT_FAILURE)
+} catch let error as GeneratorError {
+    writeError(error.description)
+    exit(EXIT_FAILURE)
 } catch {
-    writeError(error)
+    writeError(error.localizedDescription)
     exit(EXIT_FAILURE)
 }
 
@@ -93,8 +102,8 @@ private enum CLIError: Error, CustomStringConvertible {
 
     var description: String {
         switch self {
-        case .usage: usageText
-        case .unknownCommand(let command): "Unknown command: \(command)\n\n\(usageText)"
+    case .usage: usageText()
+    case .unknownCommand(let command): "Unknown command: \(command)\n\n\(usageText())"
         case .unexpectedArgument(let argument): "Unexpected argument: \(argument)"
         case .missingValue(let option): "Missing value for \(option)"
         case .missingOption(let option): "Missing required option \(option)"
@@ -102,7 +111,8 @@ private enum CLIError: Error, CustomStringConvertible {
     }
 }
 
-private let usageText = """
+private func usageText() -> String {
+    """
 Skyfig — Figma design tokens to typed Swift
 
 USAGE
@@ -110,8 +120,9 @@ USAGE
   skyfig normalize-figma --input <figma-response.json> --output <tokens.json> [--name <name>]
   skyfig generate --input <tokens.json> --output <file-or-directory> [--check]
 """
+}
 
-private func writeError(_ error: Error) {
-    let message = "error: \(String(describing: error))\n"
+private func writeError(_ description: String) {
+    let message = "error: " + description + "\n"
     FileHandle.standardError.write(Data(message.utf8))
 }
