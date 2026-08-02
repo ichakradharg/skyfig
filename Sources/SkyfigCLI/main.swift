@@ -102,8 +102,8 @@ private enum CLIError: Error, CustomStringConvertible {
 
     var description: String {
         switch self {
-        case .usage: usageText
-        case .unknownCommand(let command): "Unknown command: \(command)\n\n\(usageText)"
+    case .usage: usageText()
+    case .unknownCommand(let command): "Unknown command: \(command)\n\n\(usageText())"
         case .unexpectedArgument(let argument): "Unexpected argument: \(argument)"
         case .missingValue(let option): "Missing value for \(option)"
         case .missingOption(let option): "Missing required option \(option)"
@@ -111,7 +111,8 @@ private enum CLIError: Error, CustomStringConvertible {
     }
 }
 
-private let usageText = """
+private func usageText() -> String {
+    """
 Skyfig — Figma design tokens to typed Swift
 
 USAGE
@@ -119,6 +120,7 @@ USAGE
   skyfig normalize-figma --input <figma-response.json> --output <tokens.json> [--name <name>]
   skyfig generate --input <tokens.json> --output <file-or-directory> [--check]
 """
+}
 
 private func writeError(_ description: String) {
     let message = "error: " + description + "\n"
