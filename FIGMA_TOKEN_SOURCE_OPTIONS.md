@@ -25,6 +25,29 @@ It does not prove access to a live Figma file.
 
 Keep the fixture as stable test data. Update it deliberately for new token types or regression cases, and review generated Swift changes in pull requests.
 
+### Verify the complete fixture pipeline
+
+From the repository root, run:
+
+```bash
+swift test --parallel
+swift run skyfig validate --input Tokens/skyfig.tokens.json
+swift run skyfig generate \
+  --input Tokens/skyfig.tokens.json \
+  --output Sources/Skyfig/Generated \
+  --check
+```
+
+These commands prove that the fixture-backed canonical JSON is valid and that the committed Swift API is current. The generated code is `Sources/Skyfig/Generated/Tokens.generated.swift`.
+
+To inspect the generated API in a running SwiftUI app, use the included macOS showcase:
+
+```bash
+swift run SkyfigShowcase
+```
+
+For an iOS app, add the Skyfig package in Xcode and use `SkyfigTokens` in a SwiftUI view. For example, `SkyfigTokens.Spacing.md` provides a typed spacing value and `SkyfigTokens.Colors.Text.primary` provides a theme-aware color token.
+
 ## Option B: connect a live Figma source later
 
 ### Prerequisites
