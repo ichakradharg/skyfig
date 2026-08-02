@@ -9,8 +9,17 @@ import Glibc
 
 do {
     try run(arguments: Array(CommandLine.arguments.dropFirst()))
+} catch let error as CLIError {
+    writeError(error.description)
+    exit(EXIT_FAILURE)
+} catch let error as SkyfigValidationError {
+    writeError(error.description)
+    exit(EXIT_FAILURE)
+} catch let error as GeneratorError {
+    writeError(error.description)
+    exit(EXIT_FAILURE)
 } catch {
-    writeError(error)
+    writeError(error.localizedDescription)
     exit(EXIT_FAILURE)
 }
 
@@ -111,7 +120,7 @@ USAGE
   skyfig generate --input <tokens.json> --output <file-or-directory> [--check]
 """
 
-private func writeError(_ error: Error) {
-    let message = "error: \(String(describing: error))\n"
+private func writeError(_ description: String) {
+    let message = "error: " + description + "\n"
     FileHandle.standardError.write(Data(message.utf8))
 }
