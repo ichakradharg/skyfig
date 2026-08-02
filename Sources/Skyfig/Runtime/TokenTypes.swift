@@ -1,5 +1,8 @@
 import Foundation
 
+/// An sRGB color stored as four 8-bit red, green, blue, and alpha components.
+///
+/// Use the SwiftUI `color` property when SwiftUI is available.
 public struct SkyfigRGBAColor: Equatable, Hashable, Sendable {
     public let red: UInt8
     public let green: UInt8
@@ -14,6 +17,7 @@ public struct SkyfigRGBAColor: Equatable, Hashable, Sendable {
     }
 }
 
+/// A color token with a value for each supported appearance theme.
 public struct SkyfigColorToken: Equatable, Hashable, Sendable {
     public let light: SkyfigRGBAColor
     public let dark: SkyfigRGBAColor
@@ -23,6 +27,7 @@ public struct SkyfigColorToken: Equatable, Hashable, Sendable {
         self.dark = dark
     }
 
+    /// Returns the color value for the requested theme.
     public func value(for theme: SkyfigTheme) -> SkyfigRGBAColor {
         switch theme {
         case .light: light
@@ -31,11 +36,13 @@ public struct SkyfigColorToken: Equatable, Hashable, Sendable {
     }
 }
 
+/// The appearance themes supported by version 1 token documents.
 public enum SkyfigTheme: String, CaseIterable, Sendable {
     case light
     case dark
 }
 
+/// A CSS-style numeric font weight used by generated typography tokens.
 public enum SkyfigFontWeight: Int, CaseIterable, Sendable {
     case ultraLight = 100
     case thin = 200
@@ -48,6 +55,7 @@ public enum SkyfigFontWeight: Int, CaseIterable, Sendable {
     case black = 900
 }
 
+/// A platform-neutral typography definition generated from a token document.
 public struct SkyfigTypographyToken: Equatable, Sendable {
     public let fontFamily: String
     public let fontSize: Double
@@ -70,7 +78,9 @@ public struct SkyfigTypographyToken: Equatable, Sendable {
     }
 }
 
+/// One layer in a tokenized shadow, expressed in points.
 public struct SkyfigShadowLayer: Equatable, Sendable {
+    /// The visual placement of a shadow layer.
     public enum Kind: String, Sendable {
         case drop
         case inner
@@ -100,6 +110,7 @@ public struct SkyfigShadowLayer: Equatable, Sendable {
     }
 }
 
+/// A tokenized shadow composed of one or more ordered layers.
 public struct SkyfigShadowToken: Equatable, Sendable {
     public let layers: [SkyfigShadowLayer]
 

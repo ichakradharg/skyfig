@@ -1,5 +1,6 @@
 import Foundation
 
+/// Loads, validates, canonicalizes, and writes token documents.
 public enum TokenIO {
     public static func load(from url: URL) throws -> TokenDocument {
         try decode(Data(contentsOf: url))
@@ -36,6 +37,7 @@ public enum TokenIO {
     }
 }
 
+/// A collection of deterministic validation issues found in a token document.
 public struct SkyfigValidationError: Error, CustomStringConvertible, Equatable, Sendable {
     public let issues: [String]
 
@@ -49,6 +51,7 @@ public struct SkyfigValidationError: Error, CustomStringConvertible, Equatable, 
 }
 
 extension TokenDocument {
+    /// Validates this document against Skyfig's supported canonical conventions.
     public func validate() throws {
         var issues: [String] = []
 

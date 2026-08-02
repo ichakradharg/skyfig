@@ -1,6 +1,7 @@
 import Foundation
 import CoreFoundation
 
+/// Imports a Figma Variables API response into Skyfig's canonical token format.
 public enum FigmaImporter {
     public static func importVariables(from data: Data, name: String = "Skyfig Figma Tokens") throws -> TokenDocument {
         guard
@@ -88,6 +89,7 @@ public enum FigmaImporter {
     }
 }
 
+/// Errors that explain why a Figma Variables response could not be normalized.
 public enum FigmaImportError: Error, CustomStringConvertible, Equatable {
     case invalidPayload(String)
     case invalidVariable(String)
