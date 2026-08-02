@@ -285,7 +285,7 @@ private struct TabPlaceholder: View {
                         .foregroundStyle(text)
 
                     VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.sm) {
-                        Text("Token-powered (title.lowercased())")
+                        Text("Token-powered \(title.lowercased())")
                             .font(SkyfigTokens.Typography.body.font)
                             .foregroundStyle(SkyfigTokens.Colors.accent.color(for: colorScheme))
                         Text(message)
