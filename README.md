@@ -39,6 +39,17 @@ The raw Figma response exists only in the Actions runner's temporary directory. 
 
 The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confined to the public runtime conveniences and showcase.
 
+## iOS consumer quick start
+
+Skyfig is designed to be the central, versioned source of typed design tokens. App repositories do not need Figma credentials or a token-generation workflow.
+
+1. In Xcode, choose **File → Add Package Dependencies**, enter the Skyfig repository URL, and select a stable release.
+2. Add the `Skyfig` library product to the iOS app target.
+3. Import `Skyfig` and use `SkyfigTokens` from SwiftUI views.
+4. When design tokens are released, update the package version in a dedicated app pull request and verify the UI before merging.
+
+The package exposes typed token values; it does not contact Figma at app runtime. See [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) for how new token versions are published.
+
 ## Add Skyfig to an app
 
 After the first tagged release, add the package URL in Xcode or in `Package.swift`:
