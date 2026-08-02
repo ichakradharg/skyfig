@@ -42,9 +42,11 @@ The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confi
 ## Documentation
 
 - [Codebase guide](Docs/CODEBASE_GUIDE.md) explains the repository structure, token flow, and public API boundaries.
+- [Architecture guide](Docs/ARCHITECTURE.md) explains trust boundaries, token flow, and how apps consume releases.
 - [CLI reference](Docs/CLI_REFERENCE.md) documents validation, normalization, generation, and generated-source checks.
 - [Rendered DocC site guide](Docs/DOCS_SITE.md) explains the hosted API reference and how to preview it locally.
 - [iOS consumer sample](Examples/SkyfigConsumer/README.md) explains the iPhone and iPad integration example.
+- [Package consumer smoke test](Examples/SkyfigPackageConsumer/README.md) verifies the public package boundary without an app project.
 - [Troubleshooting](Docs/TROUBLESHOOTING.md) covers fixture validation, generation, live Figma sync, and consumer-update failures.
 - [Figma token-source options](FIGMA_TOKEN_SOURCE_OPTIONS.md) explains fixture and live-sync workflows.
 - [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) describe package publication for iOS consumers.

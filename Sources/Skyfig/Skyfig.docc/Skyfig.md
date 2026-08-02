@@ -2,7 +2,6 @@
 
 @Metadata {
     @DisplayName("Skyfig")
-    @TechnologyRoot
 }
 
 Reviewed, typed SwiftUI design tokens for iOS, macOS, and tvOS apps.
@@ -21,6 +20,7 @@ Skyfig's maintainer workflow is deliberately separate: a protected central repos
 - <doc:TokenUpdates>
 - <doc:ConsumerSample>
 - <doc:Troubleshooting>
+- <doc:Architecture>
 
 ### Generated tokens
 
