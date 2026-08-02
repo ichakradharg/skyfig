@@ -1,0 +1,282 @@
+{
+  "$id": "https://raw.githubusercontent.com/ichakradharg/skyfig/main/Schema/skyfig.tokens.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "defaultTheme": {
+      "const": "light"
+    },
+    "name": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "themes": {
+      "prefixItems": [
+        {
+          "const": "light"
+        },
+        {
+          "const": "dark"
+        }
+      ],
+      "items": false,
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "tokens": {
+      "$ref": "#/$defs/tokenCollection"
+    }
+  },
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "name",
+    "defaultTheme",
+    "themes",
+    "tokens"
+  ],
+  "title": "Skyfig canonical design tokens",
+  "type": "object",
+  "$defs": {
+    "color": {
+      "pattern": "^#[0-9A-F]{8}$",
+      "type": "string"
+    },
+    "colorToken": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "values": {
+          "additionalProperties": false,
+          "properties": {
+            "dark": {
+              "$ref": "#/$defs/color"
+            },
+            "light": {
+              "$ref": "#/$defs/color"
+            }
+          },
+          "required": [
+            "light",
+            "dark"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "values"
+      ],
+      "type": "object"
+    },
+    "dimensionToken": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "value": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    },
+    "shadowLayer": {
+      "additionalProperties": false,
+      "properties": {
+        "blur": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "color": {
+          "additionalProperties": false,
+          "properties": {
+            "dark": {
+              "$ref": "#/$defs/color"
+            },
+            "light": {
+              "$ref": "#/$defs/color"
+            }
+          },
+          "required": [
+            "light",
+            "dark"
+          ],
+          "type": "object"
+        },
+        "kind": {
+          "enum": [
+            "drop",
+            "inner"
+          ]
+        },
+        "spread": {
+          "type": "number"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "color",
+        "x",
+        "y",
+        "blur",
+        "spread"
+      ],
+      "type": "object"
+    },
+    "shadowToken": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "value": {
+          "items": {
+            "$ref": "#/$defs/shadowLayer"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    },
+    "tokenCollection": {
+      "additionalProperties": false,
+      "properties": {
+        "borderWidths": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": {
+            "$ref": "#/$defs/dimensionToken"
+          },
+          "type": "object"
+        },
+        "colors": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": {
+            "$ref": "#/$defs/colorToken"
+          },
+          "type": "object"
+        },
+        "cornerRadii": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": {
+            "$ref": "#/$defs/dimensionToken"
+          },
+          "type": "object"
+        },
+        "shadows": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": {
+            "$ref": "#/$defs/shadowToken"
+          },
+          "type": "object"
+        },
+        "spacing": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": {
+            "$ref": "#/$defs/dimensionToken"
+          },
+          "type": "object"
+        },
+        "typography": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": {
+            "$ref": "#/$defs/typographyToken"
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "colors",
+        "typography",
+        "spacing",
+        "cornerRadii",
+        "borderWidths",
+        "shadows"
+      ],
+      "type": "object"
+    },
+    "tokenMap": {
+      "propertyNames": {
+        "pattern": "^[a-z][A-Za-z0-9]*(\\.[a-z][A-Za-z0-9]*)*$"
+      },
+      "type": "object"
+    },
+    "typographyToken": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "value": {
+          "additionalProperties": false,
+          "properties": {
+            "fontFamily": {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "fontSize": {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            "fontWeight": {
+              "enum": [
+                100,
+                200,
+                300,
+                400,
+                500,
+                600,
+                700,
+                800,
+                900
+              ]
+            },
+            "letterSpacing": {
+              "type": "number"
+            },
+            "lineHeight": {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "fontFamily",
+            "fontSize",
+            "fontWeight",
+            "lineHeight",
+            "letterSpacing"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    }
+  }
+}
