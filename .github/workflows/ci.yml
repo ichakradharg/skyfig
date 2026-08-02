@@ -12,6 +12,8 @@ permissions:
 jobs:
   build-and-test:
     runs-on: macos-15
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.0.1.app/Contents/Developer
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -28,7 +30,7 @@ jobs:
           xcodebuild build \
             -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
             -scheme SkyfigConsumer \
-            -sdk iphonesimulator \
+            -sdk iphonesimulator26.0 \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO
       - name: Test
