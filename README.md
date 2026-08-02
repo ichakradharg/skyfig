@@ -43,6 +43,7 @@ The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confi
 
 - [Codebase guide](Docs/CODEBASE_GUIDE.md) explains the repository structure, token flow, and public API boundaries.
 - [CLI reference](Docs/CLI_REFERENCE.md) documents validation, normalization, generation, and generated-source checks.
+- [Rendered DocC site guide](Docs/DOCS_SITE.md) explains the hosted API reference and how to preview it locally.
 - [Figma token-source options](FIGMA_TOKEN_SOURCE_OPTIONS.md) explains fixture and live-sync workflows.
 - [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) describe package publication for iOS consumers.
 

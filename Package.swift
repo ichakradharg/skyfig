@@ -14,6 +14,9 @@ let package = Package(
         .executable(name: "skyfig", targets: ["SkyfigCLI"]),
         .executable(name: "SkyfigShowcase", targets: ["SkyfigShowcase"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.5.0"),
+    ],
     targets: [
         .target(name: "Skyfig"),
         .target(name: "SkyfigGenerator"),
