@@ -220,7 +220,7 @@ private struct HomePreview: View {
             )
 
             VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.sm) {
-                Image(systemName: "roundedcorner")
+                Image(systemName: "rectangle.on.rectangle")
                     .foregroundStyle(accent)
                 Text("Corners")
                     .font(SkyfigTokens.Typography.body.font)
