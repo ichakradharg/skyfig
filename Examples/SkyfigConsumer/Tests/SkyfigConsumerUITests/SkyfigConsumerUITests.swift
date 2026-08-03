@@ -7,11 +7,12 @@ final class SkyfigConsumerUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app.launch()
+        XCTAssertTrue(app.staticTexts["Design system preview"].waitForExistence(timeout: 5))
     }
 
     func testFiveTabsAreAvailable() {
         for title in ["Home", "Library", "Activity", "Profile", "Search"] {
-            XCTAssertTrue(app.tabBars.buttons[title].waitForExistence(timeout: 5))
+            XCTAssertTrue(navigationItem(named: title).waitForExistence(timeout: 5))
         }
     }
 
@@ -25,8 +26,13 @@ final class SkyfigConsumerUITests: XCTestCase {
         ]
 
         for expectation in expectations {
-            app.tabBars.buttons[expectation.tab].tap()
+            navigationItem(named: expectation.tab).tap()
             XCTAssertTrue(app.staticTexts[expectation.content].waitForExistence(timeout: 5))
         }
+    }
+
+    private func navigationItem(named title: String) -> XCUIElement {
+        let tabBarButton = app.tabBars.buttons[title]
+        return tabBarButton.exists ? tabBarButton : app.cells[title]
     }
 }
