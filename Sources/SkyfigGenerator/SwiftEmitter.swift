@@ -16,10 +16,16 @@ public enum SwiftEmitter {
         lines += renderCategory("Colors", declarations: document.tokens.colors.mapValues { token in
             colorExpression(light: token.values["light"]!, dark: token.values["dark"]!)
         }, indent: 1)
-        lines += renderCategory("Typography", declarations: document.tokens.typography.mapValues { token in
-            let value = token.value
-            return "SkyfigTypographyToken(fontFamily: \(swiftString(value.fontFamily)), fontSize: \(number(value.fontSize)), fontWeight: .\(weightName(value.fontWeight)), lineHeight: \(number(value.lineHeight)), letterSpacing: \(number(value.letterSpacing)))"
-        }, indent: 1)
+        lines += renderCategory(
+            "Typography",
+            declarations: document.tokens.typography.mapValues { token in
+                let value = token.value
+                return "SkyfigTypographyToken(fontFamily: \(swiftString(value.fontFamily)), "
+                    + "fontSize: \(number(value.fontSize)), fontWeight: .\(weightName(value.fontWeight)), "
+                    + "lineHeight: \(number(value.lineHeight)), letterSpacing: \(number(value.letterSpacing)))"
+            },
+            indent: 1
+        )
         lines += renderCategory("Spacing", declarations: document.tokens.spacing.mapValues { number($0.value) }, type: "Double", indent: 1)
         lines += renderCategory("CornerRadii", declarations: document.tokens.cornerRadii.mapValues { number($0.value) }, type: "Double", indent: 1)
         lines += renderCategory("BorderWidths", declarations: document.tokens.borderWidths.mapValues { number($0.value) }, type: "Double", indent: 1)
@@ -108,7 +114,10 @@ private func colorExpression(light: String, dark: String) -> String {
 
 private func shadowExpression(_ token: ShadowToken) -> String {
     let layers = token.value.map { layer in
-        "SkyfigShadowLayer(kind: .\(layer.kind.rawValue), color: \(colorExpression(light: layer.color["light"]!, dark: layer.color["dark"]!)), x: \(number(layer.x)), y: \(number(layer.y)), blur: \(number(layer.blur)), spread: \(number(layer.spread)))"
+        let color = colorExpression(light: layer.color["light"]!, dark: layer.color["dark"]!)
+        return "SkyfigShadowLayer(kind: .\(layer.kind.rawValue), color: \(color), "
+            + "x: \(number(layer.x)), y: \(number(layer.y)), blur: \(number(layer.blur)), "
+            + "spread: \(number(layer.spread)))"
     }.joined(separator: ", ")
     return "SkyfigShadowToken(layers: [\(layers)])"
 }
