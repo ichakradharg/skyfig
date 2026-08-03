@@ -1,5 +1,9 @@
 # Fork and own Skyfig
 
+## Structure-driven Figma variables
+
+A fork can retain its existing Figma hierarchy without configuring a Skyfig family map. Supported primitive paths such as `foundation/colors/brand/primary` generate a nested API such as `TeamTokens.Foundation.Colors.Brand.primary`. Skyfig normalizes only for valid Swift identifiers and reports collisions. Colors, numbers, strings, and booleans are supported; typography and shadows remain explicit composites rather than inferred from arbitrary paths.
+
 Each vertical team can use a fork as its own design-token publisher. The team owns Figma access, generated source, review rules, releases, and app adoption timing.
 
 ## Configure a generated token namespace

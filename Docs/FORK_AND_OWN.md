@@ -42,6 +42,8 @@ The first sync should be treated as an onboarding exercise: inspect the canonica
 
 The namespace affects the generated API only. The Swift package module remains `Skyfig` unless your team intentionally renames the package as a separate migration. Skyfig keeps `SkyfigTokens` as a compatibility alias for its bundled tests and examples; new application code should use your chosen namespace.
 
+Your Figma naming hierarchy does not need to match Skyfig's semantic fixture. Supported primitive variables retain their slash hierarchy automatically, so `foundation/colors/brand/primary` becomes `TeamATokens.Foundation.Colors.Brand.primary`. There is no per-team mapping configuration. Names are normalized only as required by Swift and ambiguous normalized paths fail with actionable source-name errors.
+
 ```swift
 import Skyfig
 

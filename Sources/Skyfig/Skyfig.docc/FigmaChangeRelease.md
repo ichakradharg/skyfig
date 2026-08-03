@@ -13,6 +13,8 @@ Use this workflow when UX has approved a Figma Variables change and it needs to 
 
 The sync workflow never publishes a package. A team-owned fork follows the same sequence with its own Figma secrets, approvals, namespace, and release environment.
 
+For a fork, supported primitive Figma paths generate directly beneath the team's namespace without a static family map. Keep a semantic review for any typography or shadow composites: Skyfig intentionally does not infer those structures from arbitrary variable names.
+
 ## App-team workflow
 
 App teams choose when to update to the released package version. They build and review affected UI in their own pull request before adoption. This prevents an approved Figma change from silently changing a shipped application.

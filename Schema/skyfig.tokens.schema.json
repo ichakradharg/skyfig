@@ -186,6 +186,9 @@
           },
           "type": "object"
         },
+        "dynamic": {
+          "$ref": "#/$defs/dynamicTokenCollection"
+        },
         "shadows": {
           "$ref": "#/$defs/tokenMap",
           "additionalProperties": {
@@ -220,10 +223,32 @@
     },
     "tokenMap": {
       "propertyNames": {
-        "pattern": "^[a-z][A-Za-z0-9]*(\\.[a-z][A-Za-z0-9]*)*$"
+        "pattern": "^[a-z_][A-Za-z0-9_]*(\\.[a-z_][A-Za-z0-9_]*)*$"
       },
       "type": "object"
     },
+    "dynamicTokenCollection": {
+      "additionalProperties": false,
+      "properties": {
+        "colors": { "$ref": "#/$defs/tokenMap", "additionalProperties": { "$ref": "#/$defs/colorToken" }, "type": "object" },
+        "numbers": { "$ref": "#/$defs/tokenMap", "additionalProperties": { "$ref": "#/$defs/themedNumberToken" }, "type": "object" },
+        "strings": { "$ref": "#/$defs/tokenMap", "additionalProperties": { "$ref": "#/$defs/themedStringToken" }, "type": "object" },
+        "booleans": { "$ref": "#/$defs/tokenMap", "additionalProperties": { "$ref": "#/$defs/themedBooleanToken" }, "type": "object" }
+      },
+      "required": ["colors", "numbers", "strings", "booleans"],
+      "type": "object"
+    },
+    "themedNumberToken": { "$ref": "#/$defs/themedValueToken", "properties": { "values": { "$ref": "#/$defs/themedNumberValues" } } },
+    "themedStringToken": { "$ref": "#/$defs/themedValueToken", "properties": { "values": { "$ref": "#/$defs/themedStringValues" } } },
+    "themedBooleanToken": { "$ref": "#/$defs/themedValueToken", "properties": { "values": { "$ref": "#/$defs/themedBooleanValues" } } },
+    "themedValueToken": {
+      "additionalProperties": false,
+      "properties": { "description": { "type": "string" }, "values": { "type": "object" } },
+      "required": ["values"], "type": "object"
+    },
+    "themedNumberValues": { "additionalProperties": false, "properties": { "light": { "type": "number" }, "dark": { "type": "number" } }, "required": ["light", "dark"], "type": "object" },
+    "themedStringValues": { "additionalProperties": false, "properties": { "light": { "type": "string" }, "dark": { "type": "string" } }, "required": ["light", "dark"], "type": "object" },
+    "themedBooleanValues": { "additionalProperties": false, "properties": { "light": { "type": "boolean" }, "dark": { "type": "boolean" } }, "required": ["light", "dark"], "type": "object" },
     "typographyToken": {
       "additionalProperties": false,
       "properties": {

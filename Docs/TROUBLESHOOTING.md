@@ -34,6 +34,10 @@ Generation is deterministic and atomic. A failed validation or `--check` leaves 
 
 ## Live Figma sync fails
 
+### Dynamic Figma names do not generate as expected
+
+No semantic family mapping is needed for supported primitives. Use non-empty slash-separated path segments; Skyfig converts punctuation and whitespace to lower-camel Swift identifiers, prefixes numeric-leading segments with `_`, and rejects source paths that normalize to the same output. COLOR, FLOAT, STRING, and BOOLEAN are dynamic; typography and shadows remain explicit composites because Skyfig does not infer semantics from arbitrary paths.
+
 Open the failed **Sync Figma tokens** workflow run and identify the first failing step.
 
 | Failing step or symptom | Likely cause | Resolution |

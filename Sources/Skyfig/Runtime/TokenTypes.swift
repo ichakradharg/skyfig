@@ -66,6 +66,14 @@ public enum SkyfigTheme: String, CaseIterable, Sendable {
     case dark
 }
 
+/// A non-color primitive with a value for each supported appearance theme.
+public struct SkyfigThemedValue<Value: Equatable & Sendable>: Equatable, Sendable {
+    public let light: Value
+    public let dark: Value
+    public init(light: Value, dark: Value) { self.light = light; self.dark = dark }
+    public func value(for theme: SkyfigTheme) -> Value { theme == .light ? light : dark }
+}
+
 /// A CSS-style numeric font weight used by generated typography tokens.
 public enum SkyfigFontWeight: Int, CaseIterable, Sendable {
     case ultraLight = 100
