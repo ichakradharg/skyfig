@@ -15,6 +15,8 @@ swift package --allow-writing-to-directory "$doc_output" \
   generate-documentation --target Skyfig --output-path "$doc_output"
 test -f "$doc_output/documentation/skyfig/index.html"
 python3 Scripts/check-markdown-links.py
+xcrun simctl boot "iPhone 17 Pro" || true
+xcrun simctl bootstatus "iPhone 17 Pro" -b
 xcodebuild test \
   -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
   -scheme SkyfigConsumer \
@@ -23,6 +25,8 @@ xcodebuild test \
   -only-testing:SkyfigConsumerUITests \
   ONLY_ACTIVE_ARCH=YES \
   CODE_SIGNING_ALLOWED=NO
+xcrun simctl boot "iPad Pro 13-inch (M5)" || true
+xcrun simctl bootstatus "iPad Pro 13-inch (M5)" -b
 xcodebuild test \
   -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
   -scheme SkyfigConsumer \
