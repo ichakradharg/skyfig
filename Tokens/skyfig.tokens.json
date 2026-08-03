@@ -71,7 +71,7 @@
         "description": "Warning or needs-attention status",
         "values": {
           "dark": "#FDE68AFF",
-          "light": "#A16207FF"
+          "light": "#9A5C07FF"
         }
       },
       "surface.primary": {

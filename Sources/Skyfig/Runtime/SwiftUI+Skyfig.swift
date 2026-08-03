@@ -30,6 +30,19 @@ public extension SkyfigTypographyToken {
         return .custom(fontFamily, size: fontSize).weight(fontWeight.swiftUIWeight)
     }
 
+    /// Converts this token into a Dynamic Type-aware SwiftUI font.
+    ///
+    /// Use this overload in app UI and select the text style that matches the
+    /// semantic role of the token. The ``font`` property remains available for
+    /// fixed-size or layout-preview use cases.
+    func font(relativeTo textStyle: Font.TextStyle) -> Font {
+        if fontFamily.caseInsensitiveCompare("system") == .orderedSame {
+            return .system(textStyle, design: .default, weight: fontWeight.swiftUIWeight)
+        }
+        return .custom(fontFamily, size: fontSize, relativeTo: textStyle)
+            .weight(fontWeight.swiftUIWeight)
+    }
+
     /// The additional SwiftUI line spacing implied by the token's line height.
     var lineSpacing: Double {
         max(0, lineHeight - fontSize)
