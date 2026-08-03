@@ -47,7 +47,7 @@ The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confi
 - [Accessibility](Docs/ACCESSIBILITY.md) explains Dynamic Type-aware token use, contrast guardrails, and app-level accessibility checks.
 - [Consumer upgrade guide](Docs/CONSUMER_UPGRADES.md) explains how app teams safely adopt a new Skyfig package version.
 - [Changelog](CHANGELOG.md) records consumer-facing changes and migration expectations.
-- [Consumer screenshot baselines](Examples/SkyfigConsumer/Snapshots/README.md) explains the dedicated-Mac visual regression workflow.
+- [Consumer visual regression](Docs/VISUAL_REGRESSION.md) explains dedicated-Mac runner setup, baseline recording, light-only screenshot coverage, and the deferred dark-mode review.
 - [CLI reference](Docs/CLI_REFERENCE.md) documents validation, normalization, generation, and generated-source checks.
 - [Rendered DocC site guide](Docs/DOCS_SITE.md) explains the hosted API reference and how to preview it locally.
 - [iOS consumer sample](Examples/SkyfigConsumer/README.md) explains the iPhone and iPad integration example.

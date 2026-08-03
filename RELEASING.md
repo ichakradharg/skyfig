@@ -10,6 +10,7 @@ This checklist keeps package releases predictable for iOS consumers.
 - Prepare release notes that summarize token changes, consumer impact, and any migration work.
 - Move the relevant Unreleased entries from [CHANGELOG.md](CHANGELOG.md) into the tagged release notes.
 - Confirm the `release` environment has the intended reviewers and that `v*` tags are protected.
+- For token or consumer UI changes, run the local iPhone and iPad UI tests and review the dedicated-Mac [visual baselines](Docs/VISUAL_REGRESSION.md). The current screenshot set is light-only; dark appearance still needs an explicit review.
 
 ## Publish
 

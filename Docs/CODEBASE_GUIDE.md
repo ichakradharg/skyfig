@@ -15,7 +15,8 @@ Skyfig is a central publisher for typed SwiftUI design tokens. This guide explai
 | `Examples/SkyfigShowcase/` | A macOS SwiftUI app that demonstrates generated tokens. |
 | `Examples/SkyfigConsumer/` | An iOS 26+ iPhone and iPad consumer app that imports Skyfig through a local package reference. |
 | `Tests/` | Unit, importer, schema, and pipeline coverage. |
-| `.github/workflows/` | CI, Figma synchronization, and manually approved releases. |
+| `.github/workflows/` | CI, Figma synchronization, manually approved releases, and dedicated-Mac visual regression. |
+| `Scripts/` | Local UI-test, release-readiness, documentation, and screenshot-baseline verification commands. |
 
 ## Token flow
 

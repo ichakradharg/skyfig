@@ -61,6 +61,10 @@ Never merge by copying generated files directly to `main`; the pull request is t
 
 Use the consumer app's compiler errors as the source of truth. A removed or renamed public token is intentionally a compile-time break, so update the app to the new `SkyfigTokens` API and verify its UI before merging the package-version update.
 
+## Visual baseline setup or verification fails
+
+Visual screenshots require a repository self-hosted Mac runner with the `skyfig-visual` label; ordinary GitHub-hosted CI does not create or compare baselines. Follow [consumer visual regression](VISUAL_REGRESSION.md) to verify runner labels, simulator names, Xcode versions, and the record/verify commands. If a screenshot differs, inspect it as a design review artifact rather than copying it over blindly. Dark appearance is not yet represented by the committed baseline set and must be reviewed separately.
+
 For the repository sample, open `Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj` and run it on an iOS 26 simulator. If it appears letterboxed, confirm the target still generates its iOS launch screen and that the app is running from the current build.
 
 ## Escalation checklist

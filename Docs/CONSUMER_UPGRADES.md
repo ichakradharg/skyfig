@@ -16,6 +16,8 @@ Skyfig releases are explicit package versions. Updating a dependency is an app-t
 4. Run the app's usual accessibility, UI, and screenshot checks.
 5. Merge the app pull request only after the visual change is accepted.
 
+For the repository consumer sample, run `Scripts/test-consumer-ui.sh` on both devices and, when a change affects rendered appearance, verify the dedicated-Mac [visual baselines](VISUAL_REGRESSION.md). Review dark appearance separately because the initial screenshot baselines cover light appearance only.
+
 ## Handle breaking changes
 
 Major versions may remove, rename, or change the type or meaning of public generated tokens. Follow the release migration notes, update call sites, and avoid copying token values into the app as a workaround. If a deprecated token is available, migrate before the next major release rather than waiting for removal.

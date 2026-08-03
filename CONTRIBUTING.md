@@ -18,6 +18,8 @@ swift run skyfig generate \
 
 If you intentionally change canonical tokens or the emitter, regenerate without `--check` and commit both the canonical input and generated output.
 
+For changes to the iOS consumer sample, run `Scripts/test-consumer-ui.sh`. Changes that affect rendered appearance also need the dedicated-Mac [visual-baseline review](Docs/VISUAL_REGRESSION.md); do not record screenshots from ordinary hosted CI.
+
 ## Source boundaries
 
 - `Schema/` defines the canonical interchange contract.

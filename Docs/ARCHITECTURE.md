@@ -36,7 +36,7 @@ iOS, iPadOS, macOS, and tvOS apps
 
 1. A maintainer syncs Figma or updates the committed fixture-backed canonical JSON.
 2. Skyfig validates the document and generates the corresponding Swift API.
-3. A pull request reviews canonical JSON and generated Swift together; CI verifies freshness, documentation, and consumer compilation.
+3. A pull request reviews canonical JSON and generated Swift together; CI verifies freshness, documentation, and consumer UI coverage. Rendered consumer changes receive separate dedicated-Mac visual-baseline review.
 4. A reviewed release publishes one tested package version.
 5. Each application updates that version in its own pull request and verifies the visual change before adoption.
 
@@ -47,3 +47,4 @@ This model makes a token update explicit and reversible for each app team. It al
 - App developers should begin with the [consumer quick start](../README.md#ios-consumer-quick-start) and use `SkyfigTokens`.
 - Package maintainers should read the [codebase guide](CODEBASE_GUIDE.md), then the [troubleshooting guide](TROUBLESHOOTING.md).
 - Design-token maintainers should follow [Figma token-source options](../FIGMA_TOKEN_SOURCE_OPTIONS.md) and the protected sync-pull-request workflow.
+- Consumer visual reviewers should follow the [dedicated-Mac baseline guide](VISUAL_REGRESSION.md).
