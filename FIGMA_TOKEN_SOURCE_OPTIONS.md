@@ -72,6 +72,8 @@ Add these repository secrets:
 
 GitHub Actions is already enabled to create the draft pull requests used by syncs.
 
+For a team-owned fork, optionally add the Actions variable `SKYFIG_TOKEN_NAMESPACE`. Its value becomes the generated Swift enum, for example `TeamATokens`. The default is `SkyfigTokens`. See [Fork and own Skyfig](Docs/FORK_AND_OWN.md) for the complete ownership and release setup.
+
 ### First live sync
 
 1. Confirm the Figma variable collections and modes follow Skyfig's documented naming conventions.
