@@ -43,6 +43,8 @@ public struct TokenCollection: Codable, Equatable, Sendable {
     public let cornerRadii: [String: DimensionToken]
     public let borderWidths: [String: DimensionToken]
     public let shadows: [String: ShadowToken]
+    /// Primitive Figma variables preserved by their source hierarchy. These are emitted at the namespace root.
+    public let dynamic: DynamicTokenCollection
 
     public init(
         colors: [String: ColorToken] = [:],
@@ -50,7 +52,8 @@ public struct TokenCollection: Codable, Equatable, Sendable {
         spacing: [String: DimensionToken] = [:],
         cornerRadii: [String: DimensionToken] = [:],
         borderWidths: [String: DimensionToken] = [:],
-        shadows: [String: ShadowToken] = [:]
+        shadows: [String: ShadowToken] = [:],
+        dynamic: DynamicTokenCollection = DynamicTokenCollection()
     ) {
         self.colors = colors
         self.typography = typography
@@ -58,6 +61,51 @@ public struct TokenCollection: Codable, Equatable, Sendable {
         self.cornerRadii = cornerRadii
         self.borderWidths = borderWidths
         self.shadows = shadows
+        self.dynamic = dynamic
+    }
+
+    enum CodingKeys: String, CodingKey { case colors, typography, spacing, cornerRadii, borderWidths, shadows, dynamic }
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        colors = try container.decode([String: ColorToken].self, forKey: .colors)
+        typography = try container.decode([String: TypographyToken].self, forKey: .typography)
+        spacing = try container.decode([String: DimensionToken].self, forKey: .spacing)
+        cornerRadii = try container.decode([String: DimensionToken].self, forKey: .cornerRadii)
+        borderWidths = try container.decode([String: DimensionToken].self, forKey: .borderWidths)
+        shadows = try container.decode([String: ShadowToken].self, forKey: .shadows)
+        dynamic = try container.decodeIfPresent(
+            DynamicTokenCollection.self,
+            forKey: .dynamic
+        ) ?? DynamicTokenCollection()
+    }
+}
+
+/// Structure-driven primitive tokens imported from arbitrary Figma variable paths.
+public struct DynamicTokenCollection: Codable, Equatable, Sendable {
+    public let colors: [String: ColorToken]
+    public let numbers: [String: ThemedValueToken<Double>]
+    public let strings: [String: ThemedValueToken<String>]
+    public let booleans: [String: ThemedValueToken<Bool>]
+
+    public init(
+        colors: [String: ColorToken] = [:],
+        numbers: [String: ThemedValueToken<Double>] = [:],
+        strings: [String: ThemedValueToken<String>] = [:],
+        booleans: [String: ThemedValueToken<Bool>] = [:]
+    ) {
+        self.colors = colors
+        self.numbers = numbers
+        self.strings = strings
+        self.booleans = booleans
+    }
+}
+
+public struct ThemedValueToken<Value: Codable & Equatable & Sendable>: Codable, Equatable, Sendable {
+    public let description: String?
+    public let values: [String: Value]
+    public init(description: String? = nil, values: [String: Value]) {
+        self.description = description
+        self.values = values
     }
 }
 

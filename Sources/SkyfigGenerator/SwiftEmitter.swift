@@ -31,6 +31,7 @@ public enum SwiftEmitter {
         lines += renderCategory("CornerRadii", declarations: document.tokens.cornerRadii.mapValues { number($0.value) }, type: "Double", indent: 1)
         lines += renderCategory("BorderWidths", declarations: document.tokens.borderWidths.mapValues { number($0.value) }, type: "Double", indent: 1)
         lines += renderCategory("Shadows", declarations: document.tokens.shadows.mapValues(shadowExpression), indent: 1)
+        lines += renderDynamic(document.tokens.dynamic, indent: 1)
         lines.append("}")
         if namespace != "SkyfigTokens" {
             lines.append("")
@@ -58,6 +59,29 @@ public enum SwiftEmitter {
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
         try generated.write(to: url, options: .atomic)
     }
+}
+
+private func renderDynamic(_ dynamic: DynamicTokenCollection, indent: Int) -> [String] {
+    var declarations: [String: String] = [:]
+    for (path, token) in dynamic.colors {
+        declarations[path] = colorExpression(light: token.values["light"]!, dark: token.values["dark"]!)
+    }
+    for (path, token) in dynamic.numbers {
+        declarations[path] = "SkyfigThemedValue<Double>(light: \(number(token.values["light"]!)), "
+            + "dark: \(number(token.values["dark"]!)))"
+    }
+    for (path, token) in dynamic.strings {
+        declarations[path] = "SkyfigThemedValue<String>(light: \(swiftString(token.values["light"]!)), "
+            + "dark: \(swiftString(token.values["dark"]!)))"
+    }
+    for (path, token) in dynamic.booleans {
+        declarations[path] = "SkyfigThemedValue<Bool>(light: \(token.values["light"]!), "
+            + "dark: \(token.values["dark"]!))"
+    }
+    guard !declarations.isEmpty else { return [] }
+    let root = Namespace()
+    for key in declarations.keys.sorted() { root.insert(path: key, declaration: declarations[key]!) }
+    return render(root, valueType: nil, indent: indent)
 }
 
 /// Errors reported while generating or checking generated Swift source.

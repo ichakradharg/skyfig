@@ -8,6 +8,7 @@ The repository includes:
 - light and dark colors, typography, spacing, corner radii, border widths, and layered shadows;
 - deterministic Swift generation with generated code isolated in `Sources/Skyfig/Generated`;
 - a Figma Variables REST API normalizer with alias resolution;
+- structure-driven Figma primitive generation: arbitrary slash paths become nested Swift APIs without team mapping files;
 - CI, scheduled/manual Figma synchronization, and review-gated SemVer releases;
 - unit tests and a runnable SwiftUI showcase.
 
@@ -219,6 +220,10 @@ Skyfig can be used as a team-owned token publisher. A fork uses its own Figma se
 Run **Actions → Sync Figma tokens → Run workflow**, or rely on the weekly schedule. Repository Actions settings must permit `GITHUB_TOKEN` to create pull requests. GitHub may place CI for a pull request created by the built-in token in an approval-required state; if so, a maintainer must choose **Approve workflows to run** before the required PR check can complete. A least-privilege GitHub App installation token is the appropriate option if fully unattended PR checks are needed; do not substitute a broad personal access token.
 
 ### Figma naming convention
+
+Skyfig keeps its semantic families for the bundled fixture and existing consumers, but they are not required for a team-owned fork. Every supported primitive Figma variable is also preserved in a structure-driven API under the configured namespace. For example, `foundation/colors/brand/primary` generates `TeamTokens.Foundation.Colors.Brand.primary`. Segments are Swift-normalized deterministically; collisions fail the normalization with both source names. COLOR, FLOAT, STRING, and BOOLEAN variables are supported; colors use `SkyfigColorToken`, while the other primitives use `SkyfigThemedValue`. Typography and shadows remain explicit semantic composites because Figma Variables represents them as separate primitive fields—Skyfig does not infer a composite style from arbitrary names.
+
+For example, `type/body/font-size` becomes `TeamTokens.Type.Body.fontSize`, but it is a `SkyfigThemedValue<Double>`, not a guessed `SkyfigTypographyToken`. Figma stores typography and shadow styles as multiple primitive variables, so unrelated COLOR/FLOAT/STRING/BOOLEAN paths stay independently typed. Teams that want one bundled `SkyfigTypographyToken` or `SkyfigShadowToken` can continue using the established explicit semantic typography and shadow conventions.
 
 Collection modes are matched by name, case-insensitively, never by array position. Name them `Light` and `Dark`. A single-mode collection uses its default mode for both themes; a multi-mode collection must define both names so a misspelling cannot silently map dark values to light. Aliases are resolved across collections by theme; missing aliases and cycles fail the sync. Variables marked `deletedButReferenced` remain available for alias resolution but are not emitted as tokens.
 

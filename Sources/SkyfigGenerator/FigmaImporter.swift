@@ -21,6 +21,10 @@ public enum FigmaImporter {
         var typographyBuilders: [String: TypographyBuilder] = [:]
         var shadowBuilders: [String: [Int: ShadowBuilder]] = [:]
         var importedNames: [String: String] = [:]
+        var dynamicColors: [String: ColorToken] = [:]
+        var dynamicNumbers: [String: ThemedValueToken<Double>] = [:]
+        var dynamicStrings: [String: ThemedValueToken<String>] = [:]
+        var dynamicBooleans: [String: ThemedValueToken<Bool>] = [:]
 
         for id in variables.keys.sorted() {
             guard let variable = variables[id] as? [String: Any], let rawName = variable["name"] as? String else {
@@ -38,6 +42,44 @@ public enum FigmaImporter {
                 source: rawName
             ) {
                 try claim(importKey, source: rawName, importedNames: &importedNames)
+            }
+            let dynamicPath = try dynamicTokenPath(parts, source: rawName)
+            try claim("dynamic:\(dynamicPath)", source: rawName, importedNames: &importedNames)
+            let description = variable["description"] as? String
+            switch resolvedType {
+            case "COLOR":
+                dynamicColors[dynamicPath] = ColorToken(
+                    description: description,
+                    values: [
+                        "light": try resolver.color(id: id, theme: "light"),
+                        "dark": try resolver.color(id: id, theme: "dark"),
+                    ]
+                )
+            case "FLOAT":
+                dynamicNumbers[dynamicPath] = ThemedValueToken(
+                    description: description,
+                    values: themed(
+                        try resolver.number(id: id, theme: "light"),
+                        dark: { try resolver.number(id: id, theme: "dark") }
+                    )
+                )
+            case "STRING":
+                dynamicStrings[dynamicPath] = ThemedValueToken(
+                    description: description,
+                    values: themed(
+                        try resolver.string(id: id, theme: "light"),
+                        dark: { try resolver.string(id: id, theme: "dark") }
+                    )
+                )
+            case "BOOLEAN":
+                dynamicBooleans[dynamicPath] = ThemedValueToken(
+                    description: description,
+                    values: themed(
+                        try resolver.boolean(id: id, theme: "light"),
+                        dark: { try resolver.boolean(id: id, theme: "dark") }
+                    )
+                )
+            default: continue
             }
 
             switch category {
@@ -82,6 +124,7 @@ public enum FigmaImporter {
                 cornerRadii: cornerRadii,
                 borderWidths: borderWidths,
                 shadows: shadows
+                , dynamic: DynamicTokenCollection(colors: dynamicColors, numbers: dynamicNumbers, strings: dynamicStrings, booleans: dynamicBooleans)
             )
         )
         try document.validate()
@@ -158,6 +201,12 @@ private final class Resolver {
         guard let value = raw as? String else {
             throw FigmaImportError.typeMismatch(variable: id, expected: "a string")
         }
+        return value
+    }
+
+    func boolean(id: String, theme: String) throws -> Bool {
+        let raw = try resolve(id: id, theme: theme, stack: [])
+        guard let value = raw as? Bool else { throw FigmaImportError.typeMismatch(variable: id, expected: "a boolean") }
         return value
     }
 
@@ -373,10 +422,20 @@ private func tokenPath<S: Collection>(_ parts: S, source: String) throws -> Stri
     return parts.joined(separator: ".")
 }
 
+private func dynamicTokenPath<S: Collection>(_ parts: S, source: String) throws -> String where S.Element == String {
+    guard !parts.isEmpty else { throw FigmaImportError.unsupportedName(source) }
+    return parts.map { $0.first?.isNumber == true ? "_\($0)" : $0 }.joined(separator: ".")
+}
+
 private func numeric(_ value: Any?) -> Double? {
     guard let number = value as? NSNumber else { return nil }
     guard CFGetTypeID(number) != CFBooleanGetTypeID() else { return nil }
     return number.doubleValue
+}
+
+private func themed<Value>(_ light: Value, dark: () throws -> Value) -> [String: Value] {
+    let darkValue = (try? dark()) ?? light
+    return ["light": light, "dark": darkValue]
 }
 
 private func byte(_ value: Double) -> UInt8 {

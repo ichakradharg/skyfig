@@ -145,4 +145,26 @@ final class FigmaImporterTests: XCTestCase {
             XCTAssertTrue(String(describing: error).contains("multiple modes but no dark mode"))
         }
     }
+
+    func testPreservesArbitraryHierarchyWithoutFamilyMapping() throws {
+        let data = Data("""
+        {"meta":{"variableCollections":{"c":{"defaultModeId":"l","modes":[
+        {"modeId":"l","name":"Light"},{"modeId":"d","name":"Dark"}
+        ]}},"variables":{
+        "color":{"name":"foundation/colors/brand/primary","resolvedType":"COLOR",
+        "variableCollectionId":"c","valuesByMode":{"l":{"r":0,"g":0.4,"b":1,"a":1},
+        "d":{"r":0.3,"g":0.6,"b":1,"a":1}}},
+        "number":{"name":"layout/Grid Size/2xl","resolvedType":"FLOAT","variableCollectionId":"c","valuesByMode":{"l":32,"d":36}}
+        }}}
+        """.utf8)
+        let document = try FigmaImporter.importVariables(from: data)
+        XCTAssertEqual(document.tokens.dynamic.colors["foundation.colors.brand.primary"]?.values["dark"], "#4D99FFFF")
+        XCTAssertEqual(document.tokens.dynamic.numbers["layout.gridSize._2xl"]?.values["light"], 32)
+        let generated = try SwiftEmitter.generate(document, namespace: "TeamTokens")
+        XCTAssertTrue(generated.contains("public enum Foundation"))
+        XCTAssertTrue(generated.contains("public enum Brand"))
+        XCTAssertTrue(generated.contains("public static let primary = SkyfigColorToken"))
+        XCTAssertTrue(generated.contains("public enum GridSize"))
+        XCTAssertTrue(generated.contains("public static let _2xl"))
+    }
 }
