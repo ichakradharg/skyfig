@@ -19,3 +19,7 @@ Maintainers will acknowledge a complete report as soon as practical, coordinate 
 ## Secrets and generated content
 
 Skyfig does not need credentials at runtime. Figma credentials belong only in GitHub Actions Secrets and are scoped to the fetch step in `.github/workflows/sync-figma.yml`. Never commit Figma API responses or pass access tokens as CLI arguments. Generated Swift must contain normalized token literals only—never source IDs, access tokens, environment values, timestamps, or machine paths.
+
+## Automated dependency safeguards
+
+Dependabot opens weekly update pull requests for Swift package dependencies and GitHub Actions. Dependabot security updates, secret scanning, and push protection are enabled in the repository settings. Pull requests that change dependencies or workflows run the dependency-review check, which blocks newly introduced high-severity vulnerabilities. CodeQL scans Swift and GitHub Actions workflows after merges to `main`, weekly, and when run manually; it is kept off pull-request CI to preserve fast feedback.
