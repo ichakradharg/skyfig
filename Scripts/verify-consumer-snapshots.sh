@@ -9,6 +9,7 @@ snapshot_directory="Examples/SkyfigConsumer/Snapshots"
 derived_data_path="${SKYFIG_SNAPSHOT_DERIVED_DATA:-/private/tmp/skyfig-consumer-snapshots}"
 app_path="$derived_data_path/Build/Products/Debug-iphonesimulator/SkyfigConsumer.app"
 bundle_identifier="com.skyfig.consumer"
+snapshot_settle_delay="${SKYFIG_SNAPSHOT_SETTLE_DELAY:-5}"
 
 case "$mode" in
   record|verify) ;;
@@ -54,7 +55,7 @@ record_or_verify_snapshot() {
 
   xcrun simctl install "$simulator" "$app_path"
   xcrun simctl launch --terminate-running-process "$simulator" "$bundle_identifier"
-  sleep 3
+  sleep "$snapshot_settle_delay"
   xcrun simctl io "$simulator" screenshot "$actual_snapshot"
 
   if [[ "$mode" == "record" ]]; then
