@@ -31,6 +31,10 @@ SKYFIG_IPHONE_SIMULATOR="iPhone 17 Pro" SKYFIG_SIMULATOR_OS=26.0.1 \
   Scripts/test-consumer-ui.sh iphone
 ```
 
+## Visual screenshot baselines
+
+The UI tests prove navigation and expected content; they do not compare rendered pixels. The dedicated-Mac visual workflow records and verifies deterministic iPhone and iPad screenshots in light appearance. Follow the [consumer visual-regression guide](../../Docs/VISUAL_REGRESSION.md) to prepare the `skyfig-visual` runner, record reviewed baselines, and verify intended changes. Dark-mode screenshot review is intentionally deferred and remains a required manual accessibility and release-review step.
+
 ## What it proves
 
 - A separate package can import the public `Skyfig` library product.

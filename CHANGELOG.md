@@ -9,6 +9,7 @@ All notable consumer-facing changes to Skyfig are recorded here. Skyfig follows 
 - Semantic action, focus, and status color tokens.
 - Dynamic Type-aware typography helper for SwiftUI consumers.
 - Token accessibility guardrails and consumer guidance.
+- iPhone and iPad consumer UI-test coverage, plus dedicated-Mac light-appearance screenshot regression guidance and workflow support.
 
 ### Changed
 

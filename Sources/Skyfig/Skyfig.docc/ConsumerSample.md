@@ -18,8 +18,8 @@ The app bar on the Home tab includes a token-styled add button. Its content uses
 
 ## Continuous integration
 
-The iOS consumer build runs when package runtime, generated-token, or consumer-sample files change. It verifies that the public package dependency and SwiftUI API compile for iOS 26 without starting a simulator.
-
-The `SkyfigConsumerUITests` target confirms all five tabs exist and that each tab presents its expected token-driven content. Run it locally from Xcode or on a dedicated macOS CI runner. GitHub-hosted CI intentionally limits itself to the reliable iOS compile check; hosted simulator test runners can stall before a test starts. Documentation-only changes do not start an iOS build.
+The iOS consumer job runs when package runtime, generated-token, or consumer-sample files change. It builds the public package boundary and runs `SkyfigConsumerUITests` against named iPhone and iPad simulators. The tests confirm all five tabs exist and that each presents its expected token-driven content. Documentation-only changes do not start an iOS job.
 
 To run the tests in Xcode, select the **SkyfigConsumer** scheme and an iPhone or iPad simulator, then choose **Product > Test**. From the repository root, `Scripts/test-consumer-ui.sh` runs both devices; pass `iphone` or `ipad` to run only one.
+
+Pixel-stable screenshot comparison is separate from UI tests and runs only on the dedicated `skyfig-visual` Mac runner. See the [consumer visual-regression guide](https://github.com/ichakradharg/skyfig/blob/main/Docs/VISUAL_REGRESSION.md) for baseline setup. The initial screenshot set is light-only; dark-mode visual review remains separate.
