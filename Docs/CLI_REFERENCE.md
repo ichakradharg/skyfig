@@ -32,7 +32,7 @@ swift run skyfig generate \
 
 Writes `Tokens.generated.swift` into the output directory. Pass a `.swift` path to write to one exact file.
 
-`--namespace` controls the generated public enum. It defaults to `SkyfigTokens`, so existing repositories and consumers remain compatible. A team-owned fork can choose a distinct Swift type name, such as `TeamATokens`; use the same namespace every time you generate or check the output.
+`--namespace` controls the generated public enum. It defaults to `SkyfigTokens`, so existing repositories and consumers remain compatible. A team-owned fork can choose a distinct Swift type name, such as `TeamATokens`; use the same namespace every time you generate or check the output. Custom output includes `SkyfigTokens` as a compatibility alias for the bundled Skyfig tests and examples, while new app code should use the selected namespace.
 
 ## Check generated source in CI
 

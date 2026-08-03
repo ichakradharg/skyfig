@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+token_namespace="${SKYFIG_TOKEN_NAMESPACE:-SkyfigTokens}"
+
 doc_output=".build/release-docc"
 rm -rf "$doc_output"
 
@@ -8,8 +10,9 @@ swift build
 swift test --parallel
 swift package plugin --allow-writing-to-package-directory swiftlint lint
 swift run skyfig validate --input Tokens/skyfig.tokens.json
-swift run skyfig generate --input Tokens/skyfig.tokens.json --output Sources/Skyfig/Generated --check
+swift run skyfig generate --input Tokens/skyfig.tokens.json --output Sources/Skyfig/Generated --namespace "$token_namespace" --check
 Scripts/test-cli-integration.sh
+Scripts/test-custom-namespace.sh
 swift run --package-path Examples/SkyfigPackageConsumer
 swift package --allow-writing-to-directory "$doc_output" \
   generate-documentation --target Skyfig --output-path "$doc_output"

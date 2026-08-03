@@ -19,6 +19,8 @@ jobs:
   prepare:
     runs-on: macos-15
     timeout-minutes: 20
+    env:
+      SKYFIG_TOKEN_NAMESPACE: ${{ vars.SKYFIG_TOKEN_NAMESPACE || 'SkyfigTokens' }}
     outputs:
       sha: ${{ steps.meta.outputs.sha }}
       tag: ${{ steps.meta.outputs.tag }}

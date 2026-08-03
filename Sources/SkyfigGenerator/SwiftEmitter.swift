@@ -32,6 +32,12 @@ public enum SwiftEmitter {
         lines += renderCategory("BorderWidths", declarations: document.tokens.borderWidths.mapValues { number($0.value) }, type: "Double", indent: 1)
         lines += renderCategory("Shadows", declarations: document.tokens.shadows.mapValues(shadowExpression), indent: 1)
         lines.append("}")
+        if namespace != "SkyfigTokens" {
+            lines.append("")
+            lines.append("/// Compatibility alias retained for bundled Skyfig tests and examples.")
+            lines.append("/// New application code should use \(namespace).")
+            lines.append("public typealias SkyfigTokens = \(namespace)")
+        }
         lines.append("")
         return lines.joined(separator: "\n")
     }
