@@ -1,5 +1,6 @@
 import XCTest
 
+@MainActor
 final class SkyfigConsumerUITests: XCTestCase {
     private let app = XCUIApplication()
 
