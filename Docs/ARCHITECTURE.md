@@ -14,7 +14,7 @@ Canonical JSON (reviewed source of truth)
        validate + generate
                 |
                 v
-Typed Swift API (SkyfigTokens)
+Typed Swift API (SkyfigTokens or team namespace)
                 |
         reviewed package release
                 |
@@ -44,7 +44,7 @@ This model makes a token update explicit and reversible for each app team. It al
 
 ## Where to start
 
-- App developers should begin with the [consumer quick start](../README.md#ios-consumer-quick-start) and use `SkyfigTokens`.
+- App developers should begin with the [consumer quick start](../README.md#ios-consumer-quick-start) and use the generated namespace configured by their publisher. The default is `SkyfigTokens`; team-owned forks can use a name such as `TeamATokens`.
 - Package maintainers should read the [codebase guide](CODEBASE_GUIDE.md), then the [troubleshooting guide](TROUBLESHOOTING.md).
 - Design-token maintainers should follow [Figma token-source options](../FIGMA_TOKEN_SOURCE_OPTIONS.md) and the protected sync-pull-request workflow.
 - Consumer visual reviewers should follow the [dedicated-Mac baseline guide](VISUAL_REGRESSION.md).

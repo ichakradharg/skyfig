@@ -4,7 +4,7 @@ Skyfig publishes API reference and conceptual guides as a static DocC site on Gi
 
 ## Publishing
 
-After this workflow is merged, configure **Settings > Pages** for the repository to use **GitHub Actions** as its build source. Every relevant change merged to `main`, or a manual run of **Publish DocC site**, generates and deploys the static site.
+After this workflow is merged, configure **Settings > Pages** for the repository to use **GitHub Actions** as its build source. Every relevant change merged to `main`, or a manual run of **Publish DocC site**, generates and deploys the static site. This is a per-repository GitHub setting, so a team-owned fork must enable it independently.
 
 The repository site is served below the `skyfig` path, so DocC's static-hosting transform is configured with that base path. This keeps page navigation and deep links correct on GitHub Pages.
 

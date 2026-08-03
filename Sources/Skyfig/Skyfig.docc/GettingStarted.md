@@ -36,7 +36,7 @@ struct WelcomeCard: View {
 }
 ```
 
-The generated API is compile-time checked. If a token changes or is removed in a new Skyfig version, app code identifies the affected use during its normal build and test process. A team-owned fork can configure a different generated namespace such as `TeamATokens`; see <doc:ForkAndOwn>.
+The generated API is compile-time checked. If a token changes or is removed in a new Skyfig version, app code identifies the affected use during its normal build and test process. A team-owned fork can configure a different generated namespace such as `TeamATokens`; replace both the package URL and namespace in this guide with that team’s values. See <doc:ForkAndOwn>.
 
 ## What stays out of app repositories
 

@@ -18,6 +18,8 @@ swift run skyfig generate \
 
 If you intentionally change canonical tokens or the emitter, regenerate without `--check` and commit both the canonical input and generated output.
 
+For a team-owned fork with `SKYFIG_TOKEN_NAMESPACE` set, pass the same value to local generation and run `Scripts/test-custom-namespace.sh`. The script verifies that a team-specific public API still compiles the package and bundled consumer example.
+
 For changes to the iOS consumer sample, run `Scripts/test-consumer-ui.sh`. Changes that affect rendered appearance also need the dedicated-Mac [visual-baseline review](Docs/VISUAL_REGRESSION.md); do not record screenshots from ordinary hosted CI.
 
 ## Source boundaries
@@ -48,3 +50,7 @@ Keep pull requests focused and explain:
 - any required repository or Figma configuration.
 
 All changes, including automated token syncs, are review-first. Do not add automatic publishing to the sync workflow or include Figma responses, file keys, tokens, or other credentials in commits, fixtures, logs, or pull-request bodies.
+
+## Team-owned forks
+
+Forks are independent publishers. Before using one for an app team, replace the upstream owner in `.github/CODEOWNERS` and configure the fork’s own branch protection, required checks, release reviewers, version-tag protection, Actions settings, and optional Pages site. Those GitHub settings do not transfer with a fork. Follow [Fork and own Skyfig](Docs/FORK_AND_OWN.md) for the full checklist.

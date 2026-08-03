@@ -24,9 +24,21 @@ The upstream Skyfig repository remains the generator and reference implementatio
 
 The live Figma endpoint requires the eligible Figma plan, membership, and variable-read permission. Until that access is ready, fixture mode continues to validate the full generation pipeline without credentials.
 
+## Fork readiness checklist
+
+Before inviting app teams to depend on the fork, confirm all of the following:
+
+- `swift test --parallel` and `Scripts/test-custom-namespace.sh` pass locally;
+- the configured namespace appears in `Sources/Skyfig/Generated/Tokens.generated.swift` after generation;
+- the fork’s `CODEOWNERS`, branch rules, required CI check, release environment, and tag rules belong to the team—not the upstream repository owner;
+- GitHub Pages is enabled only if the team wants hosted DocC, and the Pages workflow has been run once;
+- the package URL in consumer apps points to the team fork and uses a released version, never the default branch.
+
 ## Generate and review tokens
 
 Run **Actions → Sync Figma tokens → Run workflow** in your fork. The workflow reads only your repository secrets and opens or updates a draft pull request. Review both the canonical JSON and generated Swift changes before merging.
+
+The first sync should be treated as an onboarding exercise: inspect the canonical token diff, confirm the generated namespace, let the required CI check finish, and merge only after the team owner approves it.
 
 The namespace affects the generated API only. The Swift package module remains `Skyfig` unless your team intentionally renames the package as a separate migration. Skyfig keeps `SkyfigTokens` as a compatibility alias for its bundled tests and examples; new application code should use your chosen namespace.
 
@@ -50,6 +62,8 @@ swift run skyfig generate \
 ```
 
 The namespace must be a valid Swift identifier: begin with a letter or underscore, contain only letters, numbers, and underscores, and not be a Swift keyword.
+
+The repository variable is the source of truth for hosted checks. For local work, pass the same value with `--namespace`; `Scripts/test-custom-namespace.sh` proves that a non-default namespace still builds the package and its consumer example.
 
 ## Release to app developers
 

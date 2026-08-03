@@ -4,7 +4,7 @@ Skyfig publishes a stable, semantic API for application developers. Token values
 
 ## Use semantic tokens in apps
 
-Consumer code should express intent, not a literal design choice. Prefer `SkyfigTokens.Colors.Text.primary` and `SkyfigTokens.Colors.Surface.primary` over copying a color value or using an implementation-oriented name. The current fixture also exposes `accent` as a primitive bridge token; new application-facing color tokens should be semantic.
+Consumer code should express intent, not a literal design choice. Prefer `SkyfigTokens.Colors.Text.primary` and `SkyfigTokens.Colors.Surface.primary` over copying a color value or using an implementation-oriented name. In a team-owned fork, substitute the configured namespace, such as `TeamATokens`. The current fixture also exposes `accent` as a primitive bridge token; new application-facing color tokens should be semantic.
 
 The fixture now models the first semantic color contract: `action.primary` and `action.onPrimary`, `focus.ring`, `text.*`, `surface.*`, and `status.success`, `status.warning`, `status.danger`, and `status.info`. These are sample design decisions, ready to be replaced by approved Figma values later without changing the publishing workflow.
 
