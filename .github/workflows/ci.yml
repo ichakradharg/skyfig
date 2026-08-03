@@ -30,15 +30,27 @@ jobs:
         run: swift package dump-package >/dev/null
       - name: Build
         run: swift build
-      - name: Build iOS consumer sample
+      - name: Test iOS consumer sample on iPhone
         env:
           DEVELOPER_DIR: /Applications/Xcode_26.0.1.app/Contents/Developer
         run: |
-          xcodebuild build \
+          xcodebuild test \
             -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
             -scheme SkyfigConsumer \
             -sdk iphonesimulator26.0 \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0' \
+            -only-testing:SkyfigConsumerUITests \
+            CODE_SIGNING_ALLOWED=NO
+      - name: Test iOS consumer sample on iPad
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_26.0.1.app/Contents/Developer
+        run: |
+          xcodebuild test \
+            -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
+            -scheme SkyfigConsumer \
+            -sdk iphonesimulator26.0 \
+            -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M5),OS=26.0' \
+            -only-testing:SkyfigConsumerUITests \
             CODE_SIGNING_ALLOWED=NO
       - name: Build package consumer smoke test
         run: swift run --package-path Examples/SkyfigPackageConsumer

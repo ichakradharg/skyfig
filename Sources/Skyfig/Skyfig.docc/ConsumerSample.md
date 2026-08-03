@@ -18,4 +18,4 @@ The app bar on the Home tab includes a token-styled add button. Its content uses
 
 ## Continuous integration
 
-CI builds the `SkyfigConsumer` Xcode project against the iOS simulator SDK. This checks that the public package dependency and SwiftUI API compile for iOS 26. It is a build check, not an automated simulator interaction test.
+CI runs the `SkyfigConsumerUITests` target against both iPhone and iPad simulators. The tests confirm all five tabs exist and that each tab presents its expected token-driven content, in addition to verifying the public package dependency and SwiftUI API compile for iOS 26.

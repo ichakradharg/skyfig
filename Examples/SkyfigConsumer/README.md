@@ -12,6 +12,10 @@ This is a small iOS 26+ SwiftUI app that consumes the `Skyfig` library through a
 
 The sample temporarily uses a local package dependency so this repository can test the consumer boundary before Skyfig has a released version. After the first release, replace that dependency with the public GitHub package URL and version requirement used by your app.
 
+## Automated UI checks
+
+The `SkyfigConsumerUITests` target confirms that all five tabs are available and that each presents its expected token-driven content. CI runs these tests on both an iPhone and an iPad simulator, so the sample's navigation is verified in addition to compiling.
+
 ## What it proves
 
 - A separate package can import the public `Skyfig` library product.
