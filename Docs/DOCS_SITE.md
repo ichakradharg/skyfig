@@ -2,6 +2,8 @@
 
 Skyfig publishes API reference and conceptual guides as a static DocC site on GitHub Pages. The site is generated from the public Swift documentation comments and the catalog in `Sources/Skyfig/Skyfig.docc`.
 
+For this repository, the published site is [Skyfig documentation on GitHub Pages](https://ichakradharg.github.io/skyfig/). In a team-owned fork, GitHub assigns a different Pages URL; open **Settings → Pages** and select **Visit site** after enabling deployment.
+
 ## Publishing
 
 After this workflow is merged, configure **Settings > Pages** for the repository to use **GitHub Actions** as its build source. Every relevant change merged to `main`, or a manual run of **Publish DocC site**, generates and deploys the static site. This is a per-repository GitHub setting, so a team-owned fork must enable it independently.
