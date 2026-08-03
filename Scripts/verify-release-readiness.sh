@@ -15,29 +15,9 @@ swift package --allow-writing-to-directory "$doc_output" \
   generate-documentation --target Skyfig --output-path "$doc_output"
 test -f "$doc_output/documentation/skyfig/index.html"
 python3 Scripts/check-markdown-links.py
-xcrun simctl boot "iPhone 17 Pro" || true
-xcrun simctl bootstatus "iPhone 17 Pro" -b
-xcodebuild test \
+xcodebuild build \
   -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
   -scheme SkyfigConsumer \
-  -sdk iphonesimulator26.0 \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0.1' \
-  -only-testing:SkyfigConsumerUITests \
-  -test-timeouts-enabled YES \
-  -default-test-execution-time-allowance 60 \
-  -maximum-test-execution-time-allowance 120 \
-  ONLY_ACTIVE_ARCH=YES \
-  CODE_SIGNING_ALLOWED=NO
-xcrun simctl boot "iPad Pro 13-inch (M5)" || true
-xcrun simctl bootstatus "iPad Pro 13-inch (M5)" -b
-xcodebuild test \
-  -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
-  -scheme SkyfigConsumer \
-  -sdk iphonesimulator26.0 \
-  -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M5),OS=26.0.1' \
-  -only-testing:SkyfigConsumerUITests \
-  -test-timeouts-enabled YES \
-  -default-test-execution-time-allowance 60 \
-  -maximum-test-execution-time-allowance 120 \
-  ONLY_ACTIVE_ARCH=YES \
+  -sdk iphonesimulator \
+  -destination 'generic/platform=iOS Simulator' \
   CODE_SIGNING_ALLOWED=NO

@@ -14,7 +14,22 @@ The sample temporarily uses a local package dependency so this repository can te
 
 ## Automated UI checks
 
-The `SkyfigConsumerUITests` target confirms that all five tabs are available and that each presents its expected token-driven content. CI runs these tests on both an iPhone and an iPad simulator, so the sample's navigation is verified in addition to compiling.
+The `SkyfigConsumerUITests` target confirms that all five tabs are available and that each presents its expected token-driven content. Run these tests from Xcode by selecting the `SkyfigConsumer` scheme, choosing an iPhone or iPad simulator, and selecting **Product > Test** (Command-U).
+
+From the repository root, the same tests can be run with:
+
+```bash
+Scripts/test-consumer-ui.sh          # iPhone and iPad
+Scripts/test-consumer-ui.sh iphone   # iPhone only
+Scripts/test-consumer-ui.sh ipad     # iPad only
+```
+
+The command uses the newest installed simulator runtime by default. Override a simulator name or runtime when your local Xcode setup differs:
+
+```bash
+SKYFIG_IPHONE_SIMULATOR="iPhone 17 Pro" SKYFIG_SIMULATOR_OS=26.0.1 \
+  Scripts/test-consumer-ui.sh iphone
+```
 
 ## What it proves
 
