@@ -44,6 +44,8 @@ The namespace affects the generated API only. The Swift package module remains `
 
 Your Figma naming hierarchy does not need to match Skyfig's semantic fixture. Supported primitive variables retain their slash hierarchy automatically, so `foundation/colors/brand/primary` becomes `TeamATokens.Foundation.Colors.Brand.primary`. There is no per-team mapping configuration. Names are normalized only as required by Swift and ambiguous normalized paths fail with actionable source-name errors.
 
+Dynamic output exposes COLOR, FLOAT, STRING, and BOOLEAN variables individually. For example, `type/body/font-size` becomes `TeamATokens.Type.Body.fontSize` as a themed `Double`; it does not become a guessed typography style. Figma represents typography and shadows as separate primitive values, and Skyfig deliberately does not assume arbitrary variables form one composite. Teams that want bundled `SkyfigTypographyToken` or `SkyfigShadowToken` values can keep using the supported explicit semantic conventions.
+
 ```swift
 import Skyfig
 
