@@ -20,6 +20,7 @@ xcodebuild test \
   -scheme SkyfigConsumer \
   -sdk iphonesimulator26.0 \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0.1' \
+  -arch arm64 \
   -only-testing:SkyfigConsumerUITests \
   CODE_SIGNING_ALLOWED=NO
 xcodebuild test \
@@ -27,5 +28,6 @@ xcodebuild test \
   -scheme SkyfigConsumer \
   -sdk iphonesimulator26.0 \
   -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M5),OS=26.0.1' \
+  -arch arm64 \
   -only-testing:SkyfigConsumerUITests \
   CODE_SIGNING_ALLOWED=NO
