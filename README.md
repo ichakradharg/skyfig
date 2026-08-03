@@ -55,6 +55,7 @@ The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confi
 - [Troubleshooting](Docs/TROUBLESHOOTING.md) covers fixture validation, generation, live Figma sync, and consumer-update failures.
 - [Figma token-source options](FIGMA_TOKEN_SOURCE_OPTIONS.md) explains fixture and live-sync workflows.
 - [Fork and own Skyfig](Docs/FORK_AND_OWN.md) explains how a vertical team can configure its own Figma source, token namespace, approvals, and releases.
+- [From Figma handoff to package release](Docs/FIGMA_CHANGE_RELEASE_GUIDE.md) guides UX-approved design changes through sync, review, release, and app adoption.
 - [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) describe package publication for iOS consumers.
 
 ## iOS consumer quick start
