@@ -59,7 +59,7 @@ Never merge by copying generated files directly to `main`; the pull request is t
 
 ## Consumer app fails after a package update
 
-Use the consumer app's compiler errors as the source of truth. A removed or renamed public token is intentionally a compile-time break, so update the app to the new `SkyfigTokens` API and verify its UI before merging the package-version update.
+Use the consumer app's compiler errors as the source of truth. A removed or renamed public token is intentionally a compile-time break, so update the app to the generated API for that publisher—`SkyfigTokens` by default or the team namespace in a fork—and verify its UI before merging the package-version update.
 
 ## Visual baseline setup or verification fails
 

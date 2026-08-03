@@ -22,4 +22,4 @@ The iOS consumer job runs when package runtime, generated-token, or consumer-sam
 
 To run the tests in Xcode, select the **SkyfigConsumer** scheme and an iPhone or iPad simulator, then choose **Product > Test**. From the repository root, `Scripts/test-consumer-ui.sh` runs both devices; pass `iphone` or `ipad` to run only one.
 
-Pixel-stable screenshot comparison is separate from UI tests and runs only on the dedicated `skyfig-visual` Mac runner. See the [consumer visual-regression guide](https://github.com/ichakradharg/skyfig/blob/main/Docs/VISUAL_REGRESSION.md) for baseline setup. The initial screenshot set is light-only; dark-mode visual review remains separate.
+Pixel-stable screenshot comparison is separate from UI tests and runs only on the dedicated `skyfig-visual` Mac runner. The repository’s `Docs/VISUAL_REGRESSION.md` guide covers baseline setup; a team-owned fork should configure and operate its own runner. The initial screenshot set is light-only; dark-mode visual review remains separate.
