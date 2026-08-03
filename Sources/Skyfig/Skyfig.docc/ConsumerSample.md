@@ -18,4 +18,6 @@ The app bar on the Home tab includes a token-styled add button. Its content uses
 
 ## Continuous integration
 
-CI builds the `SkyfigConsumer` Xcode project against the iOS simulator SDK. This checks that the public package dependency and SwiftUI API compile for iOS 26. It is a build check, not an automated simulator interaction test.
+The iOS consumer build runs when package runtime, generated-token, or consumer-sample files change. It verifies that the public package dependency and SwiftUI API compile for iOS 26 without starting a simulator.
+
+The `SkyfigConsumerUITests` target confirms all five tabs exist and that each tab presents its expected token-driven content. Run it locally from Xcode or on a dedicated macOS CI runner. GitHub-hosted CI intentionally limits itself to the reliable iOS compile check; hosted simulator test runners can stall before a test starts. Documentation-only changes do not start an iOS build.
