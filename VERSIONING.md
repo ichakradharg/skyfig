@@ -23,4 +23,6 @@ Every token-sync pull request should state the expected consumer impact and prop
 
 Token synchronization never releases. A maintainer first merges a reviewed change to `main`, manually dispatches `.github/workflows/release.yml` with a stable version, and obtains approval for the protected `release` environment. The workflow tests the default-branch commit, verifies the version is greater than the latest stable tag, waits at the environment gate, then creates an annotated tag and GitHub release for that exact commit.
 
+Before dispatching a release, run `Scripts/test-consumer-ui.sh` locally on an iPhone and iPad simulator. The release workflow compiles the consumer app, but does not use a shared GitHub-hosted simulator for UI tests because those runners can stall before a test starts.
+
 Repository administrators should protect `main`, require `CI / build-and-test`, require review, protect `v*` tags, and configure required reviewers on the `release` environment. Tags and published releases must not be moved or replaced.

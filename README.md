@@ -218,9 +218,10 @@ Typography and shadows are grouped because Figma Variables natively store primit
 Pull requests and `main` run builds, tests, canonical validation, and a generated-source freshness check. Releases follow [Semantic Versioning](VERSIONING.md) and are deliberately separate from token synchronization:
 
 1. merge a reviewed change to `main`;
-2. manually dispatch the **Release** workflow with a stable `X.Y.Z` version;
-3. approve the protected `release` environment;
-4. the workflow tags the exact tested commit and creates the GitHub release.
+2. run the consumer UI tests locally on an iPhone and iPad simulator;
+3. manually dispatch the **Release** workflow with a stable `X.Y.Z` version;
+4. approve the protected `release` environment;
+5. the workflow tags the exact tested commit and creates the GitHub release.
 
 To make this a real review gate, configure the public `release` environment with required reviewers, protect `main` with the `CI / linux-toolchain` check and at least one PR approval, and protect `v*` tags from update or deletion. The iOS consumer build runs only for relevant package or sample changes. Run simulator UI validation locally or on a dedicated macOS runner rather than relying on shared GitHub-hosted simulator runners. A solo repository can keep the manual environment gate, but independent approval requires a trusted collaborator.
 
