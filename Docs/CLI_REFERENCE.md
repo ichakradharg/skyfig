@@ -26,10 +26,13 @@ Converts a saved Variables API response to canonical JSON. The GitHub workflow i
 ```bash
 swift run skyfig generate \
   --input Tokens/skyfig.tokens.json \
-  --output Sources/Skyfig/Generated
+  --output Sources/Skyfig/Generated \
+  --namespace TeamATokens
 ```
 
 Writes `Tokens.generated.swift` into the output directory. Pass a `.swift` path to write to one exact file.
+
+`--namespace` controls the generated public enum. It defaults to `SkyfigTokens`, so existing repositories and consumers remain compatible. A team-owned fork can choose a distinct Swift type name, such as `TeamATokens`; use the same namespace every time you generate or check the output.
 
 ## Check generated source in CI
 
@@ -37,6 +40,7 @@ Writes `Tokens.generated.swift` into the output directory. Pass a `.swift` path 
 swift run skyfig generate \
   --input Tokens/skyfig.tokens.json \
   --output Sources/Skyfig/Generated \
+  --namespace TeamATokens \
   --check
 ```
 

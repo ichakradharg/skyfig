@@ -86,6 +86,19 @@ final class TokenPipelineTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: output, encoding: .utf8), "old\n")
     }
 
+    func testCustomNamespaceIsUsedForGeneratedTokens() throws {
+        let generated = try SwiftEmitter.generate(makeDocument(), namespace: "TeamATokens")
+
+        XCTAssertTrue(generated.contains("public enum TeamATokens"))
+        XCTAssertFalse(generated.contains("public enum SkyfigTokens"))
+    }
+
+    func testInvalidNamespaceIsRejected() throws {
+        XCTAssertThrowsError(try SwiftEmitter.generate(makeDocument(), namespace: "team tokens")) { error in
+            XCTAssertEqual(error as? GeneratorError, .invalidNamespace("team tokens"))
+        }
+    }
+
     func testSwiftStringEscapesAllControlScalars() throws {
         let document = TokenDocument(
             name: "Escaping",

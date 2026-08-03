@@ -10,7 +10,7 @@ Reviewed, typed SwiftUI design tokens for iOS, macOS, and tvOS apps.
 
 Skyfig is a Swift package that lets app teams use a stable, versioned design-token API. The package has no Figma credential, network request, or generation step at app runtime. Import ``Skyfig`` and use the generated ``SkyfigTokens`` values in SwiftUI views.
 
-Skyfig's maintainer workflow is deliberately separate: a protected central repository imports Figma Variables, validates the canonical token document, generates Swift, and releases a reviewed package version. App repositories update to that version when they are ready to adopt the visual change.
+Skyfig's publisher workflow is deliberately separate: a protected repository imports Figma Variables, validates the canonical token document, generates Swift, and releases a reviewed package version. A team can own that publisher through a fork, while app repositories update to its version when they are ready to adopt the visual change.
 
 ## Topics
 
@@ -23,6 +23,7 @@ Skyfig's maintainer workflow is deliberately separate: a protected central repos
 - <doc:ConsumerSample>
 - <doc:Troubleshooting>
 - <doc:Architecture>
+- <doc:ForkAndOwn>
 
 ### Generated tokens
 

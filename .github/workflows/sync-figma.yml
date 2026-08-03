@@ -14,10 +14,10 @@ concurrency:
 env:
   BASE_BRANCH: ${{ github.event.repository.default_branch }}
   BOT_BRANCH: automation/figma-token-sync
+  TOKEN_NAMESPACE: ${{ vars.SKYFIG_TOKEN_NAMESPACE || 'SkyfigTokens' }}
 
 jobs:
   sync:
-    if: github.repository == 'ichakradharg/skyfig'
     runs-on: macos-15
     timeout-minutes: 20
     permissions:
@@ -61,7 +61,8 @@ jobs:
           swift run -c release skyfig validate --input Tokens/skyfig.tokens.json
           swift run -c release skyfig generate \
             --input Tokens/skyfig.tokens.json \
-            --output Sources/Skyfig/Generated
+            --output Sources/Skyfig/Generated \
+            --namespace "$TOKEN_NAMESPACE"
           swift test --parallel
           git diff --check
 
@@ -78,7 +79,7 @@ jobs:
 
           existing="$(gh pr list --state open --base "$BASE_BRANCH" \
             --json number,headRefName,headRepositoryOwner,isCrossRepository \
-            --jq 'map(select(.headRefName == "automation/figma-token-sync" and .headRepositoryOwner.login == "ichakradharg" and .isCrossRepository == false))[0].number // empty')"
+            --jq 'map(select(.headRefName == "automation/figma-token-sync" and .isCrossRepository == false))[0].number // empty')"
           if git diff --cached --quiet; then
             if [[ -n "$existing" ]]; then
               gh pr close "$existing" --comment 'Closing because canonical and generated tokens now match the default branch.'

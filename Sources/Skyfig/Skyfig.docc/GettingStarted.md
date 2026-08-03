@@ -36,8 +36,8 @@ struct WelcomeCard: View {
 }
 ```
 
-The generated API is compile-time checked. If a token changes or is removed in a new Skyfig version, app code identifies the affected use during its normal build and test process.
+The generated API is compile-time checked. If a token changes or is removed in a new Skyfig version, app code identifies the affected use during its normal build and test process. A team-owned fork can configure a different generated namespace such as `TeamATokens`; see <doc:ForkAndOwn>.
 
 ## What stays out of app repositories
 
-Figma access tokens and file keys belong only to the central Skyfig publisher repository. Consumers install a reviewed package release; they do not run the Figma sync workflow and do not need Figma access.
+Figma access tokens and file keys belong only to the team’s Skyfig publisher repository. Consumers install a reviewed package release; they do not run the Figma sync workflow and do not need Figma access.

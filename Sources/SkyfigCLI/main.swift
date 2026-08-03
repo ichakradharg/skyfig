@@ -35,9 +35,10 @@ private func run(arguments: [String]) throws {
     case "generate":
         let input = try required("input", in: parsed)
         let output = try required("output", in: parsed)
+        let namespace = parsed.values["namespace"] ?? "SkyfigTokens"
         let document = try TokenIO.load(from: URL(fileURLWithPath: input))
         let outputURL = generatedFileURL(for: output)
-        try SwiftEmitter.write(document, to: outputURL, check: parsed.flags.contains("check"))
+        try SwiftEmitter.write(document, to: outputURL, namespace: namespace, check: parsed.flags.contains("check"))
         print(parsed.flags.contains("check") ? "Generated source is current: \(outputURL.path)" : "Generated \(outputURL.path)")
     case "normalize-figma", "normalize":
         let input = try required("input", in: parsed)
@@ -118,7 +119,7 @@ Skyfig — Figma design tokens to typed Swift
 USAGE
   skyfig validate --input <tokens.json>
   skyfig normalize-figma --input <figma-response.json> --output <tokens.json> [--name <name>]
-  skyfig generate --input <tokens.json> --output <file-or-directory> [--check]
+  skyfig generate --input <tokens.json> --output <file-or-directory> [--namespace <SwiftTypeName>] [--check]
 """
 }
 

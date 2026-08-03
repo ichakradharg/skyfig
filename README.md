@@ -54,6 +54,7 @@ The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confi
 - [Package consumer smoke test](Examples/SkyfigPackageConsumer/README.md) verifies the public package boundary without an app project.
 - [Troubleshooting](Docs/TROUBLESHOOTING.md) covers fixture validation, generation, live Figma sync, and consumer-update failures.
 - [Figma token-source options](FIGMA_TOKEN_SOURCE_OPTIONS.md) explains fixture and live-sync workflows.
+- [Fork and own Skyfig](Docs/FORK_AND_OWN.md) explains how a vertical team can configure its own Figma source, token namespace, approvals, and releases.
 - [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) describe package publication for iOS consumers.
 
 ## iOS consumer quick start
@@ -62,7 +63,7 @@ Skyfig is designed to be the central, versioned source of typed design tokens. A
 
 1. In Xcode, choose **File → Add Package Dependencies**, enter the Skyfig repository URL, and select a stable release.
 2. Add the `Skyfig` library product to the iOS app target.
-3. Import `Skyfig` and use `SkyfigTokens` from SwiftUI views.
+3. Import `Skyfig` and use `SkyfigTokens` from SwiftUI views. A team-owned fork can configure a different generated namespace, such as `TeamATokens`.
 4. When design tokens are released, update the package version in a dedicated app pull request and verify the UI before merging.
 
 The package exposes typed token values; it does not contact Figma at app runtime. See [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) for how new token versions are published.
@@ -179,7 +180,8 @@ swift run skyfig normalize-figma \
 # Generate committed Swift source
 swift run skyfig generate \
   --input Tokens/skyfig.tokens.json \
-  --output Sources/Skyfig/Generated
+  --output Sources/Skyfig/Generated \
+  --namespace TeamATokens
 
 # Fail without writing when committed output is stale
 swift run skyfig generate \
@@ -200,6 +202,10 @@ Add these GitHub Actions secrets:
 - `FIGMA_FILE_KEY` — the Figma file key.
 
 The token is step-scoped, passed through `X-Figma-Token`, and never accepted by the Skyfig CLI. The file key is also kept in Secrets so the file identity is not exposed in workflow source.
+
+### Team-owned forks and token namespaces
+
+Skyfig can be used as a team-owned token publisher. A fork uses its own Figma secrets, its own approvals, and its own releases. To use a team-specific generated API, add a repository Actions variable named `SKYFIG_TOKEN_NAMESPACE`, for example `TeamATokens`. The sync workflow then generates `TeamATokens` instead of `SkyfigTokens`; the default remains `SkyfigTokens`. See [Fork and own Skyfig](Docs/FORK_AND_OWN.md) for the complete setup and release flow.
 
 Run **Actions → Sync Figma tokens → Run workflow**, or rely on the weekly schedule. Repository Actions settings must permit `GITHUB_TOKEN` to create pull requests. GitHub may place CI for a pull request created by the built-in token in an approval-required state; if so, a maintainer must choose **Approve workflows to run** before the required PR check can complete. A least-privilege GitHub App installation token is the appropriate option if fully unattended PR checks are needed; do not substitute a broad personal access token.
 
