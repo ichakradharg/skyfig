@@ -222,7 +222,7 @@ Pull requests and `main` run builds, tests, canonical validation, and a generate
 3. approve the protected `release` environment;
 4. the workflow tags the exact tested commit and creates the GitHub release.
 
-To make this a real review gate, configure the public `release` environment with required reviewers, protect `main` with the `CI / linux-toolchain` check and at least one PR approval, and protect `v*` tags from update or deletion. The iOS consumer build runs only for relevant package or sample changes, and simulator UI validation runs only for sample changes on pull requests (with a full iPhone and iPad run scheduled nightly). A solo repository can keep the manual environment gate, but independent approval requires a trusted collaborator.
+To make this a real review gate, configure the public `release` environment with required reviewers, protect `main` with the `CI / linux-toolchain` check and at least one PR approval, and protect `v*` tags from update or deletion. The iOS consumer build runs only for relevant package or sample changes. Run simulator UI validation locally or on a dedicated macOS runner rather than relying on shared GitHub-hosted simulator runners. A solo repository can keep the manual environment gate, but independent approval requires a trusted collaborator.
 
 ## Contributing and security
 

@@ -20,4 +20,4 @@ The app bar on the Home tab includes a token-styled add button. Its content uses
 
 The iOS consumer build runs when package runtime, generated-token, or consumer-sample files change. It verifies that the public package dependency and SwiftUI API compile for iOS 26 without starting a simulator.
 
-UI tests are intentionally narrower: a pull request that changes the consumer sample runs an iPhone smoke test, while the nightly and manual UI workflows also run the iPad validation. The tests confirm all five tabs exist and that each tab presents its expected token-driven content. Documentation-only changes do not start an iOS simulator.
+The `SkyfigConsumerUITests` target confirms all five tabs exist and that each tab presents its expected token-driven content. Run it locally from Xcode or on a dedicated macOS CI runner. GitHub-hosted CI intentionally limits itself to the reliable iOS compile check; hosted simulator test runners can stall before a test starts. Documentation-only changes do not start an iOS build.
