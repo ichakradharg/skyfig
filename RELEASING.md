@@ -8,6 +8,7 @@ This checklist keeps package releases predictable for iOS consumers.
 - Confirm the `main` CI run is green.
 - Choose a stable `MAJOR.MINOR.PATCH` version using [Versioning and releases](VERSIONING.md).
 - Prepare release notes that summarize token changes, consumer impact, and any migration work.
+- Move the relevant Unreleased entries from [CHANGELOG.md](CHANGELOG.md) into the tagged release notes.
 - Confirm the `release` environment has the intended reviewers and that `v*` tags are protected.
 
 ## Publish
@@ -24,6 +25,8 @@ This checklist keeps package releases predictable for iOS consumers.
 2. Build the app and verify views that use changed token families in light and dark appearance.
 3. Confirm that the app has no Figma credentials and makes no Figma request at runtime.
 4. Ship the app update through its normal review and release process.
+
+See the [consumer upgrade guide](Docs/CONSUMER_UPGRADES.md) for the app-team adoption sequence.
 
 ## Guardrails
 
