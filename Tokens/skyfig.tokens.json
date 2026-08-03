@@ -19,9 +19,59 @@
     },
     "colors": {
       "accent": {
+        "description": "Legacy primitive bridge token; prefer action.primary in app UI",
         "values": {
           "dark": "#7DD3FCFF",
           "light": "#0369A1FF"
+        }
+      },
+      "action.onPrimary": {
+        "description": "Content shown on a primary action surface",
+        "values": {
+          "dark": "#0F172AFF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "action.primary": {
+        "description": "Primary interactive action surface",
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0369A1FF"
+        }
+      },
+      "focus.ring": {
+        "description": "Keyboard and accessibility focus indicator",
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0284C7FF"
+        }
+      },
+      "status.danger": {
+        "description": "Destructive outcome or error status",
+        "values": {
+          "dark": "#FCA5A5FF",
+          "light": "#B91C1CFF"
+        }
+      },
+      "status.info": {
+        "description": "Informational status",
+        "values": {
+          "dark": "#93C5FDFF",
+          "light": "#1D4ED8FF"
+        }
+      },
+      "status.success": {
+        "description": "Successful outcome status",
+        "values": {
+          "dark": "#86EFACFF",
+          "light": "#15803DFF"
+        }
+      },
+      "status.warning": {
+        "description": "Warning or needs-attention status",
+        "values": {
+          "dark": "#FDE68AFF",
+          "light": "#A16207FF"
         }
       },
       "surface.primary": {
@@ -37,12 +87,14 @@
         }
       },
       "text.primary": {
+        "description": "Primary readable text",
         "values": {
           "dark": "#F8FAFCFF",
           "light": "#0F172AFF"
         }
       },
       "text.secondary": {
+        "description": "Secondary readable text",
         "values": {
           "dark": "#CBD5E1FF",
           "light": "#475569FF"

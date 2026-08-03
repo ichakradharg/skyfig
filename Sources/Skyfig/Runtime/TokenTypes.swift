@@ -15,6 +15,30 @@ public struct SkyfigRGBAColor: Equatable, Hashable, Sendable {
         self.blue = blue
         self.alpha = alpha
     }
+
+    /// The WCAG relative luminance of this opaque sRGB color.
+    ///
+    /// This value is useful for validating design-token contrast. For colors
+    /// with transparency, composite them over their intended background first.
+    public var relativeLuminance: Double {
+        func linearized(_ component: UInt8) -> Double {
+            let value = Double(component) / 255
+            return value <= 0.04045
+                ? value / 12.92
+                : pow((value + 0.055) / 1.055, 2.4)
+        }
+
+        return (0.2126 * linearized(red))
+            + (0.7152 * linearized(green))
+            + (0.0722 * linearized(blue))
+    }
+
+    /// Returns the WCAG contrast ratio against another opaque sRGB color.
+    public func contrastRatio(against other: SkyfigRGBAColor) -> Double {
+        let lighter = max(relativeLuminance, other.relativeLuminance)
+        let darker = min(relativeLuminance, other.relativeLuminance)
+        return (lighter + 0.05) / (darker + 0.05)
+    }
 }
 
 /// A color token with a value for each supported appearance theme.

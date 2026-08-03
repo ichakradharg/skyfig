@@ -34,5 +34,5 @@ SKYFIG_IPHONE_SIMULATOR="iPhone 17 Pro" SKYFIG_SIMULATOR_OS=26.0.1 \
 ## What it proves
 
 - A separate package can import the public `Skyfig` library product.
-- A SwiftUI app can use generated colors, typography, spacing, corner radii, borders, and elevation shadows across a full tab interface.
+- A SwiftUI app can use generated semantic actions, status, text, and surface colors alongside typography, spacing, corner radii, borders, and elevation shadows across a full tab interface.
 - The generated API remains the sole visual-value source; the sample has no copied token values.
