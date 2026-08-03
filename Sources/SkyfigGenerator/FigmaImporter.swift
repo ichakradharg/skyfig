@@ -47,10 +47,38 @@ public enum FigmaImporter {
             try claim("dynamic:\(dynamicPath)", source: rawName, importedNames: &importedNames)
             let description = variable["description"] as? String
             switch resolvedType {
-            case "COLOR": dynamicColors[dynamicPath] = ColorToken(description: description, values: ["light": try resolver.color(id: id, theme: "light"), "dark": try resolver.color(id: id, theme: "dark")])
-            case "FLOAT": dynamicNumbers[dynamicPath] = ThemedValueToken(description: description, values: themed(try resolver.number(id: id, theme: "light"), dark: { try resolver.number(id: id, theme: "dark") }))
-            case "STRING": dynamicStrings[dynamicPath] = ThemedValueToken(description: description, values: themed(try resolver.string(id: id, theme: "light"), dark: { try resolver.string(id: id, theme: "dark") }))
-            case "BOOLEAN": dynamicBooleans[dynamicPath] = ThemedValueToken(description: description, values: themed(try resolver.boolean(id: id, theme: "light"), dark: { try resolver.boolean(id: id, theme: "dark") }))
+            case "COLOR":
+                dynamicColors[dynamicPath] = ColorToken(
+                    description: description,
+                    values: [
+                        "light": try resolver.color(id: id, theme: "light"),
+                        "dark": try resolver.color(id: id, theme: "dark"),
+                    ]
+                )
+            case "FLOAT":
+                dynamicNumbers[dynamicPath] = ThemedValueToken(
+                    description: description,
+                    values: themed(
+                        try resolver.number(id: id, theme: "light"),
+                        dark: { try resolver.number(id: id, theme: "dark") }
+                    )
+                )
+            case "STRING":
+                dynamicStrings[dynamicPath] = ThemedValueToken(
+                    description: description,
+                    values: themed(
+                        try resolver.string(id: id, theme: "light"),
+                        dark: { try resolver.string(id: id, theme: "dark") }
+                    )
+                )
+            case "BOOLEAN":
+                dynamicBooleans[dynamicPath] = ThemedValueToken(
+                    description: description,
+                    values: themed(
+                        try resolver.boolean(id: id, theme: "light"),
+                        dark: { try resolver.boolean(id: id, theme: "dark") }
+                    )
+                )
             default: continue
             }
 

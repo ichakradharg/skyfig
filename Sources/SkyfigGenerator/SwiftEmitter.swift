@@ -63,10 +63,21 @@ public enum SwiftEmitter {
 
 private func renderDynamic(_ dynamic: DynamicTokenCollection, indent: Int) -> [String] {
     var declarations: [String: String] = [:]
-    for (path, token) in dynamic.colors { declarations[path] = colorExpression(light: token.values["light"]!, dark: token.values["dark"]!) }
-    for (path, token) in dynamic.numbers { declarations[path] = "SkyfigThemedValue<Double>(light: \(number(token.values["light"]!)), dark: \(number(token.values["dark"]!)))" }
-    for (path, token) in dynamic.strings { declarations[path] = "SkyfigThemedValue<String>(light: \(swiftString(token.values["light"]!)), dark: \(swiftString(token.values["dark"]!)))" }
-    for (path, token) in dynamic.booleans { declarations[path] = "SkyfigThemedValue<Bool>(light: \(token.values["light"]!), dark: \(token.values["dark"]!))" }
+    for (path, token) in dynamic.colors {
+        declarations[path] = colorExpression(light: token.values["light"]!, dark: token.values["dark"]!)
+    }
+    for (path, token) in dynamic.numbers {
+        declarations[path] = "SkyfigThemedValue<Double>(light: \(number(token.values["light"]!)), "
+            + "dark: \(number(token.values["dark"]!)))"
+    }
+    for (path, token) in dynamic.strings {
+        declarations[path] = "SkyfigThemedValue<String>(light: \(swiftString(token.values["light"]!)), "
+            + "dark: \(swiftString(token.values["dark"]!)))"
+    }
+    for (path, token) in dynamic.booleans {
+        declarations[path] = "SkyfigThemedValue<Bool>(light: \(token.values["light"]!), "
+            + "dark: \(token.values["dark"]!))"
+    }
     guard !declarations.isEmpty else { return [] }
     let root = Namespace()
     for key in declarations.keys.sorted() { root.insert(path: key, declaration: declarations[key]!) }

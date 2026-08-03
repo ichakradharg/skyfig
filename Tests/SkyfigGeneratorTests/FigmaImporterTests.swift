@@ -148,8 +148,12 @@ final class FigmaImporterTests: XCTestCase {
 
     func testPreservesArbitraryHierarchyWithoutFamilyMapping() throws {
         let data = Data("""
-        {"meta":{"variableCollections":{"c":{"defaultModeId":"l","modes":[{"modeId":"l","name":"Light"},{"modeId":"d","name":"Dark"}]}},"variables":{
-        "color":{"name":"foundation/colors/brand/primary","resolvedType":"COLOR","variableCollectionId":"c","valuesByMode":{"l":{"r":0,"g":0.4,"b":1,"a":1},"d":{"r":0.3,"g":0.6,"b":1,"a":1}}},
+        {"meta":{"variableCollections":{"c":{"defaultModeId":"l","modes":[
+        {"modeId":"l","name":"Light"},{"modeId":"d","name":"Dark"}
+        ]}},"variables":{
+        "color":{"name":"foundation/colors/brand/primary","resolvedType":"COLOR",
+        "variableCollectionId":"c","valuesByMode":{"l":{"r":0,"g":0.4,"b":1,"a":1},
+        "d":{"r":0.3,"g":0.6,"b":1,"a":1}}},
         "number":{"name":"layout/Grid Size/2xl","resolvedType":"FLOAT","variableCollectionId":"c","valuesByMode":{"l":32,"d":36}}
         }}}
         """.utf8)

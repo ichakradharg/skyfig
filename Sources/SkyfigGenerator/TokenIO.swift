@@ -78,7 +78,10 @@ extension TokenDocument {
         validatePaths(tokens.dynamic.numbers.keys, at: "$.tokens.dynamic.numbers", issues: &issues)
         validatePaths(tokens.dynamic.strings.keys, at: "$.tokens.dynamic.strings", issues: &issues)
         validatePaths(tokens.dynamic.booleans.keys, at: "$.tokens.dynamic.booleans", issues: &issues)
-        let dynamicPaths = Array(tokens.dynamic.colors.keys) + Array(tokens.dynamic.numbers.keys) + Array(tokens.dynamic.strings.keys) + Array(tokens.dynamic.booleans.keys)
+        let dynamicPaths = Array(tokens.dynamic.colors.keys)
+            + Array(tokens.dynamic.numbers.keys)
+            + Array(tokens.dynamic.strings.keys)
+            + Array(tokens.dynamic.booleans.keys)
         for path in Set(dynamicPaths) where dynamicPaths.filter({ $0 == path }).count > 1 {
             issues.append("$.tokens.dynamic: \(path) appears in more than one primitive type")
         }
@@ -116,7 +119,13 @@ extension TokenDocument {
                 validateFinite(layer.spread, at: "\(layerPath).spread", issues: &issues)
             }
         }
-        for (name, token) in tokens.dynamic.colors { validateThemedColors(token.values, at: "$.tokens.dynamic.colors.\(name).values", issues: &issues) }
+        for (name, token) in tokens.dynamic.colors {
+            validateThemedColors(
+                token.values,
+                at: "$.tokens.dynamic.colors.\(name).values",
+                issues: &issues
+            )
+        }
         validateThemedValues(tokens.dynamic.numbers, at: "$.tokens.dynamic.numbers", issues: &issues)
         validateThemedValues(tokens.dynamic.strings, at: "$.tokens.dynamic.strings", issues: &issues)
         validateThemedValues(tokens.dynamic.booleans, at: "$.tokens.dynamic.booleans", issues: &issues)
@@ -125,8 +134,14 @@ extension TokenDocument {
     }
 }
 
-private func validateThemedValues<Value>(_ values: [String: ThemedValueToken<Value>], at location: String, issues: inout [String]) {
-    for (name, token) in values where Set(token.values.keys) != Set(["light", "dark"]) { issues.append("\(location).\(name).values: must define exactly light and dark") }
+private func validateThemedValues<Value>(
+    _ values: [String: ThemedValueToken<Value>],
+    at location: String,
+    issues: inout [String]
+) {
+    for (name, token) in values where Set(token.values.keys) != Set(["light", "dark"]) {
+        issues.append("\(location).\(name).values: must define exactly light and dark")
+    }
 }
 
 private func validateDimensions(
@@ -193,12 +208,30 @@ private enum ShapeValidator {
         var issues: [String] = []
         rejectUnknown(root, allowed: ["$schema", "schemaVersion", "name", "defaultTheme", "themes", "tokens"], at: "$", issues: &issues)
         guard let tokens = root["tokens"] as? [String: Any] else { return issues }
-        rejectUnknown(tokens, allowed: ["colors", "typography", "spacing", "cornerRadii", "borderWidths", "shadows", "dynamic"], at: "$.tokens", issues: &issues)
+        rejectUnknown(
+            tokens,
+            allowed: ["colors", "typography", "spacing", "cornerRadii", "borderWidths", "shadows", "dynamic"],
+            at: "$.tokens",
+            issues: &issues
+        )
 
         if let dynamic = tokens["dynamic"] as? [String: Any] {
-            rejectUnknown(dynamic, allowed: ["colors", "numbers", "strings", "booleans"], at: "$.tokens.dynamic", issues: &issues)
-            validateTokenMap(dynamic["colors"], at: "$.tokens.dynamic.colors", allowed: ["description", "values"], nestedKey: "values", nestedAllowed: nil, issues: &issues)
-            for family in ["numbers", "strings", "booleans"] { validateTokenMap(dynamic[family], at: "$.tokens.dynamic.\(family)", allowed: ["description", "values"], nestedKey: "values", nestedAllowed: nil, issues: &issues) }
+            rejectUnknown(
+                dynamic,
+                allowed: ["colors", "numbers", "strings", "booleans"],
+                at: "$.tokens.dynamic",
+                issues: &issues
+            )
+            validateTokenMap(
+                dynamic["colors"], at: "$.tokens.dynamic.colors", allowed: ["description", "values"],
+                nestedKey: "values", nestedAllowed: nil, issues: &issues
+            )
+            for family in ["numbers", "strings", "booleans"] {
+                validateTokenMap(
+                    dynamic[family], at: "$.tokens.dynamic.\(family)", allowed: ["description", "values"],
+                    nestedKey: "values", nestedAllowed: nil, issues: &issues
+                )
+            }
         }
 
         validateTokenMap(

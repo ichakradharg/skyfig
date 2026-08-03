@@ -73,7 +73,10 @@ public struct TokenCollection: Codable, Equatable, Sendable {
         cornerRadii = try container.decode([String: DimensionToken].self, forKey: .cornerRadii)
         borderWidths = try container.decode([String: DimensionToken].self, forKey: .borderWidths)
         shadows = try container.decode([String: ShadowToken].self, forKey: .shadows)
-        dynamic = try container.decodeIfPresent(DynamicTokenCollection.self, forKey: .dynamic) ?? DynamicTokenCollection()
+        dynamic = try container.decodeIfPresent(
+            DynamicTokenCollection.self,
+            forKey: .dynamic
+        ) ?? DynamicTokenCollection()
     }
 }
 
@@ -84,15 +87,26 @@ public struct DynamicTokenCollection: Codable, Equatable, Sendable {
     public let strings: [String: ThemedValueToken<String>]
     public let booleans: [String: ThemedValueToken<Bool>]
 
-    public init(colors: [String: ColorToken] = [:], numbers: [String: ThemedValueToken<Double>] = [:], strings: [String: ThemedValueToken<String>] = [:], booleans: [String: ThemedValueToken<Bool>] = [:]) {
-        self.colors = colors; self.numbers = numbers; self.strings = strings; self.booleans = booleans
+    public init(
+        colors: [String: ColorToken] = [:],
+        numbers: [String: ThemedValueToken<Double>] = [:],
+        strings: [String: ThemedValueToken<String>] = [:],
+        booleans: [String: ThemedValueToken<Bool>] = [:]
+    ) {
+        self.colors = colors
+        self.numbers = numbers
+        self.strings = strings
+        self.booleans = booleans
     }
 }
 
 public struct ThemedValueToken<Value: Codable & Equatable & Sendable>: Codable, Equatable, Sendable {
     public let description: String?
     public let values: [String: Value]
-    public init(description: String? = nil, values: [String: Value]) { self.description = description; self.values = values }
+    public init(description: String? = nil, values: [String: Value]) {
+        self.description = description
+        self.values = values
+    }
 }
 
 /// A color token with canonical light and dark color values.
