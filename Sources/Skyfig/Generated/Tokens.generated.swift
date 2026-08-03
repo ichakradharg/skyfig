@@ -6,6 +6,19 @@ import Foundation
 public enum SkyfigTokens {
     public enum Colors {
         public static let accent = SkyfigColorToken(light: SkyfigRGBAColor(red: 3, green: 105, blue: 161, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
+        public enum Action {
+            public static let onPrimary = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 15, green: 23, blue: 42, alpha: 255))
+            public static let primary = SkyfigColorToken(light: SkyfigRGBAColor(red: 3, green: 105, blue: 161, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
+        }
+        public enum Focus {
+            public static let ring = SkyfigColorToken(light: SkyfigRGBAColor(red: 2, green: 132, blue: 199, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
+        }
+        public enum Status {
+            public static let danger = SkyfigColorToken(light: SkyfigRGBAColor(red: 185, green: 28, blue: 28, alpha: 255), dark: SkyfigRGBAColor(red: 252, green: 165, blue: 165, alpha: 255))
+            public static let info = SkyfigColorToken(light: SkyfigRGBAColor(red: 29, green: 78, blue: 216, alpha: 255), dark: SkyfigRGBAColor(red: 147, green: 197, blue: 253, alpha: 255))
+            public static let success = SkyfigColorToken(light: SkyfigRGBAColor(red: 21, green: 128, blue: 61, alpha: 255), dark: SkyfigRGBAColor(red: 134, green: 239, blue: 172, alpha: 255))
+            public static let warning = SkyfigColorToken(light: SkyfigRGBAColor(red: 161, green: 98, blue: 7, alpha: 255), dark: SkyfigRGBAColor(red: 253, green: 230, blue: 138, alpha: 255))
+        }
         public enum Surface {
             public static let primary = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 17, green: 24, blue: 39, alpha: 255))
             public static let secondary = SkyfigColorToken(light: SkyfigRGBAColor(red: 241, green: 245, blue: 249, alpha: 255), dark: SkyfigRGBAColor(red: 31, green: 41, blue: 55, alpha: 255))

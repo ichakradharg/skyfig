@@ -1,17 +1,17 @@
-## What changed
+## Change summary
 
-<!-- Describe the change and why it is needed. -->
+Describe the user-visible change and the affected token or API families.
 
-## Compatibility
+## Consumer and release impact
 
-- [ ] No public API or canonical schema change
-- [ ] Backward-compatible addition
-- [ ] Breaking change with migration notes
+- [ ] No consumer-facing impact
+- [ ] Patch: compatible correction
+- [ ] Minor: additive capability or token
+- [ ] Major: migration or incompatible public API change
 
 ## Validation
 
-- [ ] `swift build`
-- [ ] `swift test --parallel`
-- [ ] canonical tokens validate
-- [ ] generated source is current
-- [ ] no credentials, raw Figma response, or unrelated generated files are included
+- [ ] Updated canonical tokens and generated Swift together, if applicable
+- [ ] Added or updated tests
+- [ ] Updated consumer guidance, documentation, or release notes when needed
+- [ ] Reviewed accessibility impact for foreground/background, Dynamic Type, or motion changes

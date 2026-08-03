@@ -64,7 +64,7 @@ private struct ConsumerTabShell: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(SkyfigTokens.Colors.Surface.secondary.color(for: colorScheme))
         }
-        .tint(SkyfigTokens.Colors.accent.color(for: colorScheme))
+        .tint(SkyfigTokens.Colors.Action.primary.color(for: colorScheme))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(SkyfigTokens.Colors.Surface.secondary.color(for: colorScheme))
     }
@@ -89,8 +89,20 @@ private struct HomePreview: View {
         SkyfigTokens.Colors.Text.secondary.color(for: colorScheme)
     }
 
-    private var accent: Color {
-        SkyfigTokens.Colors.accent.color(for: colorScheme)
+    private var actionPrimary: Color {
+        SkyfigTokens.Colors.Action.primary.color(for: colorScheme)
+    }
+
+    private var actionOnPrimary: Color {
+        SkyfigTokens.Colors.Action.onPrimary.color(for: colorScheme)
+    }
+
+    private var success: Color {
+        SkyfigTokens.Colors.Status.success.color(for: colorScheme)
+    }
+
+    private var warning: Color {
+        SkyfigTokens.Colors.Status.warning.color(for: colorScheme)
     }
 
     var body: some View {
@@ -101,6 +113,7 @@ private struct HomePreview: View {
                     typeScale
                     elevationAndCorners
                     tokenStrip
+                    semanticStatusStrip
                 }
                 .padding(SkyfigTokens.Spacing.lg)
             }
@@ -110,21 +123,21 @@ private struct HomePreview: View {
                 #if os(iOS)
                 ToolbarItem(placement: .topBarLeading) {
                     Image(systemName: "square.grid.2x2.fill")
-                        .foregroundStyle(accent)
+                        .foregroundStyle(actionPrimary)
                         .accessibilityLabel("Skyfig home")
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: SkyfigTokens.Spacing.md) {
                         Button("Preview") {}
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(accent)
+                            .foregroundStyle(actionPrimary)
 
                         Button(action: {}) {
                             Image(systemName: "plus")
                                 .font(.system(size: 16, weight: .bold))
                                 .frame(width: 28, height: 28)
-                                .background(accent, in: Circle())
-                                .foregroundStyle(surface)
+                                .background(actionPrimary, in: Circle())
+                                .foregroundStyle(actionOnPrimary)
                         }
                         .accessibilityLabel("Add item")
                     }
@@ -132,7 +145,7 @@ private struct HomePreview: View {
                 #else
                 ToolbarItem {
                     Image(systemName: "square.grid.2x2.fill")
-                        .foregroundStyle(accent)
+                        .foregroundStyle(actionPrimary)
                         .accessibilityLabel("Skyfig home")
                 }
                 ToolbarItem {
@@ -140,22 +153,22 @@ private struct HomePreview: View {
                         Image(systemName: "plus")
                             .font(.system(size: 16, weight: .bold))
                             .frame(width: 28, height: 28)
-                            .background(accent, in: Circle())
-                            .foregroundStyle(surface)
+                            .background(actionPrimary, in: Circle())
+                            .foregroundStyle(actionOnPrimary)
                     }
                     .accessibilityLabel("Add item")
                 }
                 #endif
             }
         }
-        .tint(accent)
+        .tint(actionPrimary)
     }
 
     private var heroCard: some View {
         VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.md) {
             Label("Design system preview", systemImage: "paintpalette.fill")
                 .font(SkyfigTokens.Typography.body.font)
-                .foregroundStyle(accent)
+                .foregroundStyle(actionPrimary)
 
             Text("Typed tokens, ready for your app.")
                 .font(SkyfigTokens.Typography.headline.font)
@@ -170,7 +183,7 @@ private struct HomePreview: View {
 
             Button("Explore tokens") {}
                 .buttonStyle(.borderedProminent)
-                .tint(accent)
+                .tint(actionPrimary)
         }
         .padding(SkyfigTokens.Spacing.lg)
         .background(surface)
@@ -205,7 +218,7 @@ private struct HomePreview: View {
 
     private var tokenStrip: some View {
         HStack(spacing: SkyfigTokens.Spacing.sm) {
-            tokenSwatch("Accent", accent)
+            tokenSwatch("Action", actionPrimary)
             tokenSwatch("Surface", surface)
             tokenSwatch("Text", primaryText)
         }
@@ -215,7 +228,7 @@ private struct HomePreview: View {
         HStack(spacing: SkyfigTokens.Spacing.md) {
             VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.sm) {
                 Image(systemName: "square.on.square")
-                    .foregroundStyle(accent)
+                    .foregroundStyle(actionPrimary)
                 Text("Elevation")
                     .font(SkyfigTokens.Typography.body.font)
                     .foregroundStyle(primaryText)
@@ -236,7 +249,7 @@ private struct HomePreview: View {
 
             VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.sm) {
                 Image(systemName: "rectangle.on.rectangle")
-                    .foregroundStyle(accent)
+                    .foregroundStyle(actionPrimary)
                 Text("Corners")
                     .font(SkyfigTokens.Typography.body.font)
                     .foregroundStyle(primaryText)
@@ -248,6 +261,13 @@ private struct HomePreview: View {
             .padding(SkyfigTokens.Spacing.md)
             .background(surface)
             .clipShape(RoundedRectangle(cornerRadius: SkyfigTokens.CornerRadii.control))
+        }
+    }
+
+    private var semanticStatusStrip: some View {
+        HStack(spacing: SkyfigTokens.Spacing.sm) {
+            tokenSwatch("Success", success)
+            tokenSwatch("Warning", warning)
         }
     }
 
@@ -302,7 +322,7 @@ private struct TabPlaceholder: View {
                     VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.sm) {
                         Text("Token-powered \(title.lowercased())")
                             .font(SkyfigTokens.Typography.body.font)
-                            .foregroundStyle(SkyfigTokens.Colors.accent.color(for: colorScheme))
+                            .foregroundStyle(SkyfigTokens.Colors.Action.primary.color(for: colorScheme))
                         Text(message)
                             .font(SkyfigTokens.Typography.body.font)
                             .lineSpacing(SkyfigTokens.Typography.body.lineSpacing)
