@@ -63,7 +63,7 @@ Skyfig is designed to be the central, versioned source of typed design tokens. A
 
 1. In Xcode, choose **File → Add Package Dependencies**, enter the Skyfig repository URL, and select a stable release.
 2. Add the `Skyfig` library product to the iOS app target.
-3. Import `Skyfig` and use `SkyfigTokens` from SwiftUI views. A team-owned fork can configure a different generated namespace, such as `TeamATokens`.
+3. Import `Skyfig` and use `SkyfigTokens` from SwiftUI views. A team-owned fork should use its own package URL and configured namespace, such as `TeamATokens`.
 4. When design tokens are released, update the package version in a dedicated app pull request and verify the UI before merging.
 
 The package exposes typed token values; it does not contact Figma at app runtime. See [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) for how new token versions are published.
@@ -80,11 +80,13 @@ Open `Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj`, select an iOS 26 iPhone
 
 ## Add Skyfig to an app
 
-After the first tagged release, add the package URL in Xcode or in `Package.swift`:
+After a tagged release is available, add the publisher’s package URL in Xcode or in `Package.swift`. If the publisher has not released a version yet, build and evaluate it from a checkout instead of pinning a version that does not exist.
 
 ```swift
-.package(url: "https://github.com/ichakradharg/skyfig.git", from: "0.1.0")
+.package(url: "https://github.com/OWNER/skyfig.git", from: "X.Y.Z")
 ```
+
+For the upstream Skyfig package, replace `OWNER` and `X.Y.Z` with the published repository owner and release version. For a team-owned fork, use that team’s repository URL and its released version instead.
 
 Then depend on the `Skyfig` product and import it:
 
@@ -127,15 +129,18 @@ swift test --parallel
 swift run skyfig validate --input Tokens/skyfig.tokens.json
 
 # Confirm committed Swift output exactly matches the token document.
+# In a team-owned fork, set this to the same Actions namespace variable.
+TOKEN_NAMESPACE="${SKYFIG_TOKEN_NAMESPACE:-SkyfigTokens}"
 swift run skyfig generate \
   --input Tokens/skyfig.tokens.json \
   --output Sources/Skyfig/Generated \
+  --namespace "$TOKEN_NAMESPACE" \
   --check
 ```
 
 The generated, typed Swift API lives at `Sources/Skyfig/Generated/Tokens.generated.swift`. The showcase uses that API directly, so running `swift run SkyfigShowcase` is a visual demonstration of the generated tokens in SwiftUI.
 
-For an iOS app, add Skyfig as a package dependency, import `Skyfig`, and use `SkyfigTokens` in SwiftUI views as shown above. See [Figma token-source options](FIGMA_TOKEN_SOURCE_OPTIONS.md) for the fixture path and the later live-Figma setup.
+For an iOS app, add the publisher’s package as a dependency, import `Skyfig`, and use its generated namespace in SwiftUI views. The default is `SkyfigTokens`; team-owned forks can use a name such as `TeamATokens`. See [Figma token-source options](FIGMA_TOKEN_SOURCE_OPTIONS.md) for the fixture path and the later live-Figma setup.
 
 ## Canonical tokens
 
@@ -187,6 +192,7 @@ swift run skyfig generate \
 swift run skyfig generate \
   --input Tokens/skyfig.tokens.json \
   --output Sources/Skyfig/Generated \
+  --namespace TeamATokens \
   --check
 ```
 
