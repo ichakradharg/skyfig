@@ -46,4 +46,42 @@ final class SkyfigTests: XCTestCase {
             )
         }
     }
+
+    func testSemanticStatusTextMeetsAAContrastOnSupportedSurfaces() {
+        let statusTokens = [
+            SkyfigTokens.Colors.Status.danger,
+            SkyfigTokens.Colors.Status.info,
+            SkyfigTokens.Colors.Status.success,
+            SkyfigTokens.Colors.Status.warning,
+        ]
+        let surfaceTokens = [
+            SkyfigTokens.Colors.Surface.primary,
+            SkyfigTokens.Colors.Surface.secondary,
+        ]
+
+        for theme in SkyfigTheme.allCases {
+            for status in statusTokens {
+                for surface in surfaceTokens {
+                    XCTAssertGreaterThanOrEqual(
+                        status.value(for: theme).contrastRatio(against: surface.value(for: theme)),
+                        4.5,
+                        "Expected semantic status text to meet WCAG AA contrast in \(theme.rawValue) appearance."
+                    )
+                }
+            }
+        }
+    }
+
+    func testFocusRingMeetsNonTextContrastOnSupportedSurfaces() {
+        for theme in SkyfigTheme.allCases {
+            for surface in [SkyfigTokens.Colors.Surface.primary, SkyfigTokens.Colors.Surface.secondary] {
+                XCTAssertGreaterThanOrEqual(
+                    SkyfigTokens.Colors.Focus.ring.value(for: theme)
+                        .contrastRatio(against: surface.value(for: theme)),
+                    3,
+                    "Expected focus ring to meet WCAG non-text contrast in \(theme.rawValue) appearance."
+                )
+            }
+        }
+    }
 }

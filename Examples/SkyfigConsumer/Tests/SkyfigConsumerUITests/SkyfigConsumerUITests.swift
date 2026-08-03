@@ -31,6 +31,19 @@ final class SkyfigConsumerUITests: XCTestCase {
         }
     }
 
+    func testHomeRemainsUsableAtAnAccessibilityTextSize() {
+        app.terminate()
+        app.launchArguments += [
+            "-UIPreferredContentSizeCategoryName",
+            "UICTContentSizeCategoryAccessibilityExtraExtraExtraLarge",
+        ]
+        app.launch()
+
+        XCTAssertTrue(app.staticTexts["Design system preview"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Explore tokens"].exists)
+        XCTAssertTrue(app.buttons["Add item"].exists)
+    }
+
     private func navigationItem(named title: String) -> XCUIElement {
         let tabBarButton = app.tabBars.buttons[title]
         return tabBarButton.exists ? tabBarButton : app.cells[title]

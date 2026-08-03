@@ -44,6 +44,7 @@ The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confi
 - [Codebase guide](Docs/CODEBASE_GUIDE.md) explains the repository structure, token flow, and public API boundaries.
 - [Architecture guide](Docs/ARCHITECTURE.md) explains trust boundaries, token flow, and how apps consume releases.
 - [Token governance](Docs/TOKEN_GOVERNANCE.md) explains semantic token use, accessibility expectations, and safe public-API evolution.
+- [Accessibility](Docs/ACCESSIBILITY.md) explains Dynamic Type-aware token use, contrast guardrails, and app-level accessibility checks.
 - [CLI reference](Docs/CLI_REFERENCE.md) documents validation, normalization, generation, and generated-source checks.
 - [Rendered DocC site guide](Docs/DOCS_SITE.md) explains the hosted API reference and how to preview it locally.
 - [iOS consumer sample](Examples/SkyfigConsumer/README.md) explains the iPhone and iPad integration example.

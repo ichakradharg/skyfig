@@ -129,12 +129,12 @@ private struct HomePreview: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: SkyfigTokens.Spacing.md) {
                         Button("Preview") {}
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                             .foregroundStyle(actionPrimary)
 
                         Button(action: {}) {
                             Image(systemName: "plus")
-                                .font(.system(size: 16, weight: .bold))
+                                .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                                 .frame(width: 28, height: 28)
                                 .background(actionPrimary, in: Circle())
                                 .foregroundStyle(actionOnPrimary)
@@ -151,7 +151,7 @@ private struct HomePreview: View {
                 ToolbarItem {
                     Button(action: {}) {
                         Image(systemName: "plus")
-                            .font(.system(size: 16, weight: .bold))
+                            .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                             .frame(width: 28, height: 28)
                             .background(actionPrimary, in: Circle())
                             .foregroundStyle(actionOnPrimary)
@@ -167,17 +167,17 @@ private struct HomePreview: View {
     private var heroCard: some View {
         VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.md) {
             Label("Design system preview", systemImage: "paintpalette.fill")
-                .font(SkyfigTokens.Typography.body.font)
+                .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                 .foregroundStyle(actionPrimary)
 
             Text("Typed tokens, ready for your app.")
-                .font(SkyfigTokens.Typography.headline.font)
+                .font(SkyfigTokens.Typography.headline.font(relativeTo: .title))
                 .tracking(SkyfigTokens.Typography.headline.letterSpacing)
                 .lineSpacing(SkyfigTokens.Typography.headline.lineSpacing)
                 .foregroundStyle(primaryText)
 
             Text("This app imports Skyfig as a package and uses its generated SwiftUI tokens for every visual value on this screen.")
-                .font(SkyfigTokens.Typography.body.font)
+                .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                 .lineSpacing(SkyfigTokens.Typography.body.lineSpacing)
                 .foregroundStyle(secondaryText)
 
@@ -199,15 +199,15 @@ private struct HomePreview: View {
     private var typeScale: some View {
         VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.sm) {
             Text("Typography")
-                .font(SkyfigTokens.Typography.body.font)
+                .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                 .foregroundStyle(secondaryText)
 
             Text("Headline token")
-                .font(SkyfigTokens.Typography.headline.font)
+                .font(SkyfigTokens.Typography.headline.font(relativeTo: .title))
                 .foregroundStyle(primaryText)
 
             Text("Body token with generated line-height support.")
-                .font(SkyfigTokens.Typography.body.font)
+                .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                 .lineSpacing(SkyfigTokens.Typography.body.lineSpacing)
                 .foregroundStyle(secondaryText)
         }
@@ -230,10 +230,10 @@ private struct HomePreview: View {
                 Image(systemName: "square.on.square")
                     .foregroundStyle(actionPrimary)
                 Text("Elevation")
-                    .font(SkyfigTokens.Typography.body.font)
+                    .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                     .foregroundStyle(primaryText)
                 Text("Card shadow token")
-                    .font(.caption)
+                    .font(SkyfigTokens.Typography.body.font(relativeTo: .caption))
                     .foregroundStyle(secondaryText)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -251,10 +251,10 @@ private struct HomePreview: View {
                 Image(systemName: "rectangle.on.rectangle")
                     .foregroundStyle(actionPrimary)
                 Text("Corners")
-                    .font(SkyfigTokens.Typography.body.font)
+                    .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                     .foregroundStyle(primaryText)
                 Text("Card and control radii")
-                    .font(.caption)
+                    .font(SkyfigTokens.Typography.body.font(relativeTo: .caption))
                     .foregroundStyle(secondaryText)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -281,10 +281,12 @@ private struct HomePreview: View {
                         .stroke(secondaryText.opacity(0.2), lineWidth: SkyfigTokens.BorderWidths.thin)
                 }
             Text(name)
-                .font(.caption)
+                .font(SkyfigTokens.Typography.body.font(relativeTo: .caption))
                 .foregroundStyle(secondaryText)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(name) color token")
     }
 }
 
@@ -316,15 +318,15 @@ private struct TabPlaceholder: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.lg) {
                     Label(title, systemImage: symbol)
-                        .font(SkyfigTokens.Typography.headline.font)
+                        .font(SkyfigTokens.Typography.headline.font(relativeTo: .title))
                         .foregroundStyle(text)
 
                     VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.sm) {
                         Text("Token-powered \(title.lowercased())")
-                            .font(SkyfigTokens.Typography.body.font)
+                            .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                             .foregroundStyle(SkyfigTokens.Colors.Action.primary.color(for: colorScheme))
                         Text(message)
-                            .font(SkyfigTokens.Typography.body.font)
+                            .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                             .lineSpacing(SkyfigTokens.Typography.body.lineSpacing)
                             .foregroundStyle(secondaryText)
                     }
@@ -358,11 +360,11 @@ private struct TabPlaceholder: View {
     private func tokenRow(_ label: String, _ value: String) -> some View {
         HStack {
             Text(label)
-                .font(SkyfigTokens.Typography.body.font)
+                .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                 .foregroundStyle(text)
             Spacer()
             Text(value)
-                .font(SkyfigTokens.Typography.body.font)
+                .font(SkyfigTokens.Typography.body.font(relativeTo: .body))
                 .foregroundStyle(secondaryText)
         }
         .padding(SkyfigTokens.Spacing.md)
