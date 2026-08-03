@@ -41,6 +41,8 @@ The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confi
 
 ## Documentation
 
+Read the rendered API reference and guides online: [Skyfig documentation on GitHub Pages](https://ichakradharg.github.io/skyfig/). From the repository on GitHub, open **Settings → Pages**, then select **Visit site**.
+
 - [Codebase guide](Docs/CODEBASE_GUIDE.md) explains the repository structure, token flow, and public API boundaries.
 - [Architecture guide](Docs/ARCHITECTURE.md) explains trust boundaries, token flow, and how apps consume releases.
 - [Token governance](Docs/TOKEN_GOVERNANCE.md) explains semantic token use, accessibility expectations, and safe public-API evolution.
