@@ -179,11 +179,27 @@ private enum ShapeValidator {
         guard let tokens = root["tokens"] as? [String: Any] else { return issues }
         rejectUnknown(tokens, allowed: ["colors", "typography", "spacing", "cornerRadii", "borderWidths", "shadows"], at: "$.tokens", issues: &issues)
 
-        validateTokenMap(tokens["colors"], at: "$.tokens.colors", allowed: ["description", "values"], nestedKey: "values", nestedAllowed: nil, issues: &issues)
-        validateTokenMap(tokens["typography"], at: "$.tokens.typography", allowed: ["description", "value"], nestedKey: "value", nestedAllowed: ["fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing"], issues: &issues)
-        validateTokenMap(tokens["spacing"], at: "$.tokens.spacing", allowed: ["description", "value"], nestedKey: nil, nestedAllowed: nil, issues: &issues)
-        validateTokenMap(tokens["cornerRadii"], at: "$.tokens.cornerRadii", allowed: ["description", "value"], nestedKey: nil, nestedAllowed: nil, issues: &issues)
-        validateTokenMap(tokens["borderWidths"], at: "$.tokens.borderWidths", allowed: ["description", "value"], nestedKey: nil, nestedAllowed: nil, issues: &issues)
+        validateTokenMap(
+            tokens["colors"], at: "$.tokens.colors", allowed: ["description", "values"],
+            nestedKey: "values", nestedAllowed: nil, issues: &issues
+        )
+        validateTokenMap(
+            tokens["typography"], at: "$.tokens.typography", allowed: ["description", "value"],
+            nestedKey: "value", nestedAllowed: ["fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing"],
+            issues: &issues
+        )
+        validateTokenMap(
+            tokens["spacing"], at: "$.tokens.spacing", allowed: ["description", "value"],
+            nestedKey: nil, nestedAllowed: nil, issues: &issues
+        )
+        validateTokenMap(
+            tokens["cornerRadii"], at: "$.tokens.cornerRadii", allowed: ["description", "value"],
+            nestedKey: nil, nestedAllowed: nil, issues: &issues
+        )
+        validateTokenMap(
+            tokens["borderWidths"], at: "$.tokens.borderWidths", allowed: ["description", "value"],
+            nestedKey: nil, nestedAllowed: nil, issues: &issues
+        )
 
         if let shadows = tokens["shadows"] as? [String: Any] {
             for (name, rawToken) in shadows {

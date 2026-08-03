@@ -6,6 +6,7 @@ rm -rf "$doc_output"
 
 swift build
 swift test --parallel
+swift package plugin --allow-writing-to-package-directory swiftlint lint
 swift run skyfig validate --input Tokens/skyfig.tokens.json
 swift run skyfig generate --input Tokens/skyfig.tokens.json --output Sources/Skyfig/Generated --check
 Scripts/test-cli-integration.sh
