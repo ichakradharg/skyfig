@@ -19,6 +19,7 @@ Skyfig's publisher workflow is deliberately separate: a protected repository imp
 - <doc:GettingStarted>
 - <doc:Architecture>
 - <doc:ForkAndOwn>
+- <doc:FigmaChangeRelease>
 - <doc:TokenUpdates>
 - <doc:TokenGovernance>
 - <doc:Accessibility>

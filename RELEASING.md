@@ -2,6 +2,8 @@
 
 This checklist keeps package releases predictable for iOS consumers.
 
+For the complete workflow from an approved UX Figma change through consumer adoption, see [From Figma handoff to package release](Docs/FIGMA_CHANGE_RELEASE_GUIDE.md).
+
 ## Before starting
 
 - Ensure the intended token or API changes are merged to `main` through a reviewed pull request.
