@@ -1,0 +1,69 @@
+name: iOS UI Tests
+
+on:
+  pull_request:
+    paths:
+      - Examples/SkyfigConsumer/**
+      - .github/workflows/ios-ui-tests.yml
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-ui-tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  iphone-smoke:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Test iOS consumer sample on iPhone
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_26.0.1.app/Contents/Developer
+        run: |
+          xcrun simctl boot "iPhone 17 Pro" || true
+          xcrun simctl bootstatus "iPhone 17 Pro" -b
+          xcodebuild test \
+            -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
+            -scheme SkyfigConsumer \
+            -sdk iphonesimulator26.0 \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0.1' \
+            -only-testing:SkyfigConsumerUITests \
+            -test-timeouts-enabled YES \
+            -default-test-execution-time-allowance 60 \
+            -maximum-test-execution-time-allowance 120 \
+            ONLY_ACTIVE_ARCH=YES \
+            CODE_SIGNING_ALLOWED=NO
+
+  ipad-validation:
+    if: github.event_name != 'pull_request'
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Test iOS consumer sample on iPad
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_26.0.1.app/Contents/Developer
+        run: |
+          xcrun simctl boot "iPad Pro 13-inch (M5)" || true
+          xcrun simctl bootstatus "iPad Pro 13-inch (M5)" -b
+          xcodebuild test \
+            -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
+            -scheme SkyfigConsumer \
+            -sdk iphonesimulator26.0 \
+            -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M5),OS=26.0.1' \
+            -only-testing:SkyfigConsumerUITests \
+            -test-timeouts-enabled YES \
+            -default-test-execution-time-allowance 60 \
+            -maximum-test-execution-time-allowance 120 \
+            ONLY_ACTIVE_ARCH=YES \
+            CODE_SIGNING_ALLOWED=NO

@@ -23,6 +23,9 @@ xcodebuild test \
   -sdk iphonesimulator26.0 \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0.1' \
   -only-testing:SkyfigConsumerUITests \
+  -test-timeouts-enabled YES \
+  -default-test-execution-time-allowance 60 \
+  -maximum-test-execution-time-allowance 120 \
   ONLY_ACTIVE_ARCH=YES \
   CODE_SIGNING_ALLOWED=NO
 xcrun simctl boot "iPad Pro 13-inch (M5)" || true
@@ -33,5 +36,8 @@ xcodebuild test \
   -sdk iphonesimulator26.0 \
   -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M5),OS=26.0.1' \
   -only-testing:SkyfigConsumerUITests \
+  -test-timeouts-enabled YES \
+  -default-test-execution-time-allowance 60 \
+  -maximum-test-execution-time-allowance 120 \
   ONLY_ACTIVE_ARCH=YES \
   CODE_SIGNING_ALLOWED=NO
