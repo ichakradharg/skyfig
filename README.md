@@ -205,7 +205,7 @@ The token is step-scoped, passed through `X-Figma-Token`, and never accepted by 
 
 ### Team-owned forks and token namespaces
 
-Skyfig can be used as a team-owned token publisher. A fork uses its own Figma secrets, its own approvals, and its own releases. To use a team-specific generated API, add a repository Actions variable named `SKYFIG_TOKEN_NAMESPACE`, for example `TeamATokens`. The sync workflow then generates `TeamATokens` instead of `SkyfigTokens`; the default remains `SkyfigTokens`. See [Fork and own Skyfig](Docs/FORK_AND_OWN.md) for the complete setup and release flow.
+Skyfig can be used as a team-owned token publisher. A fork uses its own Figma secrets, its own approvals, and its own releases. To use a team-specific generated API, add a repository Actions variable named `SKYFIG_TOKEN_NAMESPACE`, for example `TeamATokens`. Generation, CI, and release checks use that same value; the default remains `SkyfigTokens`. Generated output preserves `SkyfigTokens` as a compatibility alias for the bundled examples, while new app code should use the team name. See [Fork and own Skyfig](Docs/FORK_AND_OWN.md) for the complete setup and release flow.
 
 Run **Actions → Sync Figma tokens → Run workflow**, or rely on the weekly schedule. Repository Actions settings must permit `GITHUB_TOKEN` to create pull requests. GitHub may place CI for a pull request created by the built-in token in an approval-required state; if so, a maintainer must choose **Approve workflows to run** before the required PR check can complete. A least-privilege GitHub App installation token is the appropriate option if fully unattended PR checks are needed; do not substitute a broad personal access token.
 

@@ -91,6 +91,7 @@ final class TokenPipelineTests: XCTestCase {
 
         XCTAssertTrue(generated.contains("public enum TeamATokens"))
         XCTAssertFalse(generated.contains("public enum SkyfigTokens"))
+        XCTAssertTrue(generated.contains("public typealias SkyfigTokens = TeamATokens"))
     }
 
     func testInvalidNamespaceIsRejected() throws {

@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  TOKEN_NAMESPACE: ${{ vars.SKYFIG_TOKEN_NAMESPACE || 'SkyfigTokens' }}
+
 jobs:
   documentation:
     runs-on: macos-15
@@ -77,9 +80,12 @@ jobs:
           swift run skyfig generate \
             --input Tokens/skyfig.tokens.json \
             --output Sources/Skyfig/Generated \
+            --namespace "$TOKEN_NAMESPACE" \
             --check
       - name: Run CLI integration tests
         run: bash Scripts/test-cli-integration.sh
+      - name: Verify a team namespace builds end to end
+        run: bash Scripts/test-custom-namespace.sh
       - name: Build package consumer smoke test
         run: swift run --package-path Examples/SkyfigPackageConsumer
       - name: Check local Markdown links

@@ -12,7 +12,7 @@ import Skyfig
 let spacing = TeamATokens.Spacing.md
 ```
 
-If the variable is unset, Skyfig preserves the default ``SkyfigTokens`` API. Use one namespace consistently for local generation, CI, and the sync workflow.
+If the variable is unset, Skyfig preserves the default ``SkyfigTokens`` API. For a custom name, generated output retains ``SkyfigTokens`` as a compatibility alias for the bundled examples and tests; new app code should use the team-specific API. CI, releases, and the sync workflow read the same variable.
 
 ## First-time fork setup
 
@@ -20,6 +20,7 @@ If the variable is unset, Skyfig preserves the default ``SkyfigTokens`` API. Use
 2. Add `FIGMA_ACCESS_TOKEN` and `FIGMA_FILE_KEY` as repository secrets.
 3. Optionally add `SKYFIG_TOKEN_NAMESPACE` as a repository Actions variable.
 4. Allow the repository token to create pull requests.
-5. Configure the team’s own code owners, branch protection, and release reviewers.
+5. Replace the inherited `@ichakradharg` entry in `.github/CODEOWNERS` with the team’s own owner or team handle.
+6. Configure the team’s own branch protection, required checks, release reviewers, `v*` tag protection, Pages, and Actions settings. GitHub does not copy these settings to a fork.
 
-The complete command examples, ownership model, fixture path, and troubleshooting guide are in the repository’s [Fork and own Skyfig guide](https://github.com/ichakradharg/skyfig/blob/main/Docs/FORK_AND_OWN.md).
+The repository’s `Docs/FORK_AND_OWN.md` guide contains the fixture path, command examples, ownership model, and troubleshooting details.
