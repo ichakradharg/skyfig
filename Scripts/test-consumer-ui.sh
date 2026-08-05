@@ -26,6 +26,7 @@ run_tests() {
     -sdk iphonesimulator \
     -destination "platform=iOS Simulator,name=$simulator,OS=$simulator_os" \
     -only-testing:SkyfigConsumerUITests \
+    -skip-testing:SkyfigConsumerUITests/SkyfigConsumerUITests/testCaptureSnapshotTabs \
     -test-timeouts-enabled YES \
     -default-test-execution-time-allowance 60 \
     -maximum-test-execution-time-allowance 120 \

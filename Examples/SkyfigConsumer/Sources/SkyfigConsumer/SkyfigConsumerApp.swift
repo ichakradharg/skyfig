@@ -64,7 +64,6 @@ private struct ConsumerTabShell: View {
                 }
             }
             .tabViewStyle(.sidebarAdaptable)
-            .tabBarMinimizeBehavior(.onScrollDown)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(SkyfigTokens.Colors.Surface.secondary.color(for: colorScheme))
         }

@@ -3,13 +3,13 @@ set -euo pipefail
 
 mode="${1:-verify}"
 target="${2:-all}"
+simulator_os="${SKYFIG_SIMULATOR_OS:-latest}"
 iphone_simulator="${SKYFIG_IPHONE_SIMULATOR:-iPhone 17 Pro}"
 ipad_simulator="${SKYFIG_IPAD_SIMULATOR:-iPad Pro 13-inch (M5)}"
 snapshot_directory="Examples/SkyfigConsumer/Snapshots"
 derived_data_path="${SKYFIG_SNAPSHOT_DERIVED_DATA:-/private/tmp/skyfig-consumer-snapshots}"
-app_path="$derived_data_path/Build/Products/Debug-iphonesimulator/SkyfigConsumer.app"
-bundle_identifier="com.skyfig.consumer"
-snapshot_settle_delay="${SKYFIG_SNAPSHOT_SETTLE_DELAY:-5}"
+capture_test="SkyfigConsumerUITests/SkyfigConsumerUITests/testCaptureSnapshotTabs"
+snapshot_tabs=(home library activity profile search)
 
 case "$mode" in
   record|verify) ;;
@@ -27,11 +27,8 @@ case "$target" in
     ;;
 esac
 
-record_or_verify_snapshot() {
+prepare_simulator() {
   local simulator="$1"
-  local snapshot_name="$2"
-  local actual_snapshot="/private/tmp/skyfig-${snapshot_name}-actual.png"
-  local expected_snapshot="$snapshot_directory/${snapshot_name}.png"
 
   xcrun simctl boot "$simulator" >/dev/null 2>&1 || true
   xcrun simctl bootstatus "$simulator" -b
@@ -43,20 +40,40 @@ record_or_verify_snapshot() {
     --cellularBars 4 \
     --batteryLevel 100 \
     --batteryState charged
+}
 
-  xcodebuild build \
-    -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
-    -scheme SkyfigConsumer \
-    -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name=$simulator" \
-    -derivedDataPath "$derived_data_path" \
-    ONLY_ACTIVE_ARCH=YES \
-    CODE_SIGNING_ALLOWED=NO
+snapshot_name_for_tab() {
+  local device="$1"
+  local tab="$2"
 
-  xcrun simctl install "$simulator" "$app_path"
-  xcrun simctl launch --terminate-running-process "$simulator" "$bundle_identifier"
-  sleep "$snapshot_settle_delay"
-  xcrun simctl io "$simulator" screenshot "$actual_snapshot"
+  if [[ "$tab" == "home" ]]; then
+    echo "${device}-light"
+  else
+    echo "${device}-${tab}-light"
+  fi
+}
+
+attachment_file_for_tab() {
+  local manifest="$1"
+  local tab="$2"
+
+  awk -v expected="skyfig-${tab}-light_" '
+    /"exportedFileName"/ {
+      file = $0
+      sub(/^.*"exportedFileName"[[:space:]]*:[[:space:]]*"/, "", file)
+      sub(/".*$/, "", file)
+    }
+    /"suggestedHumanReadableName"/ && index($0, expected) {
+      print file
+      exit
+    }
+  ' "$manifest"
+}
+
+record_or_verify_snapshot() {
+  local actual_snapshot="$1"
+  local expected_snapshot="$2"
+  local snapshot_name="$3"
 
   if [[ "$mode" == "record" ]]; then
     cp "$actual_snapshot" "$expected_snapshot"
@@ -74,12 +91,58 @@ record_or_verify_snapshot() {
   fi
 }
 
+capture_device() {
+  local simulator="$1"
+  local device="$2"
+  local result_root
+  result_root="$(mktemp -d /private/tmp/skyfig-consumer-snapshot-results.XXXXXX)"
+  local result_bundle="$result_root/results.xcresult"
+  local attachments_directory="$result_root/attachments"
+  local manifest="$attachments_directory/manifest.json"
+
+  prepare_simulator "$simulator"
+
+  xcodebuild test \
+    -project Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj \
+    -scheme SkyfigConsumer \
+    -sdk iphonesimulator \
+    -destination "platform=iOS Simulator,name=$simulator,OS=$simulator_os" \
+    -derivedDataPath "$derived_data_path" \
+    -only-testing:"$capture_test" \
+    -resultBundlePath "$result_bundle" \
+    -test-timeouts-enabled YES \
+    -default-test-execution-time-allowance 60 \
+    -maximum-test-execution-time-allowance 120 \
+    ONLY_ACTIVE_ARCH=YES \
+    CODE_SIGNING_ALLOWED=NO
+
+  xcrun xcresulttool export attachments \
+    --path "$result_bundle" \
+    --output-path "$attachments_directory"
+
+  for tab in "${snapshot_tabs[@]}"; do
+    local exported_file
+    exported_file="$(attachment_file_for_tab "$manifest" "$tab")"
+    if [[ -z "$exported_file" || ! -f "$attachments_directory/$exported_file" ]]; then
+      echo "Missing exported $tab attachment for $simulator in $manifest." >&2
+      exit 1
+    fi
+
+    local snapshot_name
+    snapshot_name="$(snapshot_name_for_tab "$device" "$tab")"
+    record_or_verify_snapshot \
+      "$attachments_directory/$exported_file" \
+      "$snapshot_directory/${snapshot_name}.png" \
+      "$snapshot_name"
+  done
+}
+
 mkdir -p "$snapshot_directory"
 
 if [[ "$target" == "all" || "$target" == "iphone" ]]; then
-  record_or_verify_snapshot "$iphone_simulator" "iphone-light"
+  capture_device "$iphone_simulator" "iphone"
 fi
 
 if [[ "$target" == "all" || "$target" == "ipad" ]]; then
-  record_or_verify_snapshot "$ipad_simulator" "ipad-light"
+  capture_device "$ipad_simulator" "ipad"
 fi

@@ -4,12 +4,23 @@ Skyfig uses deterministic iPhone and iPad screenshots to catch unintended visual
 
 ## What is covered today
 
-The committed baselines live in `Examples/SkyfigConsumer/Snapshots`:
+The ten committed baselines live in `Examples/SkyfigConsumer/Snapshots`. Each
+device has one image for every tab:
 
-- `iphone-light.png`
-- `ipad-light.png`
+- Home: `iphone-light.png` and `ipad-light.png`
+- Library: `iphone-library-light.png` and `ipad-library-light.png`
+- Activity: `iphone-activity-light.png` and `ipad-activity-light.png`
+- Profile: `iphone-profile-light.png` and `ipad-profile-light.png`
+- Search: `iphone-search-light.png` and `ipad-search-light.png`
 
-The workflow captures the consumer app after fixing simulator appearance and status-bar state. It is deliberately limited to light appearance for the first baseline set. Dark-mode visual review is deferred; do not interpret a passing visual-regression run as dark-mode approval. Add dark baselines only through a reviewed follow-up that updates the recording script, this guide, and the sample documentation together.
+The workflow fixes simulator appearance and status-bar state, then runs a
+capture-specific UI test. Each tab starts from a fresh app launch, is selected
+through the native tab control, and is exported from the XCTest result bundle.
+The normal UI-test script skips this capture-only test. Coverage is deliberately
+limited to light appearance for the first baseline set. Dark-mode visual review
+is deferred; do not interpret a passing visual-regression run as dark-mode
+approval. Add dark baselines only through a reviewed follow-up that updates the
+recording script, this guide, and the sample documentation together.
 
 ## Dedicated Mac requirements
 
@@ -19,7 +30,7 @@ Before registering the runner, prepare a dedicated Mac with:
 
 1. A stable macOS and Xcode installation. Keep the Xcode and iOS simulator runtime versions unchanged between baseline recording and verification.
 2. The iPhone and iPad simulator devices named by `Scripts/verify-consumer-snapshots.sh` (or documented `SKYFIG_IPHONE_SIMULATOR` and `SKYFIG_IPAD_SIMULATOR` overrides).
-3. A logged-in local user able to boot simulators and write `/private/tmp/skyfig-consumer-snapshots`.
+3. A logged-in local user able to boot simulators and write temporary Xcode result bundles under `/private/tmp`.
 4. An always-available network connection while the runner service is active.
 
 Confirm the simulator inventory before recording:
@@ -48,7 +59,12 @@ Scripts/verify-consumer-snapshots.sh record all
 Scripts/verify-consumer-snapshots.sh verify all
 ```
 
-Inspect both PNGs under `Examples/SkyfigConsumer/Snapshots` at full size. Confirm the expected iPhone and iPad layouts, semantic colors, Dynamic Type-safe text placement, focus/selection states, and absence of simulator or launch artifacts. Then commit only the reviewed baseline images and open a pull request. Do not include Xcode `xcuserdata`, derived data, or temporary actual screenshots.
+Inspect all ten PNGs under `Examples/SkyfigConsumer/Snapshots` at full size.
+Confirm that every file displays its named tab, the tab selection is correct,
+and the expected iPhone and iPad layouts, semantic colors, Dynamic Type-safe text
+placement, focus states, and simulator chrome are stable. Then commit only the
+reviewed baseline images and open a pull request. Do not include Xcode
+`xcuserdata`, derived data, or temporary actual screenshots.
 
 ## Verify and refresh
 
