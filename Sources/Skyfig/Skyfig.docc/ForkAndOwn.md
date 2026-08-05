@@ -25,8 +25,9 @@ If the variable is unset, Skyfig preserves the default ``SkyfigTokens`` API. For
 1. Enable Actions in the fork.
 2. Add `FIGMA_ACCESS_TOKEN` and `FIGMA_FILE_KEY` as repository secrets.
 3. Optionally add `SKYFIG_TOKEN_NAMESPACE` as a repository Actions variable.
-4. Allow the repository token to create pull requests.
-5. Replace the inherited `@ichakradharg` entry in `.github/CODEOWNERS` with the team’s own owner or team handle.
-6. Configure the team’s own branch protection, required checks, release reviewers, `v*` tag protection, Pages, and Actions settings. GitHub does not copy these settings to a fork.
+4. Run **Sync Figma tokens** manually once, then add `FIGMA_SYNC_ENABLED=true` as a repository Actions variable to enable weekly synchronization. Without it, scheduled runs are skipped.
+5. Allow the repository token to create pull requests.
+6. Replace the inherited `@ichakradharg` entry in `.github/CODEOWNERS` with the team’s own owner or team handle.
+7. Configure the team’s own branch protection, required checks, release reviewers, `v*` tag protection, Pages, and Actions settings. GitHub does not copy these settings to a fork.
 
 The repository’s `Docs/FORK_AND_OWN.md` guide contains the fixture path, command examples, ownership model, and troubleshooting details.

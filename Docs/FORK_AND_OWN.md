@@ -18,9 +18,10 @@ The upstream Skyfig repository remains the generator and reference implementatio
 2. Choose a token namespace for application code. It must be a Swift type name, such as `TeamATokens` or `PaymentsTokens`.
 3. In **Settings → Secrets and variables → Actions → Variables**, create `SKYFIG_TOKEN_NAMESPACE` with that value. If you do not create it, generated code keeps the default `SkyfigTokens` namespace.
 4. In **Settings → Secrets and variables → Actions → Secrets**, add `FIGMA_ACCESS_TOKEN` and `FIGMA_FILE_KEY`. Keep both values out of source code and pull-request text.
-5. In **Settings → Actions → General**, allow the repository `GITHUB_TOKEN` to create pull requests.
-6. Replace the inherited `@ichakradharg` entry in `.github/CODEOWNERS` with your team’s owner or team handle.
-7. Configure your own branch protection, required CI checks, release-environment reviewers, `v*` tag protection, Pages, and Actions settings. GitHub does not copy these repository settings when you fork.
+5. Run **Sync Figma tokens** manually once. After it succeeds, create the Actions variable `FIGMA_SYNC_ENABLED` with the value `true` to enable weekly synchronization. Scheduled runs stay skipped while this variable is unset.
+6. In **Settings → Actions → General**, allow the repository `GITHUB_TOKEN` to create pull requests.
+7. Replace the inherited `@ichakradharg` entry in `.github/CODEOWNERS` with your team’s owner or team handle.
+8. Configure your own branch protection, required CI checks, release-environment reviewers, `v*` tag protection, Pages, and Actions settings. GitHub does not copy these repository settings when you fork.
 
 The live Figma endpoint requires the eligible Figma plan, membership, and variable-read permission. Until that access is ready, fixture mode continues to validate the full generation pipeline without credentials.
 
