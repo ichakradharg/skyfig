@@ -31,6 +31,19 @@ public enum SkyfigTokens {
     public enum Typography {
         public static let body = SkyfigTypographyToken(fontFamily: "system", fontSize: 16, fontWeight: .regular, lineHeight: 24, letterSpacing: 0)
         public static let headline = SkyfigTypographyToken(fontFamily: "system", fontSize: 28, fontWeight: .bold, lineHeight: 34, letterSpacing: -0.4)
+        public enum Apple {
+            public static let body = SkyfigTypographyToken(fontFamily: "system", fontSize: 17, fontWeight: .regular, lineHeight: 22, letterSpacing: 0)
+            public static let callout = SkyfigTypographyToken(fontFamily: "system", fontSize: 16, fontWeight: .regular, lineHeight: 21, letterSpacing: 0)
+            public static let caption1 = SkyfigTypographyToken(fontFamily: "system", fontSize: 12, fontWeight: .regular, lineHeight: 16, letterSpacing: 0)
+            public static let caption2 = SkyfigTypographyToken(fontFamily: "system", fontSize: 11, fontWeight: .regular, lineHeight: 13, letterSpacing: 0)
+            public static let footnote = SkyfigTypographyToken(fontFamily: "system", fontSize: 13, fontWeight: .regular, lineHeight: 18, letterSpacing: 0)
+            public static let headline = SkyfigTypographyToken(fontFamily: "system", fontSize: 17, fontWeight: .semibold, lineHeight: 22, letterSpacing: 0)
+            public static let largeTitle = SkyfigTypographyToken(fontFamily: "system", fontSize: 34, fontWeight: .regular, lineHeight: 41, letterSpacing: 0)
+            public static let subheadline = SkyfigTypographyToken(fontFamily: "system", fontSize: 15, fontWeight: .regular, lineHeight: 20, letterSpacing: 0)
+            public static let title1 = SkyfigTypographyToken(fontFamily: "system", fontSize: 28, fontWeight: .regular, lineHeight: 34, letterSpacing: 0)
+            public static let title2 = SkyfigTypographyToken(fontFamily: "system", fontSize: 22, fontWeight: .regular, lineHeight: 28, letterSpacing: 0)
+            public static let title3 = SkyfigTypographyToken(fontFamily: "system", fontSize: 20, fontWeight: .regular, lineHeight: 25, letterSpacing: 0)
+        }
     }
     public enum Spacing {
         public static let lg: Double = 24
@@ -49,5 +62,8 @@ public enum SkyfigTokens {
     }
     public enum Shadows {
         public static let card = SkyfigShadowToken(layers: [SkyfigShadowLayer(kind: .drop, color: SkyfigColorToken(light: SkyfigRGBAColor(red: 15, green: 23, blue: 42, alpha: 36), dark: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 102)), x: 0, y: 8, blur: 18, spread: 0)])
+        public static let floatingPanel = SkyfigShadowToken(layers: [SkyfigShadowLayer(kind: .drop, color: SkyfigColorToken(light: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 36), dark: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 128)), x: 0, y: 2, blur: 4, spread: 0), SkyfigShadowLayer(kind: .drop, color: SkyfigColorToken(light: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 46), dark: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 179)), x: 0, y: 8, blur: 20, spread: -2)])
+        public static let modal = SkyfigShadowToken(layers: [SkyfigShadowLayer(kind: .drop, color: SkyfigColorToken(light: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 51), dark: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 153)), x: 0, y: 12, blur: 32, spread: 0)])
+        public static let searchFieldInner = SkyfigShadowToken(layers: [SkyfigShadowLayer(kind: .inner, color: SkyfigColorToken(light: SkyfigRGBAColor(red: 0, green: 51, blue: 128, alpha: 41), dark: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 163)), x: 0, y: 1, blur: 6, spread: 0)])
     }
 }

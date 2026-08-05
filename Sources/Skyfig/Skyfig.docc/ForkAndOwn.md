@@ -2,9 +2,21 @@
 
 ## Structure-driven Figma variables
 
-A fork can retain its existing Figma hierarchy without configuring a Skyfig family map. Supported primitive paths such as `foundation/colors/brand/primary` generate a nested API such as `TeamTokens.Foundation.Colors.Brand.primary`. Skyfig normalizes only for valid Swift identifiers and reports collisions. Colors, numbers, strings, and booleans are supported; typography and shadows remain explicit composites rather than inferred from arbitrary paths.
+A fork can retain its existing Figma hierarchy without configuring a Skyfig family map. Supported primitive paths such as `foundation/colors/brand/primary` generate a nested API such as `TeamTokens.Foundation.Colors.Brand.primary`. Skyfig normalizes only for valid Swift identifiers and reports collisions. Colors, numbers, strings, and booleans are supported. Complete sibling groups with recognized typography or shadow fields also generate bundled composite tokens without mapping their outer path.
 
-For example, `type/body/font-size` becomes `TeamTokens.Type.Body.fontSize` as a themed numeric value. Figma stores typography and shadows as several primitive variables, not native composite values, so Skyfig does not guess that unrelated paths form one Swift style. A team that wants a bundled `SkyfigTypographyToken` or `SkyfigShadowToken` can use the existing explicit semantic conventions.
+Figma stores typography and shadows as several primitive variables, not native composite values. Skyfig bundles a group only when every required field is present once with a compatible type. Common aliases such as `family`, `typeface`, `leading`, `tracking`, `offsetX`, and `blurRadius` are recognized. Partial or ambiguous groups stay primitive instead of being guessed. Numeric shadow layer segments define deterministic layer order; kind defaults to `drop` and spread defaults to zero.
+
+For example, the sibling variables `semantic/text/body/family`, `size`, `weight`, `leading`, and `tracking` become one `TeamTokens.Typography.Semantic.Text.body` value. The outer folders and style name remain team owned; only the recognized leaf roles determine whether the group is complete.
+
+```swift
+Text("Account balance")
+    .font(
+        TeamTokens.Typography.Semantic.Text.body
+            .font(relativeTo: .body)
+    )
+```
+
+The Apple HIG fixture demonstrates all 11 standard iOS and iPadOS text styles. Consumers use each generated token with its corresponding SwiftUI text style so Dynamic Type, including accessibility sizes, remains system controlled.
 
 Each vertical team can use a fork as its own design-token publisher. The team owns Figma access, generated source, review rules, releases, and app adoption timing.
 

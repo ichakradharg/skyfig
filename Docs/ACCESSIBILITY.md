@@ -16,6 +16,8 @@ Text("Your settings are up to date.")
 
 Choose the text style for the role in the interface, not only the token's point size. Verify important screens at an accessibility size and avoid fixed-height text containers.
 
+The bundled Apple fixture uses the default Large metrics from Apple's Human Interface Guidelines for Large Title, Title 1–3, Headline, Body, Callout, Subheadline, Footnote, Caption 1, and Caption 2. These values document and preview the base hierarchy; they are not a replacement for system scaling. Match each token to its SwiftUI text style so the system responds from `xSmall` through `xxxLarge` and all five accessibility sizes. Do not manually select a different token for every content-size category.
+
 ## Contrast
 
 Skyfig tests these baseline expectations in light and dark appearance:

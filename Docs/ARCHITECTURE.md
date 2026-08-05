@@ -32,7 +32,7 @@ iOS, iPadOS, macOS, and tvOS apps
 | Skyfig package | Public, typed token API and runtime helpers | Network access or Figma authentication at app runtime |
 | Consumer apps | UI composition and explicit package-version adoption | Figma secrets or token-generation workflows |
 
-The canonical document carries both the established semantic families and a structure-driven primitive collection. This additive boundary lets existing consumers keep their semantic APIs while a forked team generates typed APIs from its own Figma hierarchy without a mapping layer.
+The canonical document carries both the established semantic families and a structure-driven primitive collection. During normalization, complete recognized typography and shadow sibling groups are additionally projected into composite token families; incomplete or ambiguous groups remain primitives. This additive boundary lets existing consumers keep their semantic APIs while a forked team generates typed APIs from its own Figma hierarchy without a mapping layer.
 
 ## Change lifecycle
 

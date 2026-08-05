@@ -37,6 +37,8 @@ Before inviting app teams to depend on the fork, confirm all of the following:
 
 ## Generate and review tokens
 
+Share the [Figma variable authoring rules](FIGMA_AUTHORING_GUIDE.md) with designers before the first live sync. It defines the flexible hierarchy model, recognized composite leaf roles, modes, aliases, and the handoff checklist.
+
 Run **Actions → Sync Figma tokens → Run workflow** in your fork. The workflow reads only your repository secrets and opens or updates a draft pull request. Review both the canonical JSON and generated Swift changes before merging.
 
 The first sync should be treated as an onboarding exercise: inspect the canonical token diff, confirm the generated namespace, let the required CI check finish, and merge only after the team owner approves it.
@@ -45,10 +47,20 @@ The namespace affects the generated API only. The Swift package module remains `
 
 Your Figma naming hierarchy does not need to match Skyfig's semantic fixture. Supported primitive variables retain their slash hierarchy automatically, so `foundation/colors/brand/primary` becomes `TeamATokens.Foundation.Colors.Brand.primary`. There is no per-team mapping configuration. Names are normalized only as required by Swift and ambiguous normalized paths fail with actionable source-name errors.
 
-Dynamic output exposes COLOR, FLOAT, STRING, and BOOLEAN variables individually. For example, `type/body/font-size` becomes `TeamATokens.Type.Body.fontSize` as a themed `Double`; it does not become a guessed typography style. Figma represents typography and shadows as separate primitive values, and Skyfig deliberately does not assume arbitrary variables form one composite. Teams that want bundled `SkyfigTypographyToken` or `SkyfigShadowToken` values can keep using the supported explicit semantic conventions.
+Dynamic output exposes COLOR, FLOAT, STRING, and BOOLEAN variables individually. Skyfig also examines sibling variables without requiring a team-specific outer-path map. A complete typography group containing family, size, weight, line height, and letter spacing becomes a bundled `SkyfigTypographyToken`; a complete shadow group containing color, x, y, and blur becomes a bundled `SkyfigShadowToken`. Common field aliases are supported. Partial, incorrectly typed, or ambiguous groups remain primitives so a fork never receives a guessed composite. The explicit `typography/...` and `shadows/...` conventions remain compatible.
+
+For example, the sibling variables `semantic/text/body/family`, `size`, `weight`, `leading`, and `tracking` generate one `TeamATokens.Typography.Semantic.Text.body` token. The outer folders and style name remain owned by the Figma team; Skyfig only recognizes the leaf roles needed to assemble the style.
+
+For Apple-platform typography, use the generated token with the matching SwiftUI `Font.TextStyle`. This lets the system scale across standard and accessibility Dynamic Type sizes. The repository's Apple HIG fixture and consumer sample demonstrate all 11 standard iOS and iPadOS styles.
 
 ```swift
 import Skyfig
+
+Text("Account balance")
+    .font(
+        TeamATokens.Typography.Semantic.Text.body
+            .font(relativeTo: .body)
+    )
 
 Text("Pay now")
     .padding(TeamATokens.Spacing.md)

@@ -1,5 +1,5 @@
-import Foundation
 import CoreFoundation
+import Foundation
 
 /// Imports a Figma Variables API response into Skyfig's canonical token format.
 public enum FigmaImporter {
@@ -10,7 +10,9 @@ public enum FigmaImporter {
             let variables = meta["variables"] as? [String: Any],
             let collections = meta["variableCollections"] as? [String: Any]
         else {
-            throw FigmaImportError.invalidPayload("expected meta.variables and meta.variableCollections from the Figma Variables API")
+            throw FigmaImportError.invalidPayload(
+                "expected meta.variables and meta.variableCollections from the Figma Variables API"
+            )
         }
 
         let resolver = Resolver(variables: variables, collections: collections)
@@ -20,6 +22,8 @@ public enum FigmaImporter {
         var borderWidths: [String: DimensionToken] = [:]
         var typographyBuilders: [String: TypographyBuilder] = [:]
         var shadowBuilders: [String: [Int: ShadowBuilder]] = [:]
+        var inferredTypography: [String: InferredTypographyCandidate] = [:]
+        var inferredShadows: [String: InferredShadowCandidate] = [:]
         var importedNames: [String: String] = [:]
         var dynamicColors: [String: ColorToken] = [:]
         var dynamicNumbers: [String: ThemedValueToken<Double>] = [:]
@@ -82,20 +86,62 @@ public enum FigmaImporter {
             default: continue
             }
 
+            if category != "typography" {
+                try collectInferredTypography(
+                    id: id,
+                    name: rawName,
+                    parts: parts,
+                    resolvedType: resolvedType,
+                    resolver: resolver,
+                    candidates: &inferredTypography
+                )
+            }
+            if category != "shadow", category != "shadows" {
+                try collectInferredShadow(
+                    id: id,
+                    name: rawName,
+                    parts: parts,
+                    resolvedType: resolvedType,
+                    resolver: resolver,
+                    candidates: &inferredShadows
+                )
+            }
+
             switch category {
             case "typography":
-                try importTypography(id: id, name: rawName, parts: parts, resolver: resolver, builders: &typographyBuilders)
+                try importTypography(
+                    id: id,
+                    name: rawName,
+                    parts: parts,
+                    resolver: resolver,
+                    builders: &typographyBuilders
+                )
             case "shadow", "shadows":
-                try importShadow(id: id, name: rawName, parts: parts, resolver: resolver, builders: &shadowBuilders)
+                try importShadow(
+                    id: id,
+                    name: rawName,
+                    parts: parts,
+                    resolver: resolver,
+                    builders: &shadowBuilders
+                )
             case "spacing":
                 let path = try tokenPath(parts.dropFirst(), source: rawName)
-                spacing[path] = DimensionToken(description: variable["description"] as? String, value: try resolver.number(id: id, theme: "light"))
+                spacing[path] = DimensionToken(
+                    description: variable["description"] as? String,
+                    value: try resolver.number(id: id, theme: "light")
+                )
             case "cornerradius", "cornerradii", "radius", "radii":
                 let path = try tokenPath(parts.dropFirst(), source: rawName)
-                cornerRadii[path] = DimensionToken(description: variable["description"] as? String, value: try resolver.number(id: id, theme: "light"))
+                cornerRadii[path] = DimensionToken(
+                    description: variable["description"] as? String,
+                    value: try resolver.number(id: id, theme: "light")
+                )
             case "borderwidth", "borderwidths":
                 let path = try tokenPath(parts.dropFirst(), source: rawName)
-                borderWidths[path] = DimensionToken(description: variable["description"] as? String, value: try resolver.number(id: id, theme: "light"))
+                borderWidths[path] = DimensionToken(
+                    description: variable["description"] as? String,
+                    value: try resolver.number(id: id, theme: "light")
+                )
             default:
                 guard resolvedType == "COLOR" else { continue }
                 let colorParts = ["color", "colors"].contains(category) ? parts.dropFirst() : parts[...]
@@ -110,10 +156,16 @@ public enum FigmaImporter {
             }
         }
 
-        let typography = try typographyBuilders.mapValues { try $0.build() }
-        let shadows = try shadowBuilders.mapValues { indexed in
+        var typography = try typographyBuilders.mapValues { try $0.build() }
+        for (path, candidate) in inferredTypography where candidate.canBuild {
+            typography[path] = try candidate.builder.build()
+        }
+        var shadows = try shadowBuilders.mapValues { indexed in
             let layers = try indexed.keys.sorted().map { try indexed[$0]!.build() }
             return ShadowToken(value: layers)
+        }
+        for (path, candidate) in inferredShadows where candidate.canBuild {
+            shadows[path] = try candidate.build()
         }
         let document = TokenDocument(
             name: name,
@@ -123,8 +175,13 @@ public enum FigmaImporter {
                 spacing: spacing,
                 cornerRadii: cornerRadii,
                 borderWidths: borderWidths,
-                shadows: shadows
-                , dynamic: DynamicTokenCollection(colors: dynamicColors, numbers: dynamicNumbers, strings: dynamicStrings, booleans: dynamicBooleans)
+                shadows: shadows,
+                dynamic: DynamicTokenCollection(
+                    colors: dynamicColors,
+                    numbers: dynamicNumbers,
+                    strings: dynamicStrings,
+                    booleans: dynamicBooleans
+                )
             )
         )
         try document.validate()
@@ -150,13 +207,16 @@ public enum FigmaImportError: Error, CustomStringConvertible, Equatable {
         case .invalidPayload(let reason): "Invalid Figma response: \(reason)"
         case .invalidVariable(let id): "Invalid Figma variable: \(id)"
         case .missingValue(let variable, let theme): "Figma variable \(variable) has no value for \(theme)"
-        case .missingMode(let collection, let theme): "Figma collection \(collection) has multiple modes but no \(theme) mode"
+        case .missingMode(let collection, let theme):
+            "Figma collection \(collection) has multiple modes but no \(theme) mode"
         case .missingAlias(let id): "Figma alias refers to missing variable \(id)"
         case .aliasCycle(let id): "Figma alias cycle detected at \(id)"
         case .typeMismatch(let variable, let expected): "Figma variable \(variable) is not \(expected)"
         case .unsupportedName(let name): "Unsupported Figma variable name: \(name)"
-        case .incompleteComposite(let name, let fields): "Figma composite \(name) is missing: \(fields.sorted().joined(separator: ", "))"
-        case .nameCollision(let first, let second, let output): "Figma variables \(first) and \(second) both normalize to \(output)"
+        case .incompleteComposite(let name, let fields):
+            "Figma composite \(name) is missing: \(fields.sorted().joined(separator: ", "))"
+        case .nameCollision(let first, let second, let output):
+            "Figma variables \(first) and \(second) both normalize to \(output)"
         }
     }
 }
@@ -269,6 +329,14 @@ private struct TypographyBuilder {
     var lineHeight: Double?
     var letterSpacing: Double?
 
+    var isComplete: Bool {
+        fontFamily != nil
+            && fontSize != nil
+            && fontWeight != nil
+            && lineHeight != nil
+            && letterSpacing != nil
+    }
+
     func build() throws -> TypographyToken {
         var missing: [String] = []
         if fontFamily == nil { missing.append("fontFamily") }
@@ -296,15 +364,83 @@ private struct ShadowBuilder {
     var blur: Double?
     var spread: Double?
 
+    var isComplete: Bool {
+        colors != nil && x != nil && y != nil && blur != nil
+    }
+
     func build() throws -> ShadowLayer {
         var missing: [String] = []
         if colors == nil { missing.append("color") }
         if x == nil { missing.append("x") }
         if y == nil { missing.append("y") }
         if blur == nil { missing.append("blur") }
-        if spread == nil { missing.append("spread") }
         guard missing.isEmpty else { throw FigmaImportError.incompleteComposite(name, fields: missing) }
-        return ShadowLayer(kind: kind, color: colors!, x: x!, y: y!, blur: blur!, spread: spread!)
+        return ShadowLayer(kind: kind, color: colors!, x: x!, y: y!, blur: blur!, spread: spread ?? 0)
+    }
+}
+
+private enum TypographyField: String, CaseIterable, Hashable {
+    case fontFamily
+    case fontSize
+    case fontWeight
+    case lineHeight
+    case letterSpacing
+
+    func accepts(_ resolvedType: String) -> Bool {
+        switch self {
+        case .fontFamily: resolvedType == "STRING"
+        case .fontSize, .lineHeight, .letterSpacing: resolvedType == "FLOAT"
+        case .fontWeight: resolvedType == "FLOAT" || resolvedType == "STRING"
+        }
+    }
+}
+
+private struct InferredTypographyCandidate {
+    var builder: TypographyBuilder
+    var fields: Set<TypographyField> = []
+    var isAmbiguous = false
+
+    var canBuild: Bool {
+        !isAmbiguous && fields.count == TypographyField.allCases.count && builder.isComplete
+    }
+}
+
+private enum ShadowField: String, Hashable {
+    case kind
+    case color
+    case x
+    case y
+    case blur
+    case spread
+
+    func accepts(_ resolvedType: String) -> Bool {
+        switch self {
+        case .kind: resolvedType == "STRING"
+        case .color: resolvedType == "COLOR"
+        case .x, .y, .blur, .spread: resolvedType == "FLOAT"
+        }
+    }
+}
+
+private struct InferredShadowLayerCandidate {
+    var builder: ShadowBuilder
+    var fields: Set<ShadowField> = []
+    var isAmbiguous = false
+
+    var canBuild: Bool {
+        !isAmbiguous && builder.isComplete
+    }
+}
+
+private struct InferredShadowCandidate {
+    var layers: [Int: InferredShadowLayerCandidate] = [:]
+
+    var canBuild: Bool {
+        !layers.isEmpty && layers.values.allSatisfy(\.canBuild)
+    }
+
+    func build() throws -> ShadowToken {
+        ShadowToken(value: try layers.keys.sorted().map { try layers[$0]!.builder.build() })
     }
 }
 
@@ -317,15 +453,15 @@ private func importTypography(
 ) throws {
     guard parts.count >= 3 else { throw FigmaImportError.unsupportedName(name) }
     let path = try tokenPath(parts.dropFirst().dropLast(), source: name)
-    let field = categoryName(parts.last!)
+    guard let field = typographyField(parts.last!) else { throw FigmaImportError.unsupportedName(name) }
     var builder = builders[path] ?? TypographyBuilder(name: path)
     switch field {
-    case "fontfamily": builder.fontFamily = try resolver.string(id: id, theme: "light")
-    case "fontsize": builder.fontSize = try resolver.number(id: id, theme: "light")
-    case "fontweight": builder.fontWeight = try fontWeight(from: resolver.raw(id: id, theme: "light"), variable: id)
-    case "lineheight": builder.lineHeight = try resolver.number(id: id, theme: "light")
-    case "letterspacing": builder.letterSpacing = try resolver.number(id: id, theme: "light")
-    default: throw FigmaImportError.unsupportedName(name)
+    case .fontFamily: builder.fontFamily = try resolver.string(id: id, theme: "light")
+    case .fontSize: builder.fontSize = try resolver.number(id: id, theme: "light")
+    case .fontWeight:
+        builder.fontWeight = try fontWeight(from: resolver.raw(id: id, theme: "light"), variable: id)
+    case .lineHeight: builder.lineHeight = try resolver.number(id: id, theme: "light")
+    case .letterSpacing: builder.letterSpacing = try resolver.number(id: id, theme: "light")
     }
     builders[path] = builder
 }
@@ -338,7 +474,7 @@ private func importShadow(
     builders: inout [String: [Int: ShadowBuilder]]
 ) throws {
     guard parts.count >= 3 else { throw FigmaImportError.unsupportedName(name) }
-    let field = categoryName(parts.last!)
+    guard let field = shadowField(parts.last!) else { throw FigmaImportError.unsupportedName(name) }
     let possibleIndex = parts.count >= 4 ? Int(parts[parts.count - 2]) : nil
     let index = possibleIndex ?? 0
     let pathParts = possibleIndex == nil ? parts.dropFirst().dropLast() : parts.dropFirst().dropLast(2)
@@ -346,23 +482,113 @@ private func importShadow(
     var indexed = builders[path] ?? [:]
     var builder = indexed[index] ?? ShadowBuilder(name: "\(path)[\(index)]")
     switch field {
-    case "kind":
+    case .kind:
         let raw = try resolver.string(id: id, theme: "light").lowercased()
-        guard let kind = ShadowLayer.Kind(rawValue: raw) else { throw FigmaImportError.typeMismatch(variable: id, expected: "drop or inner") }
+        guard let kind = ShadowLayer.Kind(rawValue: raw) else {
+            throw FigmaImportError.typeMismatch(variable: id, expected: "drop or inner")
+        }
         builder.kind = kind
-    case "color":
+    case .color:
         builder.colors = [
             "light": try resolver.color(id: id, theme: "light"),
             "dark": try resolver.color(id: id, theme: "dark"),
         ]
-    case "x": builder.x = try resolver.number(id: id, theme: "light")
-    case "y": builder.y = try resolver.number(id: id, theme: "light")
-    case "blur": builder.blur = try resolver.number(id: id, theme: "light")
-    case "spread": builder.spread = try resolver.number(id: id, theme: "light")
-    default: throw FigmaImportError.unsupportedName(name)
+    case .x: builder.x = try resolver.number(id: id, theme: "light")
+    case .y: builder.y = try resolver.number(id: id, theme: "light")
+    case .blur: builder.blur = try resolver.number(id: id, theme: "light")
+    case .spread: builder.spread = try resolver.number(id: id, theme: "light")
     }
     indexed[index] = builder
     builders[path] = indexed
+}
+
+private func collectInferredTypography(
+    id: String,
+    name: String,
+    parts: [String],
+    resolvedType: String,
+    resolver: Resolver,
+    candidates: inout [String: InferredTypographyCandidate]
+) throws {
+    guard
+        parts.count >= 2,
+        let field = typographyField(parts.last!),
+        field.accepts(resolvedType)
+    else { return }
+
+    let path = try tokenPath(parts.dropLast(), source: name)
+    var candidate = candidates[path] ?? InferredTypographyCandidate(
+        builder: TypographyBuilder(name: path)
+    )
+    guard candidate.fields.insert(field).inserted else {
+        candidate.isAmbiguous = true
+        candidates[path] = candidate
+        return
+    }
+
+    switch field {
+    case .fontFamily: candidate.builder.fontFamily = try resolver.string(id: id, theme: "light")
+    case .fontSize: candidate.builder.fontSize = try resolver.number(id: id, theme: "light")
+    case .fontWeight:
+        candidate.builder.fontWeight = try fontWeight(
+            from: resolver.raw(id: id, theme: "light"),
+            variable: id
+        )
+    case .lineHeight: candidate.builder.lineHeight = try resolver.number(id: id, theme: "light")
+    case .letterSpacing:
+        candidate.builder.letterSpacing = try resolver.number(id: id, theme: "light")
+    }
+    candidates[path] = candidate
+}
+
+private func collectInferredShadow(
+    id: String,
+    name: String,
+    parts: [String],
+    resolvedType: String,
+    resolver: Resolver,
+    candidates: inout [String: InferredShadowCandidate]
+) throws {
+    guard
+        parts.count >= 2,
+        let field = shadowField(parts.last!),
+        field.accepts(resolvedType)
+    else { return }
+
+    let possibleIndex = parts.count >= 3 ? Int(parts[parts.count - 2]) : nil
+    let index = possibleIndex ?? 0
+    let pathParts = possibleIndex == nil ? parts.dropLast() : parts.dropLast(2)
+    let path = try tokenPath(pathParts, source: name)
+    var candidate = candidates[path] ?? InferredShadowCandidate()
+    var layer = candidate.layers[index] ?? InferredShadowLayerCandidate(
+        builder: ShadowBuilder(name: "\(path)[\(index)]")
+    )
+    guard layer.fields.insert(field).inserted else {
+        layer.isAmbiguous = true
+        candidate.layers[index] = layer
+        candidates[path] = candidate
+        return
+    }
+
+    switch field {
+    case .kind:
+        let raw = try resolver.string(id: id, theme: "light").lowercased()
+        guard let kind = ShadowLayer.Kind(rawValue: raw) else {
+            throw FigmaImportError.typeMismatch(variable: id, expected: "drop or inner")
+        }
+        layer.builder.kind = kind
+    case .color:
+        layer.builder.colors = [
+            "light": try resolver.color(id: id, theme: "light"),
+            "dark": try resolver.color(id: id, theme: "dark"),
+        ]
+    case .x: layer.builder.x = try resolver.number(id: id, theme: "light")
+    case .y: layer.builder.y = try resolver.number(id: id, theme: "light")
+    case .blur: layer.builder.blur = try resolver.number(id: id, theme: "light")
+    case .spread: layer.builder.spread = try resolver.number(id: id, theme: "light")
+    }
+    candidate.layers[index] = layer
+    candidates[path] = candidate
 }
 
 private func canonicalParts(_ name: String) -> [String] {
@@ -377,15 +603,21 @@ private func canonicalImportKey(
 ) throws -> String? {
     switch category {
     case "typography":
-        return "typography:\(try tokenPath(parts.dropFirst(), source: source))"
+        guard parts.count >= 3, let field = typographyField(parts.last!) else {
+            throw FigmaImportError.unsupportedName(source)
+        }
+        let path = try tokenPath(parts.dropFirst().dropLast(), source: source)
+        return "typography:\(path).\(field.rawValue)"
     case "shadow", "shadows":
         guard parts.count >= 3 else { throw FigmaImportError.unsupportedName(source) }
-        let field = categoryName(parts.last!)
+        guard let field = shadowField(parts.last!) else {
+            throw FigmaImportError.unsupportedName(source)
+        }
         let possibleIndex = parts.count >= 4 ? Int(parts[parts.count - 2]) : nil
         let index = possibleIndex ?? 0
         let pathParts = possibleIndex == nil ? parts.dropFirst().dropLast() : parts.dropFirst().dropLast(2)
         let path = try tokenPath(pathParts, source: source)
-        return "shadows:\(path).\(index).\(field)"
+        return "shadows:\(path).\(index).\(field.rawValue)"
     case "spacing":
         return "spacing:\(try tokenPath(parts.dropFirst(), source: source))"
     case "cornerradius", "cornerradii", "radius", "radii":
@@ -417,9 +649,32 @@ private func categoryName(_ value: String) -> String {
     value.lowercased().filter(\.isLetter)
 }
 
+private func typographyField(_ value: String) -> TypographyField? {
+    switch categoryName(value) {
+    case "fontfamily", "family", "typeface": .fontFamily
+    case "fontsize", "size": .fontSize
+    case "fontweight", "weight": .fontWeight
+    case "lineheight", "leading": .lineHeight
+    case "letterspacing", "tracking": .letterSpacing
+    default: nil
+    }
+}
+
+private func shadowField(_ value: String) -> ShadowField? {
+    switch categoryName(value) {
+    case "kind", "type": .kind
+    case "color": .color
+    case "x", "offsetx", "horizontaloffset": .x
+    case "y", "offsety", "verticaloffset": .y
+    case "blur", "blurradius": .blur
+    case "spread", "spreadradius": .spread
+    default: nil
+    }
+}
+
 private func tokenPath<S: Collection>(_ parts: S, source: String) throws -> String where S.Element == String {
     guard !parts.isEmpty else { throw FigmaImportError.unsupportedName(source) }
-    return parts.joined(separator: ".")
+    return parts.map { $0.first?.isNumber == true ? "_\($0)" : $0 }.joined(separator: ".")
 }
 
 private func dynamicTokenPath<S: Collection>(_ parts: S, source: String) throws -> String where S.Element == String {

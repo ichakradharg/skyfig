@@ -38,7 +38,9 @@ Generation is deterministic and atomic. A failed validation or `--check` leaves 
 
 ### Dynamic Figma names do not generate as expected
 
-No semantic family mapping is needed for supported primitives. Use non-empty slash-separated path segments; Skyfig converts punctuation and whitespace to lower-camel Swift identifiers, prefixes numeric-leading segments with `_`, and rejects source paths that normalize to the same output. COLOR, FLOAT, STRING, and BOOLEAN are dynamic; typography and shadows remain explicit composites because Skyfig does not infer semantics from arbitrary paths.
+No semantic family mapping is needed for supported primitives or structure-driven composites. Use non-empty slash-separated path segments; Skyfig converts punctuation and whitespace to lower-camel Swift identifiers, prefixes numeric-leading segments with `_`, and rejects source paths that normalize to the same output. COLOR, FLOAT, STRING, and BOOLEAN are dynamic. Typography and shadow siblings are bundled only when their recognized fields are complete, correctly typed, and unambiguous.
+
+Give designers the [Figma variable authoring rules](FIGMA_AUTHORING_GUIDE.md) before handoff. The guide lists every supported composite role and alias, multi-mode requirements, deep nesting behavior, and a pre-sync checklist.
 
 Open the failed **Sync Figma tokens** workflow run and identify the first failing step.
 
@@ -48,7 +50,8 @@ Open the failed **Sync Figma tokens** workflow run and identify the first failin
 | Figma returns access or plan errors | The token lacks `file_variables:read`, the user is not a full member, the file is inaccessible, or the plan does not support the Variables API. | Confirm Enterprise eligibility, membership, file access, and a least-privilege token. A public Figma file does not bypass these requirements. |
 | Light or dark mode error | A multi-mode collection does not contain modes named `Light` and `Dark`. | Rename the Figma modes, case-insensitively, or use a single-mode collection. |
 | Alias or cycle error | A referenced Figma variable is missing, deleted incorrectly, or part of an alias cycle. | Repair the alias relationship in Figma. Variables marked `deletedButReferenced` may resolve aliases but are not emitted. |
-| Typography or shadow error | A composite token is incomplete or has an unsupported metric. | Supply every required component using the repository naming convention, then rerun. |
+| Expected composite remains primitive | The group is incomplete, contains incompatible Figma types, or has duplicate aliases such as both `size` and `fontSize`. | Review the sibling fields. Keep one recognized name per role and supply every required typography or shadow value. |
+| Explicit typography or shadow error | A group under the legacy `typography/...` or `shadows/...` convention is incomplete or invalid. | Supply the missing required fields or move the partial values to a non-explicit hierarchy so they remain primitives. |
 
 The workflow keeps the raw Figma response only in the runner's temporary directory. It commits canonical JSON and generated Swift, not credentials or raw API data.
 

@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "variableCollections": {
+      "apple": {
+        "defaultModeId": "value",
+        "modes": [{"modeId": "value", "name": "Value"}],
+        "name": "Apple HIG Typography"
+      }
+    },
+    "variables": {
+      "large-title-family": {"name": "foundation/type/large-title/font-family", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "large-title-size": {"name": "foundation/type/large-title/font-size", "resolvedType": "FLOAT", "valuesByMode": {"value": 34}, "variableCollectionId": "apple"},
+      "large-title-weight": {"name": "foundation/type/large-title/font-weight", "resolvedType": "STRING", "valuesByMode": {"value": "Regular"}, "variableCollectionId": "apple"},
+      "large-title-leading": {"name": "foundation/type/large-title/line-height", "resolvedType": "FLOAT", "valuesByMode": {"value": 41}, "variableCollectionId": "apple"},
+      "large-title-tracking": {"name": "foundation/type/large-title/letter-spacing", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "title-1-family": {"name": "semantic/text/title-1/family", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "title-1-size": {"name": "semantic/text/title-1/size", "resolvedType": "FLOAT", "valuesByMode": {"value": 28}, "variableCollectionId": "apple"},
+      "title-1-weight": {"name": "semantic/text/title-1/weight", "resolvedType": "FLOAT", "valuesByMode": {"value": 400}, "variableCollectionId": "apple"},
+      "title-1-leading": {"name": "semantic/text/title-1/leading", "resolvedType": "FLOAT", "valuesByMode": {"value": 34}, "variableCollectionId": "apple"},
+      "title-1-tracking": {"name": "semantic/text/title-1/tracking", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "title-2-family": {"name": "components/navigation/title-2/typeface", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "title-2-size": {"name": "components/navigation/title-2/font-size", "resolvedType": "FLOAT", "valuesByMode": {"value": 22}, "variableCollectionId": "apple"},
+      "title-2-weight": {"name": "components/navigation/title-2/font-weight", "resolvedType": "STRING", "valuesByMode": {"value": "Regular"}, "variableCollectionId": "apple"},
+      "title-2-leading": {"name": "components/navigation/title-2/line-height", "resolvedType": "FLOAT", "valuesByMode": {"value": 28}, "variableCollectionId": "apple"},
+      "title-2-tracking": {"name": "components/navigation/title-2/letter-spacing", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "title-3-family": {"name": "content/headings/title-3/family", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "title-3-size": {"name": "content/headings/title-3/size", "resolvedType": "FLOAT", "valuesByMode": {"value": 20}, "variableCollectionId": "apple"},
+      "title-3-weight": {"name": "content/headings/title-3/weight", "resolvedType": "FLOAT", "valuesByMode": {"value": 400}, "variableCollectionId": "apple"},
+      "title-3-leading": {"name": "content/headings/title-3/leading", "resolvedType": "FLOAT", "valuesByMode": {"value": 25}, "variableCollectionId": "apple"},
+      "title-3-tracking": {"name": "content/headings/title-3/tracking", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "headline-family": {"name": "semantic/text/headline/font-family", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "headline-size": {"name": "semantic/text/headline/font-size", "resolvedType": "FLOAT", "valuesByMode": {"value": 17}, "variableCollectionId": "apple"},
+      "headline-weight": {"name": "semantic/text/headline/font-weight", "resolvedType": "STRING", "valuesByMode": {"value": "Semibold"}, "variableCollectionId": "apple"},
+      "headline-leading": {"name": "semantic/text/headline/line-height", "resolvedType": "FLOAT", "valuesByMode": {"value": 22}, "variableCollectionId": "apple"},
+      "headline-tracking": {"name": "semantic/text/headline/letter-spacing", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "body-family": {"name": "content/reading/body/typeface", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "body-size": {"name": "content/reading/body/size", "resolvedType": "FLOAT", "valuesByMode": {"value": 17}, "variableCollectionId": "apple"},
+      "body-weight": {"name": "content/reading/body/weight", "resolvedType": "STRING", "valuesByMode": {"value": "Regular"}, "variableCollectionId": "apple"},
+      "body-leading": {"name": "content/reading/body/leading", "resolvedType": "FLOAT", "valuesByMode": {"value": 22}, "variableCollectionId": "apple"},
+      "body-tracking": {"name": "content/reading/body/tracking", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "callout-family": {"name": "components/callout/text/font-family", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "callout-size": {"name": "components/callout/text/font-size", "resolvedType": "FLOAT", "valuesByMode": {"value": 16}, "variableCollectionId": "apple"},
+      "callout-weight": {"name": "components/callout/text/font-weight", "resolvedType": "FLOAT", "valuesByMode": {"value": 400}, "variableCollectionId": "apple"},
+      "callout-leading": {"name": "components/callout/text/line-height", "resolvedType": "FLOAT", "valuesByMode": {"value": 21}, "variableCollectionId": "apple"},
+      "callout-tracking": {"name": "components/callout/text/letter-spacing", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "subheadline-family": {"name": "navigation/list/subheadline/family", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "subheadline-size": {"name": "navigation/list/subheadline/size", "resolvedType": "FLOAT", "valuesByMode": {"value": 15}, "variableCollectionId": "apple"},
+      "subheadline-weight": {"name": "navigation/list/subheadline/weight", "resolvedType": "FLOAT", "valuesByMode": {"value": 400}, "variableCollectionId": "apple"},
+      "subheadline-leading": {"name": "navigation/list/subheadline/leading", "resolvedType": "FLOAT", "valuesByMode": {"value": 20}, "variableCollectionId": "apple"},
+      "subheadline-tracking": {"name": "navigation/list/subheadline/tracking", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "footnote-family": {"name": "legal/text/footnote/typeface", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "footnote-size": {"name": "legal/text/footnote/font-size", "resolvedType": "FLOAT", "valuesByMode": {"value": 13}, "variableCollectionId": "apple"},
+      "footnote-weight": {"name": "legal/text/footnote/font-weight", "resolvedType": "STRING", "valuesByMode": {"value": "Regular"}, "variableCollectionId": "apple"},
+      "footnote-leading": {"name": "legal/text/footnote/line-height", "resolvedType": "FLOAT", "valuesByMode": {"value": 18}, "variableCollectionId": "apple"},
+      "footnote-tracking": {"name": "legal/text/footnote/letter-spacing", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "caption-1-family": {"name": "media/caption/primary/family", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "caption-1-size": {"name": "media/caption/primary/size", "resolvedType": "FLOAT", "valuesByMode": {"value": 12}, "variableCollectionId": "apple"},
+      "caption-1-weight": {"name": "media/caption/primary/weight", "resolvedType": "FLOAT", "valuesByMode": {"value": 400}, "variableCollectionId": "apple"},
+      "caption-1-leading": {"name": "media/caption/primary/leading", "resolvedType": "FLOAT", "valuesByMode": {"value": 16}, "variableCollectionId": "apple"},
+      "caption-1-tracking": {"name": "media/caption/primary/tracking", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"},
+
+      "caption-2-family": {"name": "media/caption/secondary/typeface", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "apple"},
+      "caption-2-size": {"name": "media/caption/secondary/font-size", "resolvedType": "FLOAT", "valuesByMode": {"value": 11}, "variableCollectionId": "apple"},
+      "caption-2-weight": {"name": "media/caption/secondary/font-weight", "resolvedType": "STRING", "valuesByMode": {"value": "Regular"}, "variableCollectionId": "apple"},
+      "caption-2-leading": {"name": "media/caption/secondary/line-height", "resolvedType": "FLOAT", "valuesByMode": {"value": 13}, "variableCollectionId": "apple"},
+      "caption-2-tracking": {"name": "media/caption/secondary/letter-spacing", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "apple"}
+    }
+  }
+}

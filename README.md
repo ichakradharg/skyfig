@@ -58,6 +58,7 @@ Read the rendered API reference and guides online: [Skyfig documentation on GitH
 - [Troubleshooting](Docs/TROUBLESHOOTING.md) covers fixture validation, generation, live Figma sync, and consumer-update failures.
 - [Figma token-source options](FIGMA_TOKEN_SOURCE_OPTIONS.md) explains fixture and live-sync workflows.
 - [Fork and own Skyfig](Docs/FORK_AND_OWN.md) explains how a vertical team can configure its own Figma source, token namespace, approvals, and releases.
+- [Figma variable authoring rules](Docs/FIGMA_AUTHORING_GUIDE.md) gives designers the naming, type, mode, typography, shadow, and handoff contracts required for automatic generation.
 - [From Figma handoff to package release](Docs/FIGMA_CHANGE_RELEASE_GUIDE.md) guides UX-approved design changes through sync, review, release, and app adoption.
 - [Versioning and releases](VERSIONING.md) and the [release checklist](RELEASING.md) describe package publication for iOS consumers.
 
@@ -78,7 +79,8 @@ The repository includes [SkyfigConsumer](Examples/SkyfigConsumer/README.md), an 
 
 - a modern, full-screen iPhone presentation and an adaptive iPad layout;
 - five token-driven tabs: Home, Library, Activity, Profile, and Search;
-- a native search-tab role, an app-bar add button, and generated colors, typography, spacing, corner radii, and elevation shadows.
+- a native search-tab role and an app-bar add button;
+- generated colors, all 11 Apple text styles, spacing, corner radii, and single-, multi-, and inner-shadow examples.
 
 Open `Examples/SkyfigConsumer/SkyfigConsumer.xcodeproj`, select an iOS 26 iPhone or iPad simulator, and run the `SkyfigConsumer` scheme. The [sample guide](Examples/SkyfigConsumer/README.md) includes the full verification steps.
 
@@ -223,9 +225,13 @@ Run **Actions → Sync Figma tokens → Run workflow** to validate the setup. On
 
 ### Figma naming convention
 
-Skyfig keeps its semantic families for the bundled fixture and existing consumers, but they are not required for a team-owned fork. Every supported primitive Figma variable is also preserved in a structure-driven API under the configured namespace. For example, `foundation/colors/brand/primary` generates `TeamTokens.Foundation.Colors.Brand.primary`. Segments are Swift-normalized deterministically; collisions fail the normalization with both source names. COLOR, FLOAT, STRING, and BOOLEAN variables are supported; colors use `SkyfigColorToken`, while the other primitives use `SkyfigThemedValue`. Typography and shadows remain explicit semantic composites because Figma Variables represents them as separate primitive fields—Skyfig does not infer a composite style from arbitrary names.
+Skyfig keeps its semantic families for the bundled fixture and existing consumers, but they are not required for a team-owned fork. Every supported primitive Figma variable is also preserved in a structure-driven API under the configured namespace. For example, `foundation/colors/brand/primary` generates `TeamTokens.Foundation.Colors.Brand.primary`. Segments are Swift-normalized deterministically; collisions fail the normalization with both source names. COLOR, FLOAT, STRING, and BOOLEAN variables are supported; colors use `SkyfigColorToken`, while the other primitives use `SkyfigThemedValue`.
 
-For example, `type/body/font-size` becomes `TeamTokens.Type.Body.fontSize`, but it is a `SkyfigThemedValue<Double>`, not a guessed `SkyfigTypographyToken`. Figma stores typography and shadow styles as multiple primitive variables, so unrelated COLOR/FLOAT/STRING/BOOLEAN paths stay independently typed. Teams that want one bundled `SkyfigTypographyToken` or `SkyfigShadowToken` can continue using the established explicit semantic typography and shadow conventions.
+Complete typography and shadow groups can also become bundled Swift tokens without a team-specific outer-path map. Skyfig examines sibling fields under each parent path and recognizes common names such as `fontFamily`/`family`/`typeface`, `lineHeight`/`leading`, `letterSpacing`/`tracking`, `offsetX`, `offsetY`, and `blurRadius`. A complete, unambiguous group becomes `SkyfigTypographyToken` or `SkyfigShadowToken`. Partial groups, fields with incompatible Figma types, and groups containing duplicate aliases remain available as primitives; Skyfig does not guess.
+
+For example, `semantic/text/body/family`, `size`, `weight`, `leading`, and `tracking` generate one nested `TeamTokens.Typography.Semantic.Text.body` token. The Figma team keeps its outer hierarchy and style names; Skyfig only interprets the complete set of recognized leaf roles.
+
+The Apple HIG fixture covers Large Title, Title 1–3, Headline, Body, Callout, Subheadline, Footnote, Caption 1, and Caption 2 using the default Large metrics from [Apple's typography guidance](https://developer.apple.com/design/human-interface-guidelines/typography). In application UI, pass the matching SwiftUI text style to `font(relativeTo:)`. SwiftUI then scales the system font across `xSmall` through `xxxLarge` and the five accessibility sizes instead of relying on fixed Figma sizes.
 
 Collection modes are matched by name, case-insensitively, never by array position. Name them `Light` and `Dark`. A single-mode collection uses its default mode for both themes; a multi-mode collection must define both names so a misspelling cannot silently map dark values to light. Aliases are resolved across collections by theme; missing aliases and cycles fail the sync. Variables marked `deletedButReferenced` remain available for alias resolution but are not emitted as tokens.
 
@@ -235,10 +241,10 @@ Collection modes are matched by name, case-insensitively, never by array positio
 | Spacing | `spacing/md` |
 | Corner radii | `cornerRadii/card` or `radius/card` |
 | Border widths | `borderWidths/thin` |
-| Typography | `typography/body/fontFamily`, `fontSize`, `fontWeight`, `lineHeight`, `letterSpacing` |
-| Shadows | `shadows/card/color`, `x`, `y`, `blur`, `spread`, and optional `kind`; use `shadows/card/0/color` for ordered layers |
+| Typography | Any parent group containing family/typeface, size, weight, line height/leading, and letter spacing/tracking; `typography/body/...` remains supported |
+| Shadows | Any parent group containing color, x/offset-x, y/offset-y, and blur/blur-radius; spread and kind are optional; use numeric layer segments for ordered layers |
 
-Typography and shadows are grouped because Figma Variables natively store primitive COLOR, FLOAT, and STRING values rather than composite styles. All required fields in a composite must be present. `fontWeight` accepts 100 through 900 or a standard name such as `Semibold`. Shadow `kind` is `drop` by default and may be `drop` or `inner`.
+Typography and shadows are reconstructed because Figma Variables natively store primitive COLOR, FLOAT, and STRING values rather than composite styles. `fontWeight` accepts 100 through 900 or a standard name such as `Semibold`. Shadow `kind` defaults to `drop`, `spread` defaults to zero, and numeric segments such as `0` and `1` establish deterministic layer order.
 
 ## CI and releases
 
