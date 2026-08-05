@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "variableCollections": {
+      "effects": {
+        "defaultModeId": "light",
+        "modes": [
+          {"modeId": "light", "name": "Light"},
+          {"modeId": "dark", "name": "Dark"}
+        ],
+        "name": "Effects"
+      }
+    },
+    "variables": {
+      "modal-color": {"name": "effects/modal/color", "resolvedType": "COLOR", "valuesByMode": {"light": {"r": 0, "g": 0, "b": 0, "a": 0.2}, "dark": {"r": 0, "g": 0, "b": 0, "a": 0.6}}, "variableCollectionId": "effects"},
+      "modal-x": {"name": "effects/modal/offset-x", "resolvedType": "FLOAT", "valuesByMode": {"light": 0}, "variableCollectionId": "effects"},
+      "modal-y": {"name": "effects/modal/offset-y", "resolvedType": "FLOAT", "valuesByMode": {"light": 12}, "variableCollectionId": "effects"},
+      "modal-blur": {"name": "effects/modal/blur-radius", "resolvedType": "FLOAT", "valuesByMode": {"light": 32}, "variableCollectionId": "effects"},
+      "modal-spread": {"name": "effects/modal/spread-radius", "resolvedType": "FLOAT", "valuesByMode": {"light": 0}, "variableCollectionId": "effects"},
+      "modal-kind": {"name": "effects/modal/type", "resolvedType": "STRING", "valuesByMode": {"light": "drop"}, "variableCollectionId": "effects"},
+
+      "floating-0-color": {"name": "elevation/floating-panel/0/color", "resolvedType": "COLOR", "valuesByMode": {"light": {"r": 0, "g": 0, "b": 0, "a": 0.14}, "dark": {"r": 0, "g": 0, "b": 0, "a": 0.5}}, "variableCollectionId": "effects"},
+      "floating-0-x": {"name": "elevation/floating-panel/0/x", "resolvedType": "FLOAT", "valuesByMode": {"light": 0}, "variableCollectionId": "effects"},
+      "floating-0-y": {"name": "elevation/floating-panel/0/y", "resolvedType": "FLOAT", "valuesByMode": {"light": 2}, "variableCollectionId": "effects"},
+      "floating-0-blur": {"name": "elevation/floating-panel/0/blur", "resolvedType": "FLOAT", "valuesByMode": {"light": 4}, "variableCollectionId": "effects"},
+
+      "floating-1-color": {"name": "elevation/floating-panel/1/color", "resolvedType": "COLOR", "valuesByMode": {"light": {"r": 0, "g": 0, "b": 0, "a": 0.18}, "dark": {"r": 0, "g": 0, "b": 0, "a": 0.7}}, "variableCollectionId": "effects"},
+      "floating-1-x": {"name": "elevation/floating-panel/1/horizontal-offset", "resolvedType": "FLOAT", "valuesByMode": {"light": 0}, "variableCollectionId": "effects"},
+      "floating-1-y": {"name": "elevation/floating-panel/1/vertical-offset", "resolvedType": "FLOAT", "valuesByMode": {"light": 8}, "variableCollectionId": "effects"},
+      "floating-1-blur": {"name": "elevation/floating-panel/1/blur-radius", "resolvedType": "FLOAT", "valuesByMode": {"light": 20}, "variableCollectionId": "effects"},
+      "floating-1-spread": {"name": "elevation/floating-panel/1/spread", "resolvedType": "FLOAT", "valuesByMode": {"light": -2}, "variableCollectionId": "effects"},
+      "floating-1-kind": {"name": "elevation/floating-panel/1/kind", "resolvedType": "STRING", "valuesByMode": {"light": "drop"}, "variableCollectionId": "effects"},
+
+      "search-color": {"name": "components/search/field/shadow/color", "resolvedType": "COLOR", "valuesByMode": {"light": {"r": 0, "g": 0.2, "b": 0.5, "a": 0.16}, "dark": {"r": 0, "g": 0, "b": 0, "a": 0.64}}, "variableCollectionId": "effects"},
+      "search-x": {"name": "components/search/field/shadow/x", "resolvedType": "FLOAT", "valuesByMode": {"light": 0}, "variableCollectionId": "effects"},
+      "search-y": {"name": "components/search/field/shadow/y", "resolvedType": "FLOAT", "valuesByMode": {"light": 1}, "variableCollectionId": "effects"},
+      "search-blur": {"name": "components/search/field/shadow/blur", "resolvedType": "FLOAT", "valuesByMode": {"light": 6}, "variableCollectionId": "effects"},
+      "search-kind": {"name": "components/search/field/shadow/kind", "resolvedType": "STRING", "valuesByMode": {"light": "inner"}, "variableCollectionId": "effects"},
+
+      "incomplete-color": {"name": "effects/incomplete/color", "resolvedType": "COLOR", "valuesByMode": {"light": {"r": 0, "g": 0, "b": 0, "a": 0.1}, "dark": {"r": 0, "g": 0, "b": 0, "a": 0.4}}, "variableCollectionId": "effects"},
+      "incomplete-blur": {"name": "effects/incomplete/blur", "resolvedType": "FLOAT", "valuesByMode": {"light": 4}, "variableCollectionId": "effects"}
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "variableCollections": {
+      "team": {
+        "defaultModeId": "value",
+        "modes": [{"modeId": "value", "name": "Value"}],
+        "name": "Retail application"
+      }
+    },
+    "variables": {
+      "title-family": {"name": "enterprise/retail/ios/components/profile/header/primary-title/typeface", "resolvedType": "STRING", "valuesByMode": {"value": "system"}, "variableCollectionId": "team"},
+      "title-size": {"name": "enterprise/retail/ios/components/profile/header/primary-title/size", "resolvedType": "FLOAT", "valuesByMode": {"value": 28}, "variableCollectionId": "team"},
+      "title-weight": {"name": "enterprise/retail/ios/components/profile/header/primary-title/weight", "resolvedType": "STRING", "valuesByMode": {"value": "Bold"}, "variableCollectionId": "team"},
+      "title-leading": {"name": "enterprise/retail/ios/components/profile/header/primary-title/leading", "resolvedType": "FLOAT", "valuesByMode": {"value": 34}, "variableCollectionId": "team"},
+      "title-tracking": {"name": "enterprise/retail/ios/components/profile/header/primary-title/tracking", "resolvedType": "FLOAT", "valuesByMode": {"value": -0.2}, "variableCollectionId": "team"},
+
+      "card-color": {"name": "enterprise/retail/ios/components/profile/card/elevation/color", "resolvedType": "COLOR", "valuesByMode": {"value": {"r": 0, "g": 0, "b": 0, "a": 0.2}}, "variableCollectionId": "team"},
+      "card-x": {"name": "enterprise/retail/ios/components/profile/card/elevation/horizontal-offset", "resolvedType": "FLOAT", "valuesByMode": {"value": 0}, "variableCollectionId": "team"},
+      "card-y": {"name": "enterprise/retail/ios/components/profile/card/elevation/vertical-offset", "resolvedType": "FLOAT", "valuesByMode": {"value": 6}, "variableCollectionId": "team"},
+      "card-blur": {"name": "enterprise/retail/ios/components/profile/card/elevation/blur-radius", "resolvedType": "FLOAT", "valuesByMode": {"value": 16}, "variableCollectionId": "team"}
+    }
+  }
+}

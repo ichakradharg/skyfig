@@ -13,6 +13,8 @@ Text("Settings")
 
 Avoid fixed-height text containers and verify important flows at accessibility text sizes.
 
+The generated `Typography.Apple` fixture covers the 11 standard iOS and iPadOS text styles using Apple's default Large metrics. Match Large Title, Title 1–3, Headline, Body, Callout, Subheadline, Footnote, Caption 1, and Caption 2 to their corresponding SwiftUI text styles. SwiftUI then scales them across the seven standard Dynamic Type sizes and five accessibility sizes.
+
 ## Contrast and focus
 
 ``SkyfigRGBAColor/contrastRatio(against:)`` reports the WCAG ratio for two opaque colors. Skyfig checks semantic text, actions, status text, and focus-ring pairs in both supported appearances. Image, gradient, and translucent backgrounds need a screen-specific review.

@@ -14,11 +14,13 @@ The sample uses a local Swift package reference while Skyfig is unreleased. That
 
 The sample has five tabs: Home, Library, Activity, Profile, and Search. The Search tab uses SwiftUI's dedicated search role, allowing iOS to provide its native tab-bar treatment. The adaptive tab style keeps the familiar tab bar on iPhone and uses iPad's floating tab bar/sidebar presentation. Every tab uses generated colors, typography, spacing, corner radii, borders, and elevation shadows from ``SkyfigTokens``.
 
+The five screens collectively showcase all 11 standard Apple text styles: Large Title, Title 1–3, Headline, Body, Callout, Subheadline, Footnote, Caption 1, and Caption 2. Each generated token is applied with the corresponding SwiftUI text style, so the preview responds to all standard and accessibility Dynamic Type sizes without fixed-height text containers. The Home screen also renders single-layer and ordered multi-layer drop shadows plus an inner shadow, matching the structures covered by the Figma fixtures.
+
 The app bar on the Home tab includes a token-styled add button. Its content uses flexible stacks and widths so the same screen adapts to iPhone and iPad without a separate tablet token set. The iPad target supports portrait and landscape orientations; rotate the simulator to verify the adaptive layout.
 
 ## Continuous integration
 
-The iOS consumer job runs when package runtime, generated-token, or consumer-sample files change. It builds the public package boundary and runs `SkyfigConsumerUITests` against named iPhone and iPad simulators. The tests confirm all five tabs exist and that each presents its expected token-driven content. Documentation-only changes do not start an iOS job.
+The iOS consumer job runs when package runtime, generated-token, or consumer-sample files change. It builds the public package boundary and runs `SkyfigConsumerUITests` against named iPhone and iPad simulators. The tests confirm all five tabs exist, all 11 Apple text styles and three inferred shadow structures are reachable, and the Home screen remains usable at an accessibility text size. Documentation-only changes do not start an iOS job.
 
 To run the tests in Xcode, select the **SkyfigConsumer** scheme and an iPhone or iPad simulator, then choose **Product > Test**. From the repository root, `Scripts/test-consumer-ui.sh` runs both devices; pass `iphone` or `ipad` to run only one.
 

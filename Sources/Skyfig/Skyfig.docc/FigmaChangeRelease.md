@@ -13,7 +13,7 @@ Use this workflow when UX has approved a Figma Variables change and it needs to 
 
 The sync workflow never publishes a package. A team-owned fork follows the same sequence with its own Figma secrets, approvals, namespace, and release environment.
 
-For a fork, supported primitive Figma paths generate directly beneath the team's namespace without a static family map. Keep a semantic review for any typography or shadow composites: Skyfig intentionally does not infer those structures from arbitrary variable names.
+For a fork, supported primitive Figma paths generate directly beneath the team's namespace without a static family map. Complete, unambiguous typography and shadow sibling groups also become bundled tokens regardless of their outer folders. Review inferred composites and their Dynamic Type roles in the sync pull request; incomplete or ambiguous groups remain primitives rather than being guessed.
 
 ## App-team workflow
 

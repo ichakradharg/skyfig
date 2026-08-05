@@ -124,6 +124,65 @@
             "y": 8
           }
         ]
+      },
+      "floatingPanel": {
+        "description": "Two-layer elevation reconstructed from ordered Figma groups",
+        "value": [
+          {
+            "blur": 4,
+            "color": {
+              "dark": "#00000080",
+              "light": "#00000024"
+            },
+            "kind": "drop",
+            "spread": 0,
+            "x": 0,
+            "y": 2
+          },
+          {
+            "blur": 20,
+            "color": {
+              "dark": "#000000B3",
+              "light": "#0000002E"
+            },
+            "kind": "drop",
+            "spread": -2,
+            "x": 0,
+            "y": 8
+          }
+        ]
+      },
+      "modal": {
+        "description": "Single-layer modal elevation reconstructed from aliased Figma field names",
+        "value": [
+          {
+            "blur": 32,
+            "color": {
+              "dark": "#00000099",
+              "light": "#00000033"
+            },
+            "kind": "drop",
+            "spread": 0,
+            "x": 0,
+            "y": 12
+          }
+        ]
+      },
+      "searchFieldInner": {
+        "description": "Inner search-field depth reconstructed from a nested Figma group",
+        "value": [
+          {
+            "blur": 6,
+            "color": {
+              "dark": "#000000A3",
+              "light": "#00338029"
+            },
+            "kind": "inner",
+            "spread": 0,
+            "x": 0,
+            "y": 1
+          }
+        ]
       }
     },
     "spacing": {
@@ -144,6 +203,116 @@
       }
     },
     "typography": {
+      "apple.body": {
+        "description": "Apple HIG Body metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 17,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 22
+        }
+      },
+      "apple.callout": {
+        "description": "Apple HIG Callout metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 16,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 21
+        }
+      },
+      "apple.caption1": {
+        "description": "Apple HIG Caption 1 metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 12,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 16
+        }
+      },
+      "apple.caption2": {
+        "description": "Apple HIG Caption 2 metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 11,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 13
+        }
+      },
+      "apple.footnote": {
+        "description": "Apple HIG Footnote metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 13,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 18
+        }
+      },
+      "apple.headline": {
+        "description": "Apple HIG Headline metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 17,
+          "fontWeight": 600,
+          "letterSpacing": 0,
+          "lineHeight": 22
+        }
+      },
+      "apple.largeTitle": {
+        "description": "Apple HIG Large Title metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 34,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 41
+        }
+      },
+      "apple.subheadline": {
+        "description": "Apple HIG Subheadline metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 15,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 20
+        }
+      },
+      "apple.title1": {
+        "description": "Apple HIG Title 1 metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 28,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 34
+        }
+      },
+      "apple.title2": {
+        "description": "Apple HIG Title 2 metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 22,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 28
+        }
+      },
+      "apple.title3": {
+        "description": "Apple HIG Title 3 metrics at the default Large Dynamic Type size",
+        "value": {
+          "fontFamily": "system",
+          "fontSize": 20,
+          "fontWeight": 400,
+          "letterSpacing": 0,
+          "lineHeight": 25
+        }
+      },
       "body": {
         "value": {
           "fontFamily": "system",

@@ -21,7 +21,7 @@ swift run skyfig normalize-figma \
 
 Converts a saved Variables API response to canonical JSON. The GitHub workflow is responsible for downloading the source response securely.
 
-No family mapping file is required. The normalizer retains every supported primitive variable's slash-separated hierarchy in `tokens.dynamic`; generation emits that hierarchy directly below `--namespace`. Semantic families remain available for existing Skyfig consumers. COLOR, FLOAT, STRING, and BOOLEAN are supported; arbitrary typography and shadow groups are left as primitives rather than guessed as composites.
+No family mapping file is required. The normalizer retains every supported primitive variable's slash-separated hierarchy in `tokens.dynamic`; generation emits that hierarchy directly below `--namespace`. Semantic families remain available for existing Skyfig consumers. COLOR, FLOAT, STRING, and BOOLEAN are supported. Complete, unambiguous sibling groups with recognized typography or shadow fields also generate bundled composite tokens; partial and ambiguous groups remain primitives.
 
 ## Generate typed Swift
 
