@@ -11,6 +11,8 @@ There are two supported sources for tokens:
 
 The live workflow requires Figma Enterprise access, a full member, and the two repository secrets `FIGMA_ACCESS_TOKEN` and `FIGMA_FILE_KEY`. Do not put either value in source files, shell history, pull-request text, or issue comments.
 
+Weekly synchronization is opt-in. After a manual sync succeeds, set the repository Actions variable `FIGMA_SYNC_ENABLED` to `true`. If the variable is missing or has any other value, scheduled runs are skipped; manual runs remain available and still fail clearly when credentials are missing or invalid.
+
 ## Local validation or generation fails
 
 From the repository root, run the commands in this order:

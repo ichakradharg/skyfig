@@ -18,6 +18,10 @@ env:
 
 jobs:
   sync:
+    # Scheduled sync is opt-in so forks and fixture-only repositories do not
+    # report a weekly failure before live Figma credentials are configured.
+    # Manual runs remain available and validate the credentials explicitly.
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.FIGMA_SYNC_ENABLED == 'true' }}
     runs-on: macos-15
     timeout-minutes: 20
     permissions:

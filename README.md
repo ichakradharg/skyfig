@@ -211,13 +211,15 @@ Add these GitHub Actions secrets:
 - `FIGMA_ACCESS_TOKEN` — a token with `file_variables:read`, scoped as narrowly as possible;
 - `FIGMA_FILE_KEY` — the Figma file key.
 
+After both secrets are configured and a manual sync succeeds, add the repository Actions variable `FIGMA_SYNC_ENABLED` with the value `true` to enable the weekly schedule. Until then, scheduled runs are skipped instead of reporting a missing-credentials failure. Manual **Run workflow** remains available for setup validation.
+
 The token is step-scoped, passed through `X-Figma-Token`, and never accepted by the Skyfig CLI. The file key is also kept in Secrets so the file identity is not exposed in workflow source.
 
 ### Team-owned forks and token namespaces
 
 Skyfig can be used as a team-owned token publisher. A fork uses its own Figma secrets, its own approvals, and its own releases. To use a team-specific generated API, add a repository Actions variable named `SKYFIG_TOKEN_NAMESPACE`, for example `TeamATokens`. Generation, CI, and release checks use that same value; the default remains `SkyfigTokens`. Generated output preserves `SkyfigTokens` as a compatibility alias for the bundled examples, while new app code should use the team name. See [Fork and own Skyfig](Docs/FORK_AND_OWN.md) for the complete setup and release flow.
 
-Run **Actions → Sync Figma tokens → Run workflow**, or rely on the weekly schedule. Repository Actions settings must permit `GITHUB_TOKEN` to create pull requests. GitHub may place CI for a pull request created by the built-in token in an approval-required state; if so, a maintainer must choose **Approve workflows to run** before the required PR check can complete. A least-privilege GitHub App installation token is the appropriate option if fully unattended PR checks are needed; do not substitute a broad personal access token.
+Run **Actions → Sync Figma tokens → Run workflow** to validate the setup. Once it succeeds, set `FIGMA_SYNC_ENABLED=true` to opt into the weekly schedule. Repository Actions settings must permit `GITHUB_TOKEN` to create pull requests. GitHub may place CI for a pull request created by the built-in token in an approval-required state; if so, a maintainer must choose **Approve workflows to run** before the required PR check can complete. A least-privilege GitHub App installation token is the appropriate option if fully unattended PR checks are needed; do not substitute a broad personal access token.
 
 ### Figma naming convention
 

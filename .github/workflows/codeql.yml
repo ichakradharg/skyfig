@@ -15,7 +15,9 @@ permissions:
 jobs:
   analyze-swift:
     runs-on: macos-15
-    timeout-minutes: 20
+    # Traced Swift builds are materially slower than normal CI builds. Keep this
+    # non-blocking security scan reliable without weakening its target coverage.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -26,7 +28,9 @@ jobs:
           path: |
             ~/.cache/org.swift.swiftpm
             ~/.swiftpm
-          key: ${{ runner.os }}-swiftpm-${{ hashFiles('Package.swift') }}
+            .build/checkouts
+            .build/repositories
+          key: ${{ runner.os }}-swiftpm-${{ hashFiles('Package.swift', 'Package.resolved') }}
       - name: Initialize CodeQL for Swift
         uses: github/codeql-action/init@f205ea1c3313d32999d8d6a48b4f6530d4437b38 # v4.37.4
         with:
