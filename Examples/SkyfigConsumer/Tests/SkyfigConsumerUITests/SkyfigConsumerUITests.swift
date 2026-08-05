@@ -80,6 +80,33 @@ final class SkyfigConsumerUITests: XCTestCase {
         }
     }
 
+    func testCaptureSnapshotTabs() {
+        let expectations = [
+            (tab: "Home", content: "Design system preview"),
+            (tab: "Library", content: "Library"),
+            (tab: "Activity", content: "Activity"),
+            (tab: "Profile", content: "Profile"),
+            (tab: "Search", content: "Search"),
+        ]
+
+        for expectation in expectations {
+            if expectation.tab != "Home" {
+                app.terminate()
+                app.launch()
+                XCTAssertTrue(app.staticTexts["Design system preview"].waitForExistence(timeout: 5))
+            }
+
+            navigationItem(named: expectation.tab).tap()
+            XCTAssertTrue(app.staticTexts[expectation.content].waitForExistence(timeout: 5))
+            Thread.sleep(forTimeInterval: 1)
+
+            let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+            attachment.name = "skyfig-\(expectation.tab.lowercased())-light"
+            attachment.lifetime = .keepAlways
+            add(attachment)
+        }
+    }
+
     private func navigationItem(named title: String) -> XCUIElement {
         let button = app.buttons[title].firstMatch
         if button.exists {
