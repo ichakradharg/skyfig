@@ -9,7 +9,7 @@ ipad_simulator="${SKYFIG_IPAD_SIMULATOR:-iPad Pro 13-inch (M5)}"
 snapshot_directory="Examples/SkyfigConsumer/Snapshots"
 derived_data_path="${SKYFIG_SNAPSHOT_DERIVED_DATA:-/private/tmp/skyfig-consumer-snapshots}"
 capture_test="SkyfigConsumerUITests/SkyfigConsumerUITests/testCaptureSnapshotTabs"
-snapshot_tabs=(home library activity profile search)
+snapshot_tabs=(overview components content planning accessibility)
 
 case "$mode" in
   record|verify) ;;
@@ -46,7 +46,7 @@ snapshot_name_for_tab() {
   local device="$1"
   local tab="$2"
 
-  if [[ "$tab" == "home" ]]; then
+  if [[ "$tab" == "overview" ]]; then
     echo "${device}-light"
   else
     echo "${device}-${tab}-light"

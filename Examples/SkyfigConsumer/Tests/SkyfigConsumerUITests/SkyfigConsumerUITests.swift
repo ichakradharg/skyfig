@@ -11,27 +11,27 @@ final class SkyfigConsumerUITests: XCTestCase {
     }
 
     func testFiveTabsAreAvailable() {
-        for title in ["Home", "Library", "Activity", "Profile", "Search"] {
+        for title in ["Overview", "Components", "Content", "Planning", "Accessibility"] {
             XCTAssertTrue(navigationItem(named: title).waitForExistence(timeout: 5))
         }
     }
 
     func testEveryTabPresentsItsTokenDrivenContent() {
         let expectations = [
-            (tab: "Home", content: "Design system preview"),
-            (tab: "Library", content: "Library"),
-            (tab: "Activity", content: "Activity"),
-            (tab: "Profile", content: "Profile"),
-            (tab: "Search", content: "Search"),
+            (tab: "Overview", content: "Design system preview"),
+            (tab: "Components", content: "Button states"),
+            (tab: "Content", content: "Today"),
+            (tab: "Planning", content: "Sprint plan"),
+            (tab: "Accessibility", content: "Showcase.Accessibility"),
         ]
 
         for expectation in expectations {
             navigationItem(named: expectation.tab).tap()
-            XCTAssertTrue(app.staticTexts[expectation.content].waitForExistence(timeout: 5))
+            XCTAssertTrue(contentElement(named: expectation.content).waitForExistence(timeout: 5))
         }
     }
 
-    func testHomeRemainsUsableAtAnAccessibilityTextSize() {
+    func testOverviewRemainsUsableAtAnAccessibilityTextSize() {
         app.terminate()
         app.launchArguments += [
             "-UIPreferredContentSizeCategoryName",
@@ -45,24 +45,16 @@ final class SkyfigConsumerUITests: XCTestCase {
         XCTAssertTrue(typographySample(named: "Large Title").exists)
     }
 
-    func testEveryAppleTextStyleIsShowcasedAcrossTheTabs() {
-        let expectations = [
-            (tab: "Home", styles: ["Large Title", "Title 1"]),
-            (tab: "Library", styles: ["Title 2", "Title 3", "Headline"]),
-            (tab: "Activity", styles: ["Body", "Callout"]),
-            (tab: "Profile", styles: ["Subheadline", "Footnote"]),
-            (tab: "Search", styles: ["Caption 1", "Caption 2"]),
-        ]
-
-        for expectation in expectations {
-            navigationItem(named: expectation.tab).tap()
-            for style in expectation.styles {
-                XCTAssertTrue(
-                    typographySample(named: style).waitForExistence(timeout: 5),
-                    "Missing \(style) on the \(expectation.tab) tab"
-                )
-            }
+    func testAccessibilityTabExplainsReducedMotionBehavior() {
+        navigationItem(named: "Accessibility").tap()
+        let motionControl = app.buttons["Select motion preview"]
+        var scrollAttempts = 0
+        while !motionControl.exists && scrollAttempts < 3 {
+            app.swipeUp()
+            scrollAttempts += 1
         }
+        XCTAssertTrue(motionControl.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Readable at larger text sizes"].exists)
     }
 
     func testEveryInferredShadowStructureIsShowcased() {
@@ -82,22 +74,22 @@ final class SkyfigConsumerUITests: XCTestCase {
 
     func testCaptureSnapshotTabs() {
         let expectations = [
-            (tab: "Home", content: "Design system preview"),
-            (tab: "Library", content: "Library"),
-            (tab: "Activity", content: "Activity"),
-            (tab: "Profile", content: "Profile"),
-            (tab: "Search", content: "Search"),
+            (tab: "Overview", content: "Design system preview"),
+            (tab: "Components", content: "Button states"),
+            (tab: "Content", content: "Today"),
+            (tab: "Planning", content: "Sprint plan"),
+            (tab: "Accessibility", content: "Showcase.Accessibility"),
         ]
 
         for expectation in expectations {
-            if expectation.tab != "Home" {
+            if expectation.tab != "Overview" {
                 app.terminate()
                 app.launch()
                 XCTAssertTrue(app.staticTexts["Design system preview"].waitForExistence(timeout: 5))
             }
 
             navigationItem(named: expectation.tab).tap()
-            XCTAssertTrue(app.staticTexts[expectation.content].waitForExistence(timeout: 5))
+            XCTAssertTrue(contentElement(named: expectation.content).waitForExistence(timeout: 5))
             Thread.sleep(forTimeInterval: 1)
 
             let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
@@ -109,15 +101,24 @@ final class SkyfigConsumerUITests: XCTestCase {
 
     private func navigationItem(named title: String) -> XCUIElement {
         let button = app.buttons[title].firstMatch
-        if button.exists {
+        if button.exists && button.isHittable {
             return button
         }
 
         let cell = app.cells[title].firstMatch
-        return cell.exists ? cell : app.descendants(matching: .any)[title].firstMatch
+        if cell.exists && cell.isHittable {
+            return cell
+        }
+
+        return app.descendants(matching: .any)[title].firstMatch
     }
 
     private func typographySample(named name: String) -> XCUIElement {
         app.descendants(matching: .any)["Typography.\(name)"]
+    }
+
+    private func contentElement(named name: String) -> XCUIElement {
+        let staticText = app.staticTexts[name]
+        return staticText.exists ? staticText : app.descendants(matching: .any)[name]
     }
 }

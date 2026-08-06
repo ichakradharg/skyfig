@@ -65,4 +65,50 @@ public extension SkyfigFontWeight {
         }
     }
 }
+
+public extension SkyfigMaterialToken {
+    var material: Material {
+        switch kind {
+        case .ultraThin: .ultraThinMaterial
+        case .thin: .thinMaterial
+        case .regular: .regularMaterial
+        case .thick: .thickMaterial
+        }
+    }
+}
+
+public extension SkyfigMotionToken {
+    var animation: Animation {
+        switch curve {
+        case .easeInOut: .easeInOut(duration: duration)
+        case .easeIn: .easeIn(duration: duration)
+        case .easeOut: .easeOut(duration: duration)
+        case .linear: .linear(duration: duration)
+        }
+    }
+}
+
+public extension SkyfigSymbolToken {
+    var image: Image {
+        Image(systemName: name)
+    }
+
+    @ViewBuilder
+    var view: some View {
+        image
+            .symbolRenderingMode(renderingMode.swiftUI)
+            .font(.system(size: 17, weight: weight.swiftUIWeight))
+    }
+}
+
+private extension SkyfigSymbolToken.RenderingMode {
+    var swiftUI: SymbolRenderingMode {
+        switch self {
+        case .monochrome: .monochrome
+        case .hierarchical: .hierarchical
+        case .palette: .palette
+        case .multicolor: .multicolor
+        }
+    }
+}
 #endif

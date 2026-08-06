@@ -94,6 +94,49 @@
       ],
       "type": "object"
     },
+    "opacityToken": {
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string" },
+        "value": { "minimum": 0, "maximum": 1, "type": "number" }
+      },
+      "required": ["value"],
+      "type": "object"
+    },
+    "materialToken": {
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string" },
+        "value": { "enum": ["ultraThin", "thin", "regular", "thick"] }
+      },
+      "required": ["value"],
+      "type": "object"
+    },
+    "symbolToken": {
+      "additionalProperties": false,
+      "properties": {
+        "availability": { "type": "string" },
+        "description": { "type": "string" },
+        "name": { "minLength": 1, "type": "string" },
+        "renderingMode": { "enum": ["monochrome", "hierarchical", "palette", "multicolor"] },
+        "scale": { "enum": ["small", "medium", "large"] },
+        "tint": { "minLength": 1, "type": "string" },
+        "weight": { "enum": [100, 200, 300, 400, 500, 600, 700, 800, 900] }
+      },
+      "required": ["name", "weight", "scale", "renderingMode", "tint"],
+      "type": "object"
+    },
+    "motionToken": {
+      "additionalProperties": false,
+      "properties": {
+        "curve": { "enum": ["easeInOut", "easeIn", "easeOut", "linear"] },
+        "description": { "type": "string" },
+        "duration": { "minimum": 0, "type": "number" },
+        "reduceMotionDuration": { "minimum": 0, "type": "number" }
+      },
+      "required": ["duration", "curve", "reduceMotionDuration"],
+      "type": "object"
+    },
     "shadowLayer": {
       "additionalProperties": false,
       "properties": {
@@ -189,6 +232,26 @@
         "dynamic": {
           "$ref": "#/$defs/dynamicTokenCollection"
         },
+        "materials": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": { "$ref": "#/$defs/materialToken" },
+          "type": "object"
+        },
+        "metrics": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": { "$ref": "#/$defs/dimensionToken" },
+          "type": "object"
+        },
+        "motion": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": { "$ref": "#/$defs/motionToken" },
+          "type": "object"
+        },
+        "opacities": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": { "$ref": "#/$defs/opacityToken" },
+          "type": "object"
+        },
         "shadows": {
           "$ref": "#/$defs/tokenMap",
           "additionalProperties": {
@@ -201,6 +264,11 @@
           "additionalProperties": {
             "$ref": "#/$defs/dimensionToken"
           },
+          "type": "object"
+        },
+        "symbols": {
+          "$ref": "#/$defs/tokenMap",
+          "additionalProperties": { "$ref": "#/$defs/symbolToken" },
           "type": "object"
         },
         "typography": {

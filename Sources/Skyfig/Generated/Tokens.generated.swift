@@ -7,8 +7,54 @@ public enum SkyfigTokens {
     public enum Colors {
         public static let accent = SkyfigColorToken(light: SkyfigRGBAColor(red: 3, green: 105, blue: 161, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
         public enum Action {
+            public static let destructive = SkyfigColorToken(light: SkyfigRGBAColor(red: 185, green: 28, blue: 28, alpha: 255), dark: SkyfigRGBAColor(red: 252, green: 165, blue: 165, alpha: 255))
+            public static let onDestructive = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 15, green: 23, blue: 42, alpha: 255))
             public static let onPrimary = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 15, green: 23, blue: 42, alpha: 255))
+            public static let onSecondary = SkyfigColorToken(light: SkyfigRGBAColor(red: 15, green: 23, blue: 42, alpha: 255), dark: SkyfigRGBAColor(red: 248, green: 250, blue: 252, alpha: 255))
             public static let primary = SkyfigColorToken(light: SkyfigRGBAColor(red: 3, green: 105, blue: 161, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
+            public static let secondary = SkyfigColorToken(light: SkyfigRGBAColor(red: 226, green: 232, blue: 240, alpha: 255), dark: SkyfigRGBAColor(red: 51, green: 65, blue: 85, alpha: 255))
+        }
+        public enum Border {
+            public static let control = SkyfigColorToken(light: SkyfigRGBAColor(red: 148, green: 163, blue: 184, alpha: 255), dark: SkyfigRGBAColor(red: 100, green: 116, blue: 139, alpha: 255))
+            public static let disabled = SkyfigColorToken(light: SkyfigRGBAColor(red: 203, green: 213, blue: 225, alpha: 255), dark: SkyfigRGBAColor(red: 51, green: 65, blue: 85, alpha: 255))
+            public static let separator = SkyfigColorToken(light: SkyfigRGBAColor(red: 203, green: 213, blue: 225, alpha: 255), dark: SkyfigRGBAColor(red: 71, green: 85, blue: 105, alpha: 255))
+        }
+        public enum Component {
+            public enum Button {
+                public static let destructiveBackground = SkyfigColorToken(light: SkyfigRGBAColor(red: 185, green: 28, blue: 28, alpha: 255), dark: SkyfigRGBAColor(red: 252, green: 165, blue: 165, alpha: 255))
+                public static let primaryBackground = SkyfigColorToken(light: SkyfigRGBAColor(red: 3, green: 105, blue: 161, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
+                public static let primaryPressed = SkyfigColorToken(light: SkyfigRGBAColor(red: 7, green: 89, blue: 133, alpha: 255), dark: SkyfigRGBAColor(red: 186, green: 230, blue: 253, alpha: 255))
+                public static let secondaryBackground = SkyfigColorToken(light: SkyfigRGBAColor(red: 226, green: 232, blue: 240, alpha: 255), dark: SkyfigRGBAColor(red: 51, green: 65, blue: 85, alpha: 255))
+            }
+            public enum ListRow {
+                public static let background = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 30, green: 41, blue: 59, alpha: 255))
+                public static let selectedBackground = SkyfigColorToken(light: SkyfigRGBAColor(red: 224, green: 242, blue: 254, alpha: 255), dark: SkyfigRGBAColor(red: 22, green: 78, blue: 99, alpha: 255))
+            }
+            public enum Search {
+                public static let background = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 51, green: 65, blue: 85, alpha: 255))
+                public static let focusedBorder = SkyfigColorToken(light: SkyfigRGBAColor(red: 2, green: 132, blue: 199, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
+            }
+            public enum Segmented {
+                public static let background = SkyfigColorToken(light: SkyfigRGBAColor(red: 226, green: 232, blue: 240, alpha: 255), dark: SkyfigRGBAColor(red: 30, green: 41, blue: 59, alpha: 255))
+                public static let selectedBackground = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 12, green: 74, blue: 110, alpha: 255))
+            }
+            public enum Sidebar {
+                public static let background = SkyfigColorToken(light: SkyfigRGBAColor(red: 226, green: 232, blue: 240, alpha: 255), dark: SkyfigRGBAColor(red: 17, green: 24, blue: 39, alpha: 255))
+            }
+            public enum Tab {
+                public static let selected = SkyfigColorToken(light: SkyfigRGBAColor(red: 3, green: 105, blue: 161, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
+                public static let unselected = SkyfigColorToken(light: SkyfigRGBAColor(red: 100, green: 116, blue: 139, alpha: 255), dark: SkyfigRGBAColor(red: 148, green: 163, blue: 184, alpha: 255))
+            }
+            public enum Toolbar {
+                public static let background = SkyfigColorToken(light: SkyfigRGBAColor(red: 248, green: 250, blue: 252, alpha: 255), dark: SkyfigRGBAColor(red: 31, green: 41, blue: 55, alpha: 255))
+            }
+        }
+        public enum Fill {
+            public static let control = SkyfigColorToken(light: SkyfigRGBAColor(red: 226, green: 232, blue: 240, alpha: 255), dark: SkyfigRGBAColor(red: 51, green: 65, blue: 85, alpha: 255))
+            public static let controlDisabled = SkyfigColorToken(light: SkyfigRGBAColor(red: 226, green: 232, blue: 240, alpha: 255), dark: SkyfigRGBAColor(red: 30, green: 41, blue: 59, alpha: 255))
+            public static let controlPressed = SkyfigColorToken(light: SkyfigRGBAColor(red: 203, green: 213, blue: 225, alpha: 255), dark: SkyfigRGBAColor(red: 71, green: 85, blue: 105, alpha: 255))
+            public static let selected = SkyfigColorToken(light: SkyfigRGBAColor(red: 186, green: 230, blue: 253, alpha: 255), dark: SkyfigRGBAColor(red: 12, green: 74, blue: 110, alpha: 255))
+            public static let separator = SkyfigColorToken(light: SkyfigRGBAColor(red: 203, green: 213, blue: 225, alpha: 255), dark: SkyfigRGBAColor(red: 71, green: 85, blue: 105, alpha: 255))
         }
         public enum Focus {
             public static let ring = SkyfigColorToken(light: SkyfigRGBAColor(red: 2, green: 132, blue: 199, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
@@ -16,16 +62,27 @@ public enum SkyfigTokens {
         public enum Status {
             public static let danger = SkyfigColorToken(light: SkyfigRGBAColor(red: 185, green: 28, blue: 28, alpha: 255), dark: SkyfigRGBAColor(red: 252, green: 165, blue: 165, alpha: 255))
             public static let info = SkyfigColorToken(light: SkyfigRGBAColor(red: 29, green: 78, blue: 216, alpha: 255), dark: SkyfigRGBAColor(red: 147, green: 197, blue: 253, alpha: 255))
+            public static let onDanger = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 69, green: 10, blue: 10, alpha: 255))
+            public static let onInfo = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 23, green: 37, blue: 84, alpha: 255))
+            public static let onSuccess = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 5, green: 46, blue: 22, alpha: 255))
+            public static let onWarning = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 66, green: 32, blue: 6, alpha: 255))
             public static let success = SkyfigColorToken(light: SkyfigRGBAColor(red: 21, green: 128, blue: 61, alpha: 255), dark: SkyfigRGBAColor(red: 134, green: 239, blue: 172, alpha: 255))
             public static let warning = SkyfigColorToken(light: SkyfigRGBAColor(red: 154, green: 92, blue: 7, alpha: 255), dark: SkyfigRGBAColor(red: 253, green: 230, blue: 138, alpha: 255))
         }
         public enum Surface {
+            public static let elevated = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 51, green: 65, blue: 85, alpha: 255))
+            public static let grouped = SkyfigColorToken(light: SkyfigRGBAColor(red: 226, green: 232, blue: 240, alpha: 255), dark: SkyfigRGBAColor(red: 15, green: 23, blue: 42, alpha: 255))
+            public static let modal = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 30, green: 41, blue: 59, alpha: 255))
             public static let primary = SkyfigColorToken(light: SkyfigRGBAColor(red: 255, green: 255, blue: 255, alpha: 255), dark: SkyfigRGBAColor(red: 17, green: 24, blue: 39, alpha: 255))
             public static let secondary = SkyfigColorToken(light: SkyfigRGBAColor(red: 241, green: 245, blue: 249, alpha: 255), dark: SkyfigRGBAColor(red: 31, green: 41, blue: 55, alpha: 255))
+            public static let selected = SkyfigColorToken(light: SkyfigRGBAColor(red: 224, green: 242, blue: 254, alpha: 255), dark: SkyfigRGBAColor(red: 22, green: 78, blue: 99, alpha: 255))
         }
         public enum Text {
+            public static let disabled = SkyfigColorToken(light: SkyfigRGBAColor(red: 148, green: 163, blue: 184, alpha: 255), dark: SkyfigRGBAColor(red: 100, green: 116, blue: 139, alpha: 255))
+            public static let link = SkyfigColorToken(light: SkyfigRGBAColor(red: 3, green: 105, blue: 161, alpha: 255), dark: SkyfigRGBAColor(red: 125, green: 211, blue: 252, alpha: 255))
             public static let primary = SkyfigColorToken(light: SkyfigRGBAColor(red: 15, green: 23, blue: 42, alpha: 255), dark: SkyfigRGBAColor(red: 248, green: 250, blue: 252, alpha: 255))
             public static let secondary = SkyfigColorToken(light: SkyfigRGBAColor(red: 71, green: 85, blue: 105, alpha: 255), dark: SkyfigRGBAColor(red: 203, green: 213, blue: 225, alpha: 255))
+            public static let tertiary = SkyfigColorToken(light: SkyfigRGBAColor(red: 100, green: 116, blue: 139, alpha: 255), dark: SkyfigRGBAColor(red: 148, green: 163, blue: 184, alpha: 255))
         }
     }
     public enum Typography {
@@ -65,5 +122,77 @@ public enum SkyfigTokens {
         public static let floatingPanel = SkyfigShadowToken(layers: [SkyfigShadowLayer(kind: .drop, color: SkyfigColorToken(light: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 36), dark: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 128)), x: 0, y: 2, blur: 4, spread: 0), SkyfigShadowLayer(kind: .drop, color: SkyfigColorToken(light: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 46), dark: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 179)), x: 0, y: 8, blur: 20, spread: -2)])
         public static let modal = SkyfigShadowToken(layers: [SkyfigShadowLayer(kind: .drop, color: SkyfigColorToken(light: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 51), dark: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 153)), x: 0, y: 12, blur: 32, spread: 0)])
         public static let searchFieldInner = SkyfigShadowToken(layers: [SkyfigShadowLayer(kind: .inner, color: SkyfigColorToken(light: SkyfigRGBAColor(red: 0, green: 51, blue: 128, alpha: 41), dark: SkyfigRGBAColor(red: 0, green: 0, blue: 0, alpha: 163)), x: 0, y: 1, blur: 6, spread: 0)])
+    }
+    public enum Metrics {
+        public enum Button {
+            public static let height: Double = 44
+            public static let horizontalInset: Double = 16
+        }
+        public enum Control {
+            public static let bezelGap: Double = 12
+            public static let minCompactTarget: Double = 28
+            public static let minHitTarget: Double = 44
+            public static let unbezeledGap: Double = 24
+        }
+        public enum Ipad {
+            public static let panelWidth: Double = 360
+            public static let sidebarWidth: Double = 320
+        }
+        public enum Layout {
+            public static let readableWidth: Double = 680
+        }
+        public enum List {
+            public static let rowInset: Double = 16
+            public static let rowMinHeight: Double = 52
+        }
+        public enum Search {
+            public static let height: Double = 44
+        }
+        public enum Segmented {
+            public static let height: Double = 36
+        }
+        public enum Toolbar {
+            public static let iconInset: Double = 12
+        }
+    }
+    public enum Opacities {
+        public static let disabled: Double = 0.45
+        public static let overlay: Double = 0.64
+        public static let pressed: Double = 0.72
+    }
+    public enum Materials {
+        public enum Content {
+            public static let thin = SkyfigMaterialToken(.thin)
+            public static let ultraThin = SkyfigMaterialToken(.ultraThin)
+        }
+        public enum Overlay {
+            public static let modal = SkyfigMaterialToken(.thick)
+            public static let panel = SkyfigMaterialToken(.regular)
+        }
+    }
+    public enum Symbols {
+        public enum Accessibility {
+            public static let motion = SkyfigSymbolToken(name: "figure.wave", weight: .medium, scale: .large, renderingMode: .hierarchical, tint: "focus.ring", availability: nil)
+            public static let text = SkyfigSymbolToken(name: "textformat.size", weight: .medium, scale: .large, renderingMode: .hierarchical, tint: "focus.ring", availability: nil)
+        }
+        public enum Component {
+            public static let search = SkyfigSymbolToken(name: "magnifyingglass", weight: .medium, scale: .medium, renderingMode: .hierarchical, tint: "text.secondary", availability: nil)
+        }
+        public enum Navigation {
+            public static let overview = SkyfigSymbolToken(name: "square.grid.2x2.fill", weight: .semibold, scale: .medium, renderingMode: .hierarchical, tint: "action.primary", availability: nil)
+            public static let planning = SkyfigSymbolToken(name: "calendar", weight: .semibold, scale: .medium, renderingMode: .hierarchical, tint: "action.primary", availability: nil)
+        }
+        public enum Status {
+            public static let success = SkyfigSymbolToken(name: "checkmark.circle.fill", weight: .semibold, scale: .medium, renderingMode: .hierarchical, tint: "status.success", availability: nil)
+        }
+    }
+    public enum Motion {
+        public enum Feedback {
+            public static let quick = SkyfigMotionToken(duration: 0.16, curve: .easeOut, reduceMotionDuration: 0)
+            public static let standard = SkyfigMotionToken(duration: 0.24, curve: .easeInOut, reduceMotionDuration: 0)
+        }
+        public enum Selection {
+            public static let standard = SkyfigMotionToken(duration: 0.2, curve: .easeInOut, reduceMotionDuration: 0)
+        }
     }
 }

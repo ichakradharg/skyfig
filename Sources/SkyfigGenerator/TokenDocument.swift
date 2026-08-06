@@ -43,6 +43,11 @@ public struct TokenCollection: Codable, Equatable, Sendable {
     public let cornerRadii: [String: DimensionToken]
     public let borderWidths: [String: DimensionToken]
     public let shadows: [String: ShadowToken]
+    public let metrics: [String: DimensionToken]
+    public let opacities: [String: OpacityToken]
+    public let materials: [String: MaterialToken]
+    public let symbols: [String: SymbolToken]
+    public let motion: [String: MotionToken]
     /// Primitive Figma variables preserved by their source hierarchy. These are emitted at the namespace root.
     public let dynamic: DynamicTokenCollection
 
@@ -53,6 +58,11 @@ public struct TokenCollection: Codable, Equatable, Sendable {
         cornerRadii: [String: DimensionToken] = [:],
         borderWidths: [String: DimensionToken] = [:],
         shadows: [String: ShadowToken] = [:],
+        metrics: [String: DimensionToken] = [:],
+        opacities: [String: OpacityToken] = [:],
+        materials: [String: MaterialToken] = [:],
+        symbols: [String: SymbolToken] = [:],
+        motion: [String: MotionToken] = [:],
         dynamic: DynamicTokenCollection = DynamicTokenCollection()
     ) {
         self.colors = colors
@@ -61,10 +71,18 @@ public struct TokenCollection: Codable, Equatable, Sendable {
         self.cornerRadii = cornerRadii
         self.borderWidths = borderWidths
         self.shadows = shadows
+        self.metrics = metrics
+        self.opacities = opacities
+        self.materials = materials
+        self.symbols = symbols
+        self.motion = motion
         self.dynamic = dynamic
     }
 
-    enum CodingKeys: String, CodingKey { case colors, typography, spacing, cornerRadii, borderWidths, shadows, dynamic }
+    enum CodingKeys: String, CodingKey {
+        case colors, typography, spacing, cornerRadii, borderWidths, shadows
+        case metrics, opacities, materials, symbols, motion, dynamic
+    }
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         colors = try container.decode([String: ColorToken].self, forKey: .colors)
@@ -73,10 +91,84 @@ public struct TokenCollection: Codable, Equatable, Sendable {
         cornerRadii = try container.decode([String: DimensionToken].self, forKey: .cornerRadii)
         borderWidths = try container.decode([String: DimensionToken].self, forKey: .borderWidths)
         shadows = try container.decode([String: ShadowToken].self, forKey: .shadows)
+        metrics = try container.decodeIfPresent([String: DimensionToken].self, forKey: .metrics) ?? [:]
+        opacities = try container.decodeIfPresent([String: OpacityToken].self, forKey: .opacities) ?? [:]
+        materials = try container.decodeIfPresent([String: MaterialToken].self, forKey: .materials) ?? [:]
+        symbols = try container.decodeIfPresent([String: SymbolToken].self, forKey: .symbols) ?? [:]
+        motion = try container.decodeIfPresent([String: MotionToken].self, forKey: .motion) ?? [:]
         dynamic = try container.decodeIfPresent(
             DynamicTokenCollection.self,
             forKey: .dynamic
         ) ?? DynamicTokenCollection()
+    }
+}
+
+public struct OpacityToken: Codable, Equatable, Sendable {
+    public let value: Double
+
+    public init(value: Double) {
+        self.value = value
+    }
+}
+
+public struct MaterialToken: Codable, Equatable, Sendable {
+    public enum Kind: String, Codable, Sendable {
+        case ultraThin, thin, regular, thick
+    }
+
+    public let value: Kind
+
+    public init(value: Kind) {
+        self.value = value
+    }
+}
+
+public struct SymbolToken: Codable, Equatable, Sendable {
+    public enum Scale: String, Codable, Sendable {
+        case small, medium, large
+    }
+
+    public enum RenderingMode: String, Codable, Sendable {
+        case monochrome, hierarchical, palette, multicolor
+    }
+
+    public let name: String
+    public let weight: Int
+    public let scale: Scale
+    public let renderingMode: RenderingMode
+    public let tint: String
+    public let availability: String?
+
+    public init(
+        name: String,
+        weight: Int = 400,
+        scale: Scale = .medium,
+        renderingMode: RenderingMode = .monochrome,
+        tint: String,
+        availability: String? = nil
+    ) {
+        self.name = name
+        self.weight = weight
+        self.scale = scale
+        self.renderingMode = renderingMode
+        self.tint = tint
+        self.availability = availability
+    }
+}
+
+public struct MotionToken: Codable, Equatable, Sendable {
+    public enum Curve: String, Codable, Sendable {
+        case easeInOut, easeIn, easeOut, linear
+    }
+
+    public let duration: Double
+    public let curve: Curve
+    public let reduceMotionDuration: Double
+
+    public init(duration: Double, curve: Curve, reduceMotionDuration: Double = 0) {
+        self.duration = duration
+        self.curve = curve
+        self.reduceMotionDuration = reduceMotionDuration
     }
 }
 
