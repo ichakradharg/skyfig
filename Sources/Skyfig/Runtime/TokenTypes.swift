@@ -74,6 +74,67 @@ public struct SkyfigThemedValue<Value: Equatable & Sendable>: Equatable, Sendabl
     public func value(for theme: SkyfigTheme) -> Value { theme == .light ? light : dark }
 }
 
+public struct SkyfigMaterialToken: Equatable, Sendable {
+    public enum Kind: String, Sendable {
+        case ultraThin, thin, regular, thick
+    }
+
+    public let kind: Kind
+
+    public init(_ kind: Kind) {
+        self.kind = kind
+    }
+}
+
+public struct SkyfigSymbolToken: Equatable, Sendable {
+    public enum Scale: String, Sendable {
+        case small, medium, large
+    }
+
+    public enum RenderingMode: String, Sendable {
+        case monochrome, hierarchical, palette, multicolor
+    }
+
+    public let name: String
+    public let weight: SkyfigFontWeight
+    public let scale: Scale
+    public let renderingMode: RenderingMode
+    public let tint: String
+    public let availability: String?
+
+    public init(
+        name: String,
+        weight: SkyfigFontWeight,
+        scale: Scale,
+        renderingMode: RenderingMode,
+        tint: String,
+        availability: String?
+    ) {
+        self.name = name
+        self.weight = weight
+        self.scale = scale
+        self.renderingMode = renderingMode
+        self.tint = tint
+        self.availability = availability
+    }
+}
+
+public struct SkyfigMotionToken: Equatable, Sendable {
+    public enum Curve: String, Sendable {
+        case easeInOut, easeIn, easeOut, linear
+    }
+
+    public let duration: Double
+    public let curve: Curve
+    public let reduceMotionDuration: Double
+
+    public init(duration: Double, curve: Curve, reduceMotionDuration: Double) {
+        self.duration = duration
+        self.curve = curve
+        self.reduceMotionDuration = reduceMotionDuration
+    }
+}
+
 /// A CSS-style numeric font weight used by generated typography tokens.
 public enum SkyfigFontWeight: Int, CaseIterable, Sendable {
     case ultraLight = 100

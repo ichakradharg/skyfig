@@ -74,6 +74,11 @@ extension TokenDocument {
         validatePaths(tokens.cornerRadii.keys, at: "$.tokens.cornerRadii", issues: &issues)
         validatePaths(tokens.borderWidths.keys, at: "$.tokens.borderWidths", issues: &issues)
         validatePaths(tokens.shadows.keys, at: "$.tokens.shadows", issues: &issues)
+        validatePaths(tokens.metrics.keys, at: "$.tokens.metrics", issues: &issues)
+        validatePaths(tokens.opacities.keys, at: "$.tokens.opacities", issues: &issues)
+        validatePaths(tokens.materials.keys, at: "$.tokens.materials", issues: &issues)
+        validatePaths(tokens.symbols.keys, at: "$.tokens.symbols", issues: &issues)
+        validatePaths(tokens.motion.keys, at: "$.tokens.motion", issues: &issues)
         validatePaths(tokens.dynamic.colors.keys, at: "$.tokens.dynamic.colors", issues: &issues)
         validatePaths(tokens.dynamic.numbers.keys, at: "$.tokens.dynamic.numbers", issues: &issues)
         validatePaths(tokens.dynamic.strings.keys, at: "$.tokens.dynamic.strings", issues: &issues)
@@ -104,6 +109,28 @@ extension TokenDocument {
         validateDimensions(tokens.spacing, category: "spacing", issues: &issues)
         validateDimensions(tokens.cornerRadii, category: "cornerRadii", issues: &issues)
         validateDimensions(tokens.borderWidths, category: "borderWidths", issues: &issues)
+        validateDimensions(tokens.metrics, category: "metrics", issues: &issues)
+        for (name, token) in tokens.opacities {
+            guard token.value.isFinite, (0...1).contains(token.value) else {
+                issues.append("$.tokens.opacities.\(name).value: must be between 0 and 1")
+                continue
+            }
+        }
+        for (name, token) in tokens.symbols {
+            let validWeight = [100, 200, 300, 400, 500, 600, 700, 800, 900].contains(token.weight)
+            if token.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !validWeight {
+                issues.append("$.tokens.symbols.\(name): name must not be empty and weight must be supported")
+            }
+            if token.tint.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                issues.append("$.tokens.symbols.\(name).tint: must not be empty")
+            }
+        }
+        for (name, token) in tokens.motion {
+            let durations = [token.duration, token.reduceMotionDuration]
+            if durations.contains(where: { !$0.isFinite || $0 < 0 }) {
+                issues.append("$.tokens.motion.\(name): durations must be finite and nonnegative")
+            }
+        }
 
         for (name, token) in tokens.shadows {
             let path = "$.tokens.shadows.\(name).value"
@@ -206,11 +233,19 @@ private enum ShapeValidator {
             return ["$: expected a JSON object"]
         }
         var issues: [String] = []
-        rejectUnknown(root, allowed: ["$schema", "schemaVersion", "name", "defaultTheme", "themes", "tokens"], at: "$", issues: &issues)
+        rejectUnknown(
+            root,
+            allowed: ["$schema", "schemaVersion", "name", "defaultTheme", "themes", "tokens"],
+            at: "$",
+            issues: &issues
+        )
         guard let tokens = root["tokens"] as? [String: Any] else { return issues }
         rejectUnknown(
             tokens,
-            allowed: ["colors", "typography", "spacing", "cornerRadii", "borderWidths", "shadows", "dynamic"],
+            allowed: [
+                "colors", "typography", "spacing", "cornerRadii", "borderWidths", "shadows",
+                "metrics", "opacities", "materials", "symbols", "motion", "dynamic",
+            ],
             at: "$.tokens",
             issues: &issues
         )
@@ -253,6 +288,28 @@ private enum ShapeValidator {
         )
         validateTokenMap(
             tokens["borderWidths"], at: "$.tokens.borderWidths", allowed: ["description", "value"],
+            nestedKey: nil, nestedAllowed: nil, issues: &issues
+        )
+        validateTokenMap(
+            tokens["metrics"], at: "$.tokens.metrics", allowed: ["description", "value"],
+            nestedKey: nil, nestedAllowed: nil, issues: &issues
+        )
+        validateTokenMap(
+            tokens["opacities"], at: "$.tokens.opacities", allowed: ["description", "value"],
+            nestedKey: nil, nestedAllowed: nil, issues: &issues
+        )
+        validateTokenMap(
+            tokens["materials"], at: "$.tokens.materials", allowed: ["description", "value"],
+            nestedKey: nil, nestedAllowed: nil, issues: &issues
+        )
+        validateTokenMap(
+            tokens["symbols"], at: "$.tokens.symbols",
+            allowed: ["description", "name", "weight", "scale", "renderingMode", "tint", "availability"],
+            nestedKey: nil, nestedAllowed: nil, issues: &issues
+        )
+        validateTokenMap(
+            tokens["motion"], at: "$.tokens.motion",
+            allowed: ["description", "duration", "curve", "reduceMotionDuration"],
             nestedKey: nil, nestedAllowed: nil, issues: &issues
         )
 
