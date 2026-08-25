@@ -28,7 +28,12 @@ def check_file(markdown: Path) -> list[str]:
 
 
 def main() -> int:
-    markdown_files = [*ROOT.glob("*.md"), *ROOT.glob("Docs/*.md"), *ROOT.glob("Examples/**/*.md")]
+    markdown_files = [
+        *ROOT.glob("*.md"),
+        *ROOT.glob("Docs/**/*.md"),
+        *ROOT.glob("Examples/**/*.md"),
+        *ROOT.glob("Sources/**/*.md"),
+    ]
     failures = [failure for file in markdown_files for failure in check_file(file)]
     if failures:
         print("Broken local Markdown links:", *failures, sep="\n- ", file=sys.stderr)

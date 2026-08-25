@@ -104,9 +104,11 @@ public struct TokenCollection: Codable, Equatable, Sendable {
 }
 
 public struct OpacityToken: Codable, Equatable, Sendable {
+    public let description: String?
     public let value: Double
 
-    public init(value: Double) {
+    public init(value: Double, description: String? = nil) {
+        self.description = description
         self.value = value
     }
 }
@@ -116,9 +118,11 @@ public struct MaterialToken: Codable, Equatable, Sendable {
         case ultraThin, thin, regular, thick
     }
 
+    public let description: String?
     public let value: Kind
 
-    public init(value: Kind) {
+    public init(value: Kind, description: String? = nil) {
+        self.description = description
         self.value = value
     }
 }
@@ -132,6 +136,7 @@ public struct SymbolToken: Codable, Equatable, Sendable {
         case monochrome, hierarchical, palette, multicolor
     }
 
+    public let description: String?
     public let name: String
     public let weight: Int
     public let scale: Scale
@@ -145,8 +150,10 @@ public struct SymbolToken: Codable, Equatable, Sendable {
         scale: Scale = .medium,
         renderingMode: RenderingMode = .monochrome,
         tint: String,
-        availability: String? = nil
+        availability: String? = nil,
+        description: String? = nil
     ) {
+        self.description = description
         self.name = name
         self.weight = weight
         self.scale = scale
@@ -161,11 +168,18 @@ public struct MotionToken: Codable, Equatable, Sendable {
         case easeInOut, easeIn, easeOut, linear
     }
 
+    public let description: String?
     public let duration: Double
     public let curve: Curve
     public let reduceMotionDuration: Double
 
-    public init(duration: Double, curve: Curve, reduceMotionDuration: Double = 0) {
+    public init(
+        duration: Double,
+        curve: Curve,
+        reduceMotionDuration: Double = 0,
+        description: String? = nil
+    ) {
+        self.description = description
         self.duration = duration
         self.curve = curve
         self.reduceMotionDuration = reduceMotionDuration

@@ -1,6 +1,6 @@
 #if canImport(SwiftUI)
-import SwiftUI
 import Skyfig
+import SwiftUI
 
 @main
 struct SkyfigShowcaseApp: App {

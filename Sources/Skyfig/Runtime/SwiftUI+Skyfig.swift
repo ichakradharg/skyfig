@@ -79,6 +79,16 @@ public extension SkyfigMaterialToken {
 
 public extension SkyfigMotionToken {
     var animation: Animation {
+        animation(duration: duration)
+    }
+
+    func animation(reduceMotion: Bool) -> Animation? {
+        let resolvedDuration = reduceMotion ? reduceMotionDuration : duration
+        guard resolvedDuration > 0 else { return nil }
+        return animation(duration: resolvedDuration)
+    }
+
+    private func animation(duration: Double) -> Animation {
         switch curve {
         case .easeInOut: .easeInOut(duration: duration)
         case .easeIn: .easeIn(duration: duration)
@@ -98,6 +108,17 @@ public extension SkyfigSymbolToken {
         image
             .symbolRenderingMode(renderingMode.swiftUI)
             .font(.system(size: 17, weight: weight.swiftUIWeight))
+            .imageScale(scale.swiftUI)
+    }
+}
+
+private extension SkyfigSymbolToken.Scale {
+    var swiftUI: Image.Scale {
+        switch self {
+        case .small: .small
+        case .medium: .medium
+        case .large: .large
+        }
     }
 }
 

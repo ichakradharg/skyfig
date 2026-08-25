@@ -18,8 +18,8 @@ The repository includes:
 Figma Variables API
         │
         ▼
-temporary API response ── normalize ──► Tokens/skyfig.tokens.json
-                                              │
+temporary API response ── normalize + split ──► Tokens/*.tokens.json
+                                                │
                                               ▼
                                      validate + generate
                                               │
@@ -37,6 +37,7 @@ The raw Figma response exists only in the Actions runner's temporary directory. 
 - Swift 6.0 or newer
 - iOS 16+, macOS 13+, or tvOS 16+ for the SwiftUI library
 - macOS for the included showcase
+- `jq` for canonical token splitting and Figma-sync maintenance
 
 The schema, normalizer, generator, and CLI use Foundation only. SwiftUI is confined to the public runtime conveniences and showcase.
 
@@ -131,14 +132,15 @@ Skyfig includes fixture data so the complete token-to-Swift pipeline can be veri
 # Run the package and generator test suites.
 swift test --parallel
 
-# Validate the canonical fixture-backed token document.
-swift run skyfig validate --input Tokens/skyfig.tokens.json
+# Validate the canonical fixture-backed token documents.
+source Scripts/canonical-token-inputs.sh
+swift run skyfig validate "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}"
 
 # Confirm committed Swift output exactly matches the token document.
 # In a team-owned fork, set this to the same Actions namespace variable.
 TOKEN_NAMESPACE="${SKYFIG_TOKEN_NAMESPACE:-SkyfigTokens}"
 swift run skyfig generate \
-  --input Tokens/skyfig.tokens.json \
+  "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
   --output Sources/Skyfig/Generated \
   --namespace "$TOKEN_NAMESPACE" \
   --check
@@ -150,7 +152,7 @@ For an iOS app, add the publisher’s package as a dependency, import `Skyfig`, 
 
 ## Canonical tokens
 
-`Tokens/skyfig.tokens.json` is the source of truth after import. Version 1 uses literal values only, exact `light` and `dark` themes, uppercase eight-digit sRGB colors, and dot-separated lower-camel token paths. Alongside the core color, type, spacing, radius, border, and shadow families, the fixture demonstrates iOS/iPadOS semantic state colors, interaction/layout metrics, constrained system materials, SF Symbol metadata, opacities, and reduce-motion-aware motion tokens.
+The three files under `Tokens/` are the composed source of truth: foundations, semantic roles, and component metadata. Version 1 uses literal values only, exact `light` and `dark` themes, uppercase eight-digit sRGB colors, and dot-separated lower-camel token paths. Together, the files demonstrate iOS/iPadOS semantic states, interaction/layout metrics, constrained system materials, SF Symbol metadata, opacities, and reduce-motion-aware motion tokens.
 
 ```json
 {
@@ -182,9 +184,9 @@ Pass `--input` more than once to validate or generate from independently owned c
 
 ```bash
 swift run skyfig generate \
-  --input Tokens/foundation.tokens.json \
+  --input Tokens/foundations.tokens.json \
+  --input Tokens/semantic.tokens.json \
   --input Tokens/components.tokens.json \
-  --input Tokens/product.tokens.json \
   --output Sources/Skyfig/Generated
 ```
 
@@ -202,24 +204,27 @@ Text("Shared tokens")
 
 ```bash
 # Validate canonical JSON
-swift run skyfig validate --input Tokens/skyfig.tokens.json
+source Scripts/canonical-token-inputs.sh
+swift run skyfig validate "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}"
 
 # Convert a saved Figma Variables API response to canonical JSON
 swift run skyfig normalize-figma \
   --input /tmp/figma-variables.json \
-  --output Tokens/skyfig.tokens.json \
+  --output /tmp/skyfig.tokens.json \
   --name "My Design System"
+Scripts/split-canonical-tokens.sh /tmp/skyfig.tokens.json Tokens
 
 # Generate committed Swift source
 swift run skyfig generate \
-  --input Tokens/foundation.tokens.json \
+  --input Tokens/foundations.tokens.json \
+  --input Tokens/semantic.tokens.json \
   --input Tokens/components.tokens.json \
   --output Sources/Skyfig/Generated \
   --namespace TeamATokens
 
 # Fail without writing when committed output is stale
 swift run skyfig generate \
-  --input Tokens/skyfig.tokens.json \
+  "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
   --output Sources/Skyfig/Generated \
   --namespace TeamATokens \
   --check

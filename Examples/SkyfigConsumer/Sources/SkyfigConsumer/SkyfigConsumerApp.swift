@@ -55,6 +55,11 @@ private struct ConsumerTabShell: View {
         .tint(SkyfigTokens.Colors.Action.primary.color(for: colorScheme))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(SkyfigTokens.Colors.Surface.secondary.color(for: colorScheme))
+        .statusBarHidden(hidesStatusBarForSnapshots)
+    }
+
+    private var hidesStatusBarForSnapshots: Bool {
+        horizontalSizeClass == .regular && CommandLine.arguments.contains("-SkyfigSnapshotMode")
     }
 
     private var compactTabs: some View {
@@ -743,8 +748,14 @@ private struct ComponentsShowcase: View {
                 }
                 .padding(.horizontal, SkyfigTokens.Metrics.List.rowInset)
                 .frame(minHeight: SkyfigTokens.Metrics.Search.height)
-                .background(colors.searchBackground, in: RoundedRectangle(cornerRadius: SkyfigTokens.CornerRadii.control))
-                .overlay(RoundedRectangle(cornerRadius: SkyfigTokens.CornerRadii.control).stroke(colors.focus, lineWidth: SkyfigTokens.BorderWidths.focus))
+                .background(
+                    colors.searchBackground,
+                    in: RoundedRectangle(cornerRadius: SkyfigTokens.CornerRadii.control)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: SkyfigTokens.CornerRadii.control)
+                        .stroke(colors.focus, lineWidth: SkyfigTokens.BorderWidths.focus)
+                )
 
                 Picker("Schedule", selection: $selectedSegment) {
                     Text("Upcoming").tag("Upcoming")
@@ -849,6 +860,7 @@ private struct ContentShowcase: View {
 }
 
 private struct PlanningShowcase: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
     @State private var panelVisible = true
     private var colors: ShowcaseColors { ShowcaseColors(colorScheme: colorScheme) }
@@ -872,7 +884,12 @@ private struct PlanningShowcase: View {
                             detailPanel
                         }
                     }
-                    .animation(panelVisible ? SkyfigTokens.Motion.Selection.standard.animation : nil, value: panelVisible)
+                    .animation(
+                        panelVisible
+                            ? SkyfigTokens.Motion.Selection.standard.animation(reduceMotion: reduceMotion)
+                            : nil,
+                        value: panelVisible
+                    )
                 }
                 .frame(maxWidth: SkyfigTokens.Metrics.Layout.readableWidth)
                 .padding(SkyfigTokens.Spacing.lg)
@@ -902,7 +919,10 @@ private struct PlanningShowcase: View {
             }
             .frame(maxWidth: SkyfigTokens.Metrics.Ipad.panelWidth, alignment: .leading)
             .padding(SkyfigTokens.Spacing.lg)
-            .background(SkyfigTokens.Materials.Overlay.panel.material, in: RoundedRectangle(cornerRadius: SkyfigTokens.CornerRadii.card))
+            .background(
+                SkyfigTokens.Materials.Overlay.panel.material,
+                in: RoundedRectangle(cornerRadius: SkyfigTokens.CornerRadii.card)
+            )
             .shadow(color: Color.black.opacity(SkyfigTokens.Opacities.overlay), radius: 12, y: 6)
         }
     }
@@ -920,7 +940,8 @@ private struct AccessibilityMotionShowcase: View {
                 VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.xl) {
                     ShowcaseHeader(
                         title: "Accessibility",
-                        detail: "Dynamic Type, contrast roles, touch targets, and reduce-motion behavior are part of the component contract.",
+                        detail: "Dynamic Type, contrast roles, touch targets, and reduce-motion behavior "
+                            + "are part of the component contract.",
                         symbol: SkyfigTokens.Symbols.Accessibility.text
                     )
                     ShowcaseCard(title: "Touch target and focus") {
@@ -947,7 +968,7 @@ private struct AccessibilityMotionShowcase: View {
                                 .stroke(colors.focus, lineWidth: SkyfigTokens.BorderWidths.focus)
                         )
                         .animation(
-                            reduceMotion ? nil : SkyfigTokens.Motion.Feedback.standard.animation,
+                            SkyfigTokens.Motion.Feedback.standard.animation(reduceMotion: reduceMotion),
                             value: selected
                         )
                         Text(
@@ -962,7 +983,10 @@ private struct AccessibilityMotionShowcase: View {
                         Text("This card uses scalable SwiftUI text styles and grows vertically instead of truncating.")
                             .font(SkyfigTokens.Typography.Apple.body.font(relativeTo: .body))
                             .foregroundStyle(colors.primaryText)
-                        Text("Contrast-oriented foreground, action, status, and focus roles remain semantic rather than literal.")
+                        Text(
+                            "Contrast-oriented foreground, action, status, and focus roles remain "
+                                + "semantic rather than literal."
+                        )
                             .foregroundStyle(colors.secondaryText)
                     }
                 }
@@ -990,11 +1014,16 @@ private struct ShowcaseHeader: View {
                     .font(SkyfigTokens.Typography.Apple.title2.font(relativeTo: .title2))
                     .foregroundStyle(colors.primaryText)
                     .accessibilityIdentifier("Showcase.\(title)")
-                Text(detail).font(SkyfigTokens.Typography.Apple.body.font(relativeTo: .body)).foregroundStyle(colors.secondaryText)
+                Text(detail)
+                    .font(SkyfigTokens.Typography.Apple.body.font(relativeTo: .body))
+                    .foregroundStyle(colors.secondaryText)
             }
         }
         .padding(SkyfigTokens.Spacing.lg)
-        .background(SkyfigTokens.Materials.Content.thin.material, in: RoundedRectangle(cornerRadius: SkyfigTokens.CornerRadii.card))
+        .background(
+            SkyfigTokens.Materials.Content.thin.material,
+            in: RoundedRectangle(cornerRadius: SkyfigTokens.CornerRadii.card)
+        )
     }
 }
 
@@ -1006,7 +1035,9 @@ private struct ShowcaseCard<Content: View>: View {
     var body: some View {
         let colors = ShowcaseColors(colorScheme: colorScheme)
         VStack(alignment: .leading, spacing: SkyfigTokens.Spacing.md) {
-            Text(title).font(SkyfigTokens.Typography.Apple.headline.font(relativeTo: .headline)).foregroundStyle(colors.primaryText)
+            Text(title)
+                .font(SkyfigTokens.Typography.Apple.headline.font(relativeTo: .headline))
+                .foregroundStyle(colors.primaryText)
             content
         }
         .padding(SkyfigTokens.Spacing.lg)

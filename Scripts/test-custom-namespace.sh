@@ -4,6 +4,7 @@ set -euo pipefail
 # Proves that a fork can use a named public token API without breaking the
 # package's own runtime tests and consumer sample.
 namespace="TeamATokens"
+source Scripts/canonical-token-inputs.sh
 generated_source="Sources/Skyfig/Generated/Tokens.generated.swift"
 backup="$(mktemp "${TMPDIR:-/tmp}/skyfig-generated.XXXXXX")"
 
@@ -15,7 +16,7 @@ trap cleanup EXIT
 
 cp "$generated_source" "$backup"
 swift run skyfig generate \
-  --input Tokens/skyfig.tokens.json \
+  "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
   --output Sources/Skyfig/Generated \
   --namespace "$namespace"
 

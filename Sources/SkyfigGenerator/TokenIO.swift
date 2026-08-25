@@ -3,7 +3,9 @@ import Foundation
 /// Loads, validates, canonicalizes, and writes token documents.
 public enum TokenIO {
     public static func load(from url: URL) throws -> TokenDocument {
-        try decode(Data(contentsOf: url))
+        let document = try decode(Data(contentsOf: url))
+        try document.validateReferences()
+        return document
     }
 
     /// Loads and combines canonical token documents in the supplied order.
@@ -13,7 +15,7 @@ public enum TokenIO {
     /// than resolved by input order.
     public static func load(from urls: [URL]) throws -> TokenDocument {
         let sources = try urls.map { url in
-            TokenDocumentSource(identifier: url.path, document: try load(from: url))
+            TokenDocumentSource(identifier: url.path, document: try decode(Data(contentsOf: url)))
         }
         return try merge(sources)
     }
@@ -183,6 +185,7 @@ public enum TokenIO {
             )
         )
         try merged.validate()
+        try merged.validateReferences()
         return merged
     }
 }
@@ -274,8 +277,19 @@ extension TokenDocument {
             + Array(tokens.dynamic.numbers.keys)
             + Array(tokens.dynamic.strings.keys)
             + Array(tokens.dynamic.booleans.keys)
+        validatePaths(dynamicPaths, at: "$.tokens.dynamic", issues: &issues)
         for path in Set(dynamicPaths) where dynamicPaths.filter({ $0 == path }).count > 1 {
             issues.append("$.tokens.dynamic: \(path) appears in more than one primitive type")
+        }
+        let reservedDynamicRoots: Set<String> = [
+            "colors", "typography", "spacing", "cornerRadii", "borderWidths", "shadows",
+            "metrics", "opacities", "materials", "symbols", "motion",
+        ]
+        for path in Set(dynamicPaths).sorted() {
+            guard let root = path.split(separator: ".").first.map(String.init) else { continue }
+            if reservedDynamicRoots.contains(root) {
+                issues.append("$.tokens.dynamic.\(path): root \(root) conflicts with a generated token family")
+            }
         }
 
         for (name, token) in tokens.colors {
@@ -310,6 +324,10 @@ extension TokenDocument {
             }
             if token.tint.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 issues.append("$.tokens.symbols.\(name).tint: must not be empty")
+            }
+            if let availability = token.availability,
+               availability.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                issues.append("$.tokens.symbols.\(name).availability: must not be empty when provided")
             }
         }
         for (name, token) in tokens.motion {
@@ -346,6 +364,15 @@ extension TokenDocument {
 
         guard issues.isEmpty else { throw SkyfigValidationError(issues: issues) }
     }
+
+    func validateReferences() throws {
+        var issues: [String] = []
+        for (name, token) in tokens.symbols where
+            tokens.colors[token.tint] == nil && tokens.dynamic.colors[token.tint] == nil {
+            issues.append("$.tokens.symbols.\(name).tint: must reference an existing color token")
+        }
+        guard issues.isEmpty else { throw SkyfigValidationError(issues: issues) }
+    }
 }
 
 private func validateThemedValues<Value>(
@@ -379,11 +406,18 @@ private func validateThemedColors(_ values: [String: String], at path: String, i
     }
 }
 
-private func validatePaths<S: Sequence>(_ paths: S, at location: String, issues: inout [String]) where S.Element == String {
+private func validatePaths<S: Sequence>(
+    _ paths: S,
+    at location: String,
+    issues: inout [String]
+) where S.Element == String {
     var normalized: [String: String] = [:]
     let allPaths = Set(paths)
     for path in allPaths.sorted() {
-        if path.range(of: "^[a-z_][A-Za-z0-9_]*(\\.[a-z_][A-Za-z0-9_]*)*$", options: .regularExpression) == nil {
+        if path.range(
+            of: "^[a-z_][A-Za-z0-9_]*(\\.[a-z_][A-Za-z0-9_]*)*$",
+            options: .regularExpression
+        ) == nil {
             issues.append("\(location).\(path): token paths must be dot-separated lower-camel identifiers")
         }
         let emitted = path.split(separator: ".").map(String.init).map(swiftIdentifier).joined(separator: ".")
@@ -507,7 +541,12 @@ private enum ShapeValidator {
                 rejectUnknown(token, allowed: ["description", "value"], at: path, issues: &issues)
                 if let layers = token["value"] as? [[String: Any]] {
                     for (index, layer) in layers.enumerated() {
-                        rejectUnknown(layer, allowed: ["kind", "color", "x", "y", "blur", "spread"], at: "\(path).value[\(index)]", issues: &issues)
+                        rejectUnknown(
+                            layer,
+                            allowed: ["kind", "color", "x", "y", "blur", "spread"],
+                            at: "\(path).value[\(index)]",
+                            issues: &issues
+                        )
                     }
                 }
             }

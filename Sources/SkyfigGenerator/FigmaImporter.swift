@@ -39,51 +39,54 @@ public enum FigmaImporter {
             guard !parts.isEmpty else { throw FigmaImportError.unsupportedName(rawName) }
             let category = categoryName(parts[0])
             let resolvedType = (variable["resolvedType"] as? String)?.uppercased() ?? ""
-            if let importKey = try canonicalImportKey(
+            let importKey = try canonicalImportKey(
                 category: category,
                 resolvedType: resolvedType,
                 parts: parts,
                 source: rawName
-            ) {
+            )
+            if let importKey {
                 try claim(importKey, source: rawName, importedNames: &importedNames)
             }
-            let dynamicPath = try dynamicTokenPath(parts, source: rawName)
-            try claim("dynamic:\(dynamicPath)", source: rawName, importedNames: &importedNames)
-            let description = variable["description"] as? String
-            switch resolvedType {
-            case "COLOR":
-                dynamicColors[dynamicPath] = ColorToken(
-                    description: description,
-                    values: [
-                        "light": try resolver.color(id: id, theme: "light"),
-                        "dark": try resolver.color(id: id, theme: "dark"),
-                    ]
-                )
-            case "FLOAT":
-                dynamicNumbers[dynamicPath] = ThemedValueToken(
-                    description: description,
-                    values: themed(
-                        try resolver.number(id: id, theme: "light"),
-                        dark: { try resolver.number(id: id, theme: "dark") }
+            if shouldPreserveDynamicPath(parts) {
+                let dynamicPath = try dynamicTokenPath(parts, source: rawName)
+                try claim("dynamic:\(dynamicPath)", source: rawName, importedNames: &importedNames)
+                let description = variable["description"] as? String
+                switch resolvedType {
+                case "COLOR":
+                    dynamicColors[dynamicPath] = ColorToken(
+                        description: description,
+                        values: [
+                            "light": try resolver.color(id: id, theme: "light"),
+                            "dark": try resolver.color(id: id, theme: "dark"),
+                        ]
                     )
-                )
-            case "STRING":
-                dynamicStrings[dynamicPath] = ThemedValueToken(
-                    description: description,
-                    values: themed(
-                        try resolver.string(id: id, theme: "light"),
-                        dark: { try resolver.string(id: id, theme: "dark") }
+                case "FLOAT":
+                    dynamicNumbers[dynamicPath] = ThemedValueToken(
+                        description: description,
+                        values: try themed(
+                            try resolver.number(id: id, theme: "light"),
+                            dark: { try resolver.number(id: id, theme: "dark") }
+                        )
                     )
-                )
-            case "BOOLEAN":
-                dynamicBooleans[dynamicPath] = ThemedValueToken(
-                    description: description,
-                    values: themed(
-                        try resolver.boolean(id: id, theme: "light"),
-                        dark: { try resolver.boolean(id: id, theme: "dark") }
+                case "STRING":
+                    dynamicStrings[dynamicPath] = ThemedValueToken(
+                        description: description,
+                        values: try themed(
+                            try resolver.string(id: id, theme: "light"),
+                            dark: { try resolver.string(id: id, theme: "dark") }
+                        )
                     )
-                )
-            default: continue
+                case "BOOLEAN":
+                    dynamicBooleans[dynamicPath] = ThemedValueToken(
+                        description: description,
+                        values: try themed(
+                            try resolver.boolean(id: id, theme: "light"),
+                            dark: { try resolver.boolean(id: id, theme: "dark") }
+                        )
+                    )
+                default: continue
+                }
             }
 
             if category != "typography" {
@@ -682,15 +685,30 @@ private func dynamicTokenPath<S: Collection>(_ parts: S, source: String) throws 
     return parts.map { $0.first?.isNumber == true ? "_\($0)" : $0 }.joined(separator: ".")
 }
 
+private func shouldPreserveDynamicPath(_ parts: [String]) -> Bool {
+    guard let root = parts.first else { return false }
+    let generatedFamilyRoots: Set<String> = [
+        "colors", "typography", "spacing", "cornerRadii", "borderWidths", "shadows",
+        "metrics", "opacities", "materials", "symbols", "motion",
+    ]
+    return !generatedFamilyRoots.contains(root)
+}
+
 private func numeric(_ value: Any?) -> Double? {
     guard let number = value as? NSNumber else { return nil }
     guard CFGetTypeID(number) != CFBooleanGetTypeID() else { return nil }
     return number.doubleValue
 }
 
-private func themed<Value>(_ light: Value, dark: () throws -> Value) -> [String: Value] {
-    let darkValue = (try? dark()) ?? light
-    return ["light": light, "dark": darkValue]
+private func themed<Value>(_ light: Value, dark: () throws -> Value) throws -> [String: Value] {
+    do {
+        return ["light": light, "dark": try dark()]
+    } catch FigmaImportError.missingValue {
+        // Figma commonly stores mode-invariant scalar primitives only in the
+        // default mode. Preserve that intentional fallback without hiding
+        // missing modes, alias failures, cycles, or type mismatches.
+        return ["light": light, "dark": light]
+    }
 }
 
 private func byte(_ value: Double) -> UInt8 {

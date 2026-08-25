@@ -61,10 +61,12 @@ jobs:
           set -euo pipefail
           swift run -c release skyfig normalize-figma \
             --input "$RUNNER_TEMP/figma-variables.json" \
-            --output Tokens/skyfig.tokens.json
-          swift run -c release skyfig validate --input Tokens/skyfig.tokens.json
+            --output "$RUNNER_TEMP/skyfig.tokens.json"
+          Scripts/split-canonical-tokens.sh "$RUNNER_TEMP/skyfig.tokens.json" Tokens
+          source Scripts/canonical-token-inputs.sh
+          swift run -c release skyfig validate "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}"
           swift run -c release skyfig generate \
-            --input Tokens/skyfig.tokens.json \
+            "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
             --output Sources/Skyfig/Generated \
             --namespace "$TOKEN_NAMESPACE"
           swift test --parallel
@@ -79,7 +81,8 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c "$BOT_BRANCH"
-          git add -- Tokens/skyfig.tokens.json Sources/Skyfig/Generated
+          git add -- Tokens/foundations.tokens.json Tokens/semantic.tokens.json \
+            Tokens/components.tokens.json Sources/Skyfig/Generated
 
           existing="$(gh pr list --state open --base "$BASE_BRANCH" \
             --json number,headRefName,headRepositoryOwner,isCrossRepository \

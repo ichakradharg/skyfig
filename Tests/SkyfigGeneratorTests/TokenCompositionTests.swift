@@ -121,6 +121,26 @@ final class TokenCompositionTests: XCTestCase {
         }
     }
 
+    func testCrossDocumentSymbolTintReferenceResolvesAfterMerge() throws {
+        let foundation = TokenDocument(
+            name: "Foundation",
+            tokens: TokenCollection(colors: [
+                "action.primary": ColorToken(values: colors("#0369A1FF", "#38BDF8FF")),
+            ])
+        )
+        let components = TokenDocument(
+            name: "Components",
+            tokens: TokenCollection(symbols: [
+                "navigation.next": SymbolToken(name: "arrow.right", tint: "action.primary"),
+            ])
+        )
+
+        let merged = try TokenIO.merge([foundation, components])
+
+        XCTAssertEqual(merged.tokens.symbols["navigation.next"]?.tint, "action.primary")
+        XCTAssertNoThrow(try SwiftEmitter.generate(merged))
+    }
+
     func testDocumentsWithIncompatibleMetadataAreRejected() throws {
         let foundation = TokenDocument(name: "Foundation", tokens: TokenCollection())
         let unsupported = TokenDocument(

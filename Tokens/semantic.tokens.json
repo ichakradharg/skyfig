@@ -1,0 +1,349 @@
+{
+  "$schema": "../Schema/skyfig.tokens.schema.json",
+  "defaultTheme": "light",
+  "name": "Skyfig Semantic Tokens",
+  "schemaVersion": "1.0.0",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "tokens": {
+    "colors": {
+      "accent": {
+        "description": "Legacy primitive bridge token; prefer action.primary in app UI",
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0369A1FF"
+        }
+      },
+      "action.destructive": {
+        "values": {
+          "dark": "#FCA5A5FF",
+          "light": "#B91C1CFF"
+        }
+      },
+      "action.onDestructive": {
+        "values": {
+          "dark": "#0F172AFF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "action.onPrimary": {
+        "description": "Content shown on a primary action surface",
+        "values": {
+          "dark": "#0F172AFF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "action.onSecondary": {
+        "values": {
+          "dark": "#F8FAFCFF",
+          "light": "#0F172AFF"
+        }
+      },
+      "action.primary": {
+        "description": "Primary interactive action surface",
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0369A1FF"
+        }
+      },
+      "action.secondary": {
+        "values": {
+          "dark": "#334155FF",
+          "light": "#E2E8F0FF"
+        }
+      },
+      "border.control": {
+        "values": {
+          "dark": "#64748BFF",
+          "light": "#94A3B8FF"
+        }
+      },
+      "border.disabled": {
+        "values": {
+          "dark": "#334155FF",
+          "light": "#CBD5E1FF"
+        }
+      },
+      "border.separator": {
+        "values": {
+          "dark": "#475569FF",
+          "light": "#CBD5E1FF"
+        }
+      },
+      "component.button.destructiveBackground": {
+        "values": {
+          "dark": "#FCA5A5FF",
+          "light": "#B91C1CFF"
+        }
+      },
+      "component.button.primaryBackground": {
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0369A1FF"
+        }
+      },
+      "component.button.primaryPressed": {
+        "values": {
+          "dark": "#BAE6FDFF",
+          "light": "#075985FF"
+        }
+      },
+      "component.button.secondaryBackground": {
+        "values": {
+          "dark": "#334155FF",
+          "light": "#E2E8F0FF"
+        }
+      },
+      "component.listRow.background": {
+        "values": {
+          "dark": "#1E293BFF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "component.listRow.selectedBackground": {
+        "values": {
+          "dark": "#164E63FF",
+          "light": "#E0F2FEFF"
+        }
+      },
+      "component.search.background": {
+        "values": {
+          "dark": "#334155FF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "component.search.focusedBorder": {
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0284C7FF"
+        }
+      },
+      "component.segmented.background": {
+        "values": {
+          "dark": "#1E293BFF",
+          "light": "#E2E8F0FF"
+        }
+      },
+      "component.segmented.selectedBackground": {
+        "values": {
+          "dark": "#0C4A6EFF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "component.sidebar.background": {
+        "values": {
+          "dark": "#111827FF",
+          "light": "#E2E8F0FF"
+        }
+      },
+      "component.tab.selected": {
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0369A1FF"
+        }
+      },
+      "component.tab.unselected": {
+        "values": {
+          "dark": "#94A3B8FF",
+          "light": "#64748BFF"
+        }
+      },
+      "component.toolbar.background": {
+        "values": {
+          "dark": "#1F2937FF",
+          "light": "#F8FAFCFF"
+        }
+      },
+      "fill.control": {
+        "values": {
+          "dark": "#334155FF",
+          "light": "#E2E8F0FF"
+        }
+      },
+      "fill.controlDisabled": {
+        "values": {
+          "dark": "#1E293BFF",
+          "light": "#E2E8F0FF"
+        }
+      },
+      "fill.controlPressed": {
+        "values": {
+          "dark": "#475569FF",
+          "light": "#CBD5E1FF"
+        }
+      },
+      "fill.selected": {
+        "values": {
+          "dark": "#0C4A6EFF",
+          "light": "#BAE6FDFF"
+        }
+      },
+      "fill.separator": {
+        "values": {
+          "dark": "#475569FF",
+          "light": "#CBD5E1FF"
+        }
+      },
+      "focus.ring": {
+        "description": "Keyboard and accessibility focus indicator",
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0284C7FF"
+        }
+      },
+      "status.danger": {
+        "description": "Destructive outcome or error status",
+        "values": {
+          "dark": "#FCA5A5FF",
+          "light": "#B91C1CFF"
+        }
+      },
+      "status.info": {
+        "description": "Informational status",
+        "values": {
+          "dark": "#93C5FDFF",
+          "light": "#1D4ED8FF"
+        }
+      },
+      "status.onDanger": {
+        "values": {
+          "dark": "#450A0AFF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "status.onInfo": {
+        "values": {
+          "dark": "#172554FF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "status.onSuccess": {
+        "values": {
+          "dark": "#052E16FF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "status.onWarning": {
+        "values": {
+          "dark": "#422006FF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "status.success": {
+        "description": "Successful outcome status",
+        "values": {
+          "dark": "#86EFACFF",
+          "light": "#15803DFF"
+        }
+      },
+      "status.warning": {
+        "description": "Warning or needs-attention status",
+        "values": {
+          "dark": "#FDE68AFF",
+          "light": "#9A5C07FF"
+        }
+      },
+      "surface.elevated": {
+        "values": {
+          "dark": "#334155FF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "surface.grouped": {
+        "values": {
+          "dark": "#0F172AFF",
+          "light": "#E2E8F0FF"
+        }
+      },
+      "surface.modal": {
+        "values": {
+          "dark": "#1E293BFF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "surface.primary": {
+        "values": {
+          "dark": "#111827FF",
+          "light": "#FFFFFFFF"
+        }
+      },
+      "surface.secondary": {
+        "values": {
+          "dark": "#1F2937FF",
+          "light": "#F1F5F9FF"
+        }
+      },
+      "surface.selected": {
+        "values": {
+          "dark": "#164E63FF",
+          "light": "#E0F2FEFF"
+        }
+      },
+      "text.disabled": {
+        "values": {
+          "dark": "#64748BFF",
+          "light": "#94A3B8FF"
+        }
+      },
+      "text.link": {
+        "values": {
+          "dark": "#7DD3FCFF",
+          "light": "#0369A1FF"
+        }
+      },
+      "text.primary": {
+        "description": "Primary readable text",
+        "values": {
+          "dark": "#F8FAFCFF",
+          "light": "#0F172AFF"
+        }
+      },
+      "text.secondary": {
+        "description": "Secondary readable text",
+        "values": {
+          "dark": "#CBD5E1FF",
+          "light": "#475569FF"
+        }
+      },
+      "text.tertiary": {
+        "values": {
+          "dark": "#94A3B8FF",
+          "light": "#64748BFF"
+        }
+      }
+    },
+    "materials": {
+      "content.thin": {
+        "value": "thin"
+      },
+      "content.ultraThin": {
+        "value": "ultraThin"
+      },
+      "overlay.modal": {
+        "value": "thick"
+      },
+      "overlay.panel": {
+        "value": "regular"
+      }
+    },
+    "motion": {
+      "feedback.quick": {
+        "curve": "easeOut",
+        "duration": 0.16,
+        "reduceMotionDuration": 0
+      },
+      "feedback.standard": {
+        "curve": "easeInOut",
+        "duration": 0.24,
+        "reduceMotionDuration": 0
+      },
+      "selection.standard": {
+        "curve": "easeInOut",
+        "duration": 0.2,
+        "reduceMotionDuration": 0
+      }
+    }
+  }
+}

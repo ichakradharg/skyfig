@@ -72,8 +72,9 @@ Text("Pay now")
 Use the same namespace locally and in CI. This keeps generated output deterministic.
 
 ```bash
+source Scripts/canonical-token-inputs.sh
 swift run skyfig generate \
-  --input Tokens/skyfig.tokens.json \
+  "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
   --output Sources/Skyfig/Generated \
   --namespace TeamATokens
 ```

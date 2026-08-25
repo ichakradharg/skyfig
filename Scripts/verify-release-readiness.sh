@@ -2,15 +2,20 @@
 set -euo pipefail
 
 token_namespace="${SKYFIG_TOKEN_NAMESPACE:-SkyfigTokens}"
+source Scripts/canonical-token-inputs.sh
 
 doc_output=".build/release-docc"
 rm -rf "$doc_output"
 
 swift build
 swift test --parallel
-swift package plugin --allow-writing-to-package-directory swiftlint lint
-swift run skyfig validate --input Tokens/skyfig.tokens.json
-swift run skyfig generate --input Tokens/skyfig.tokens.json --output Sources/Skyfig/Generated --namespace "$token_namespace" --check
+swift package plugin --allow-writing-to-package-directory swiftlint lint --strict
+swift run skyfig validate "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}"
+swift run skyfig generate \
+  "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
+  --output Sources/Skyfig/Generated \
+  --namespace "$token_namespace" \
+  --check
 Scripts/test-cli-integration.sh
 Scripts/test-custom-namespace.sh
 swift run --package-path Examples/SkyfigPackageConsumer
