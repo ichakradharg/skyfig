@@ -7,11 +7,11 @@ Skyfig uses deterministic iPhone and iPad screenshots to catch unintended visual
 The ten committed baselines live in `Examples/SkyfigConsumer/Snapshots`. Each
 device has one image for every tab:
 
-- Home: `iphone-light.png` and `ipad-light.png`
-- Library: `iphone-library-light.png` and `ipad-library-light.png`
-- Activity: `iphone-activity-light.png` and `ipad-activity-light.png`
-- Profile: `iphone-profile-light.png` and `ipad-profile-light.png`
-- Search: `iphone-search-light.png` and `ipad-search-light.png`
+- Overview: `iphone-light.png` and `ipad-light.png`
+- Components: `iphone-components-light.png` and `ipad-components-light.png`
+- Content: `iphone-content-light.png` and `ipad-content-light.png`
+- Planning: `iphone-planning-light.png` and `ipad-planning-light.png`
+- Accessibility: `iphone-accessibility-light.png` and `ipad-accessibility-light.png`
 
 The workflow fixes simulator appearance and status-bar state, then runs a
 capture-specific UI test. Each tab starts from a fresh app launch, is selected

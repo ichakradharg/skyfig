@@ -99,7 +99,44 @@
           "dark": "#CBD5E1FF",
           "light": "#475569FF"
         }
-      }
+      },
+      "text.tertiary": {"values":{"dark":"#94A3B8FF","light":"#64748BFF"}},
+      "text.disabled": {"values":{"dark":"#64748BFF","light":"#94A3B8FF"}},
+      "text.link": {"values":{"dark":"#7DD3FCFF","light":"#0369A1FF"}},
+      "surface.grouped": {"values":{"dark":"#0F172AFF","light":"#E2E8F0FF"}},
+      "surface.elevated": {"values":{"dark":"#334155FF","light":"#FFFFFFFF"}},
+      "surface.modal": {"values":{"dark":"#1E293BFF","light":"#FFFFFFFF"}},
+      "surface.selected": {"values":{"dark":"#164E63FF","light":"#E0F2FEFF"}},
+      "fill.control": {"values":{"dark":"#334155FF","light":"#E2E8F0FF"}},
+      "fill.controlPressed": {"values":{"dark":"#475569FF","light":"#CBD5E1FF"}},
+      "fill.controlDisabled": {"values":{"dark":"#1E293BFF","light":"#E2E8F0FF"}},
+      "fill.selected": {"values":{"dark":"#0C4A6EFF","light":"#BAE6FDFF"}},
+      "fill.separator": {"values":{"dark":"#475569FF","light":"#CBD5E1FF"}},
+      "border.control": {"values":{"dark":"#64748BFF","light":"#94A3B8FF"}},
+      "border.disabled": {"values":{"dark":"#334155FF","light":"#CBD5E1FF"}},
+      "border.separator": {"values":{"dark":"#475569FF","light":"#CBD5E1FF"}},
+      "action.secondary": {"values":{"dark":"#334155FF","light":"#E2E8F0FF"}},
+      "action.onSecondary": {"values":{"dark":"#F8FAFCFF","light":"#0F172AFF"}},
+      "action.destructive": {"values":{"dark":"#FCA5A5FF","light":"#B91C1CFF"}},
+      "action.onDestructive": {"values":{"dark":"#0F172AFF","light":"#FFFFFFFF"}},
+      "status.onSuccess": {"values":{"dark":"#052E16FF","light":"#FFFFFFFF"}},
+      "status.onInfo": {"values":{"dark":"#172554FF","light":"#FFFFFFFF"}},
+      "status.onWarning": {"values":{"dark":"#422006FF","light":"#FFFFFFFF"}},
+      "status.onDanger": {"values":{"dark":"#450A0AFF","light":"#FFFFFFFF"}},
+      "component.button.primaryBackground": {"values":{"dark":"#7DD3FCFF","light":"#0369A1FF"}},
+      "component.button.primaryPressed": {"values":{"dark":"#BAE6FDFF","light":"#075985FF"}},
+      "component.button.secondaryBackground": {"values":{"dark":"#334155FF","light":"#E2E8F0FF"}},
+      "component.button.destructiveBackground": {"values":{"dark":"#FCA5A5FF","light":"#B91C1CFF"}},
+      "component.search.background": {"values":{"dark":"#334155FF","light":"#FFFFFFFF"}},
+      "component.search.focusedBorder": {"values":{"dark":"#7DD3FCFF","light":"#0284C7FF"}},
+      "component.segmented.background": {"values":{"dark":"#1E293BFF","light":"#E2E8F0FF"}},
+      "component.segmented.selectedBackground": {"values":{"dark":"#0C4A6EFF","light":"#FFFFFFFF"}},
+      "component.listRow.background": {"values":{"dark":"#1E293BFF","light":"#FFFFFFFF"}},
+      "component.listRow.selectedBackground": {"values":{"dark":"#164E63FF","light":"#E0F2FEFF"}},
+      "component.tab.selected": {"values":{"dark":"#7DD3FCFF","light":"#0369A1FF"}},
+      "component.tab.unselected": {"values":{"dark":"#94A3B8FF","light":"#64748BFF"}},
+      "component.toolbar.background": {"values":{"dark":"#1F2937FF","light":"#F8FAFCFF"}},
+      "component.sidebar.background": {"values":{"dark":"#111827FF","light":"#E2E8F0FF"}}
     },
     "cornerRadii": {
       "card": {
@@ -201,6 +238,46 @@
       "xs": {
         "value": 4
       }
+    },
+    "metrics": {
+      "control.minHitTarget": {"value": 44},
+      "control.minCompactTarget": {"value": 28},
+      "control.bezelGap": {"value": 12},
+      "control.unbezeledGap": {"value": 24},
+      "button.height": {"value": 44},
+      "button.horizontalInset": {"value": 16},
+      "search.height": {"value": 44},
+      "segmented.height": {"value": 36},
+      "list.rowMinHeight": {"value": 52},
+      "list.rowInset": {"value": 16},
+      "toolbar.iconInset": {"value": 12},
+      "layout.readableWidth": {"value": 680},
+      "ipad.sidebarWidth": {"value": 320},
+      "ipad.panelWidth": {"value": 360}
+    },
+    "opacities": {
+      "disabled": {"value": 0.45},
+      "pressed": {"value": 0.72},
+      "overlay": {"value": 0.64}
+    },
+    "materials": {
+      "content.ultraThin": {"value": "ultraThin"},
+      "content.thin": {"value": "thin"},
+      "overlay.panel": {"value": "regular"},
+      "overlay.modal": {"value": "thick"}
+    },
+    "symbols": {
+      "navigation.overview": {"name":"square.grid.2x2.fill","weight":600,"scale":"medium","renderingMode":"hierarchical","tint":"action.primary"},
+      "navigation.planning": {"name":"calendar","weight":600,"scale":"medium","renderingMode":"hierarchical","tint":"action.primary"},
+      "status.success": {"name":"checkmark.circle.fill","weight":600,"scale":"medium","renderingMode":"hierarchical","tint":"status.success"},
+      "component.search": {"name":"magnifyingglass","weight":500,"scale":"medium","renderingMode":"hierarchical","tint":"text.secondary"},
+      "accessibility.text": {"name":"textformat.size","weight":500,"scale":"large","renderingMode":"hierarchical","tint":"focus.ring"},
+      "accessibility.motion": {"name":"figure.wave","weight":500,"scale":"large","renderingMode":"hierarchical","tint":"focus.ring"}
+    },
+    "motion": {
+      "feedback.standard": {"duration":0.24,"curve":"easeInOut","reduceMotionDuration":0},
+      "feedback.quick": {"duration":0.16,"curve":"easeOut","reduceMotionDuration":0},
+      "selection.standard": {"duration":0.2,"curve":"easeInOut","reduceMotionDuration":0}
     },
     "typography": {
       "apple.body": {

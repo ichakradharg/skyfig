@@ -27,10 +27,42 @@ public enum SwiftEmitter {
             },
             indent: 1
         )
-        lines += renderCategory("Spacing", declarations: document.tokens.spacing.mapValues { number($0.value) }, type: "Double", indent: 1)
-        lines += renderCategory("CornerRadii", declarations: document.tokens.cornerRadii.mapValues { number($0.value) }, type: "Double", indent: 1)
-        lines += renderCategory("BorderWidths", declarations: document.tokens.borderWidths.mapValues { number($0.value) }, type: "Double", indent: 1)
+        lines += renderCategory(
+            "Spacing", declarations: document.tokens.spacing.mapValues { number($0.value) }, type: "Double", indent: 1
+        )
+        lines += renderCategory(
+            "CornerRadii",
+            declarations: document.tokens.cornerRadii.mapValues { number($0.value) },
+            type: "Double",
+            indent: 1
+        )
+        lines += renderCategory(
+            "BorderWidths",
+            declarations: document.tokens.borderWidths.mapValues { number($0.value) },
+            type: "Double",
+            indent: 1
+        )
         lines += renderCategory("Shadows", declarations: document.tokens.shadows.mapValues(shadowExpression), indent: 1)
+        lines += renderCategory(
+            "Metrics", declarations: document.tokens.metrics.mapValues { number($0.value) }, type: "Double", indent: 1
+        )
+        lines += renderCategory(
+            "Opacities",
+            declarations: document.tokens.opacities.mapValues { number($0.value) },
+            type: "Double",
+            indent: 1
+        )
+        lines += renderCategory(
+            "Materials",
+            declarations: document.tokens.materials.mapValues { "SkyfigMaterialToken(.\($0.value.rawValue))" },
+            indent: 1
+        )
+        lines += renderCategory(
+            "Symbols", declarations: document.tokens.symbols.mapValues(symbolExpression), indent: 1
+        )
+        lines += renderCategory(
+            "Motion", declarations: document.tokens.motion.mapValues(motionExpression), indent: 1
+        )
         lines += renderDynamic(document.tokens.dynamic, indent: 1)
         lines.append("}")
         if namespace != "SkyfigTokens" {
@@ -59,6 +91,19 @@ public enum SwiftEmitter {
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
         try generated.write(to: url, options: .atomic)
     }
+}
+
+private func symbolExpression(_ token: SymbolToken) -> String {
+    let availability = token.availability.map(swiftString) ?? "nil"
+    return "SkyfigSymbolToken(name: \(swiftString(token.name)), "
+        + "weight: .\(weightName(token.weight)), scale: .\(token.scale.rawValue), "
+        + "renderingMode: .\(token.renderingMode.rawValue), tint: \(swiftString(token.tint)), "
+        + "availability: \(availability))"
+}
+
+private func motionExpression(_ token: MotionToken) -> String {
+    "SkyfigMotionToken(duration: \(number(token.duration)), curve: .\(token.curve.rawValue), "
+        + "reduceMotionDuration: \(number(token.reduceMotionDuration)))"
 }
 
 private func renderDynamic(_ dynamic: DynamicTokenCollection, indent: Int) -> [String] {

@@ -1,6 +1,8 @@
 # Skyfig consumer sample
 
-This is a small iOS 26+ SwiftUI app that consumes the `Skyfig` library through a separate iOS app project. It demonstrates the generated `SkyfigTokens` API in a five-tab navigation interface, including the dedicated search tab, an app-bar add button, a design-system preview screen, and token-driven content in every tab. The adaptive tab style keeps the familiar tab bar on iPhone and uses iPad's floating tab bar/sidebar presentation. The tabs collectively showcase all 11 standard Apple text styles using generated tokens and their matching SwiftUI Dynamic Type roles. The Home tab also shows the single-layer, ordered multi-layer, and inner-shadow structures exercised by the Figma fixtures.
+This is a small iOS 26+ SwiftUI app that consumes the `Skyfig` library through a separate app project. Its adaptive five-destination interface uses the system tab bar on compact iPhone layouts and a persistent sidebar on regular-width iPad layouts. The tabs are cohesive compositions rather than token lists: Overview/Foundation, Components, Content/Lists, Planning/Detail, and Accessibility/Motion.
+
+The sample uses semantic light/dark colors, component states, readable-width and iPad panel metrics, constrained system materials, SF Symbol metadata, opacity, Dynamic Type, touch targets, focus treatment, and reduce-motion-aware animation. It intentionally does not use safe-area, device-size, or fixed-breakpoint tokens.
 
 ## Run it
 
@@ -8,14 +10,14 @@ This is a small iOS 26+ SwiftUI app that consumes the `Skyfig` library through a
 2. Select an iOS 26 iPhone or iPad simulator and run the `SkyfigConsumer` scheme.
 3. Confirm that the app fills the display, including the area around the Dynamic Island or the iPad safe area. The project generates the standard iOS launch screen, so iOS treats it as a modern, full-screen app rather than letterboxing it in legacy compatibility mode.
 4. Switch the simulator between light and dark appearance to see generated color tokens resolve automatically.
-5. On iPad, rotate once to confirm that the adaptive tab layout continues to use the generated token values in every supported orientation.
+5. On iPad, rotate once to confirm that the adaptive sidebar continues to expose every destination and uses the generated token values in every supported orientation.
 6. Increase **Larger Text** through the accessibility sizes and confirm that each typography card expands vertically without clipping or horizontal truncation.
 
 The sample temporarily uses a local package dependency so this repository can test the consumer boundary before Skyfig has a released version. After the first release, replace that dependency with the public GitHub package URL and version requirement used by your app.
 
 ## Automated UI checks
 
-The `SkyfigConsumerUITests` target confirms that all five tabs are available, each presents its expected token-driven content, every Apple text style and inferred shadow structure is reachable, and the Home screen remains usable at an accessibility text size. Run these tests from Xcode by selecting the `SkyfigConsumer` scheme, choosing an iPhone or iPad simulator, and selecting **Product > Test** (Command-U).
+The `SkyfigConsumerUITests` target confirms that all five tabs are available, each presents expected token-driven content, accessibility/motion controls are reachable, and Overview remains usable at an accessibility text size. Run these tests from Xcode by selecting the `SkyfigConsumer` scheme, choosing an iPhone or iPad simulator, and selecting **Product > Test** (Command-U).
 
 From the repository root, the same tests can be run with:
 
@@ -37,8 +39,8 @@ SKYFIG_IPHONE_SIMULATOR="iPhone 17 Pro" SKYFIG_SIMULATOR_OS=26.0.1 \
 The normal UI suite proves navigation and expected content; its helper script
 skips the separate capture-only test. The dedicated-Mac visual workflow uses
 that test to relaunch the app, tap each native tab, export XCTest attachments,
-and compare deterministic light-appearance screenshots for Home, Library,
-Activity, Profile, and Search on both iPhone and iPad. Follow the
+and compare deterministic light-appearance screenshots for Overview, Components,
+Content, Planning, and Accessibility on both iPhone and iPad. Follow the
 [consumer visual-regression guide](../../Docs/VISUAL_REGRESSION.md) to prepare
 the `skyfig-visual` runner, inspect the ten stored baselines, and verify intended
 changes. Dark-mode screenshot review is intentionally deferred and remains a

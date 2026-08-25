@@ -19,7 +19,7 @@ Typed Swift API (SkyfigTokens or team namespace)
         reviewed package release
                 |
                 v
-iOS, iPadOS, macOS, and tvOS apps
+iOS and iPadOS apps
 ```
 
 ## Responsibilities and trust boundaries

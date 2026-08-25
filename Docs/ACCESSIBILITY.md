@@ -35,6 +35,12 @@ Use `SkyfigRGBAColor.contrastRatio(against:)` to check an opaque composed pair. 
 - Keep keyboard focus visible; use `focus.ring` rather than relying only on color changes.
 - Ensure status is communicated with text or a symbol as well as color.
 - Respect Reduce Motion and Reduce Transparency; do not use essential meaning only in animation or material effects.
+
+## Generated interaction tokens
+
+Use `Metrics.Control.minHitTarget` (44 pt) for primary touch targets and reserve the 28 pt compact target for tightly constrained, supplementary controls. Treat the values as a component contract, not a substitute for testing real content at larger Dynamic Type sizes.
+
+The fixture's `Motion` tokens provide a standard animation and a `reduceMotionDuration`. A view should disable or simplify nonessential animation when SwiftUI's `accessibilityReduceMotion` is enabled. `Materials` map only to system material choices; verify Reduce Transparency separately because materials must never be the sole carrier of meaning. Use semantic foreground/action/status colors and `Focus.ring`, and keep text or an SF Symbol alongside color-based status.
 - Use semantic control labels and traits so VoiceOver presents the intended action.
 - Test at least one key flow with VoiceOver, larger Dynamic Type, light and dark appearance, and increased contrast.
 

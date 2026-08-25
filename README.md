@@ -78,7 +78,7 @@ The package exposes typed token values; it does not contact Figma at app runtime
 The repository includes [SkyfigConsumer](Examples/SkyfigConsumer/README.md), an iOS 26+ SwiftUI sample that imports Skyfig through a separate app project. It is a practical reference for package consumers and demonstrates:
 
 - a modern, full-screen iPhone presentation and an adaptive iPad layout;
-- five token-driven tabs: Home, Library, Activity, Profile, and Search;
+- five token-driven iOS/iPadOS compositions: Overview, Components, Content, Planning, and Accessibility;
 - a native search-tab role and an app-bar add button;
 - generated colors, all 11 Apple text styles, spacing, corner radii, and single-, multi-, and inner-shadow examples.
 
@@ -150,7 +150,7 @@ For an iOS app, add the publisher’s package as a dependency, import `Skyfig`, 
 
 ## Canonical tokens
 
-`Tokens/skyfig.tokens.json` is the source of truth after import. Version 1 uses literal values only, exact `light` and `dark` themes, uppercase eight-digit sRGB colors, and dot-separated lower-camel token paths.
+`Tokens/skyfig.tokens.json` is the source of truth after import. Version 1 uses literal values only, exact `light` and `dark` themes, uppercase eight-digit sRGB colors, and dot-separated lower-camel token paths. Alongside the core color, type, spacing, radius, border, and shadow families, the fixture demonstrates iOS/iPadOS semantic state colors, interaction/layout metrics, constrained system materials, SF Symbol metadata, opacities, and reduce-motion-aware motion tokens.
 
 ```json
 {
