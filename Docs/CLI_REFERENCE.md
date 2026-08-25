@@ -10,6 +10,14 @@ swift run skyfig validate --input Tokens/skyfig.tokens.json
 
 Validates the JSON document's structure, supported schema version, token paths, themes, values, and composite token requirements.
 
+Repeat `--input` to validate a shared set as one token source. Each file is validated independently before the combined token paths are validated:
+
+```bash
+swift run skyfig validate \
+  --input Tokens/foundation.tokens.json \
+  --input Tokens/components.tokens.json
+```
+
 ## Normalize a saved Figma response
 
 ```bash
@@ -27,12 +35,15 @@ No family mapping file is required. The normalizer retains every supported primi
 
 ```bash
 swift run skyfig generate \
-  --input Tokens/skyfig.tokens.json \
+  --input Tokens/foundation.tokens.json \
+  --input Tokens/components.tokens.json \
   --output Sources/Skyfig/Generated \
   --namespace TeamATokens
 ```
 
 Writes `Tokens.generated.swift` into the output directory. Pass a `.swift` path to write to one exact file.
+
+`--input` is repeatable. Canonical files may omit token families they do not own; omitted families decode as empty maps. Skyfig combines all families into one generated API and rejects any duplicate token path with both source filenames. Input order never acts as override precedence.
 
 `--namespace` controls the generated public enum. It defaults to `SkyfigTokens`, so existing repositories and consumers remain compatible. A team-owned fork can choose a distinct Swift type name, such as `TeamATokens`; use the same namespace every time you generate or check the output. Custom output includes `SkyfigTokens` as a compatibility alias for the bundled Skyfig tests and examples, while new app code should use the selected namespace.
 
@@ -40,7 +51,8 @@ Writes `Tokens.generated.swift` into the output directory. Pass a `.swift` path 
 
 ```bash
 swift run skyfig generate \
-  --input Tokens/skyfig.tokens.json \
+  --input Tokens/foundation.tokens.json \
+  --input Tokens/components.tokens.json \
   --output Sources/Skyfig/Generated \
   --namespace TeamATokens \
   --check

@@ -6,6 +6,23 @@ public enum TokenIO {
         try decode(Data(contentsOf: url))
     }
 
+    /// Loads and combines canonical token documents in the supplied order.
+    ///
+    /// Every document is validated before merging. Token paths must have one
+    /// owner across all inputs; duplicate declarations are rejected rather
+    /// than resolved by input order.
+    public static func load(from urls: [URL]) throws -> TokenDocument {
+        let sources = try urls.map { url in
+            TokenDocumentSource(identifier: url.path, document: try load(from: url))
+        }
+        return try merge(sources)
+    }
+
+    /// Combines independently created token documents into one generator input.
+    public static func merge(_ documents: [TokenDocument]) throws -> TokenDocument {
+        try merge(documents.map { TokenDocumentSource(identifier: $0.name, document: $0) })
+    }
+
     public static func decode(_ data: Data) throws -> TokenDocument {
         let shapeIssues = try ShapeValidator.issues(in: data)
         guard shapeIssues.isEmpty else {
@@ -35,6 +52,163 @@ public enum TokenIO {
         if (try? Data(contentsOf: url)) == data { return }
         try data.write(to: url, options: .atomic)
     }
+
+    private static func merge(_ sources: [TokenDocumentSource]) throws -> TokenDocument {
+        guard let first = sources.first else {
+            throw TokenMergeError(issues: ["$: at least one token document is required"])
+        }
+
+        for source in sources {
+            try source.document.validate()
+        }
+
+        var colors: [String: ColorToken] = [:]
+        var typography: [String: TypographyToken] = [:]
+        var spacing: [String: DimensionToken] = [:]
+        var cornerRadii: [String: DimensionToken] = [:]
+        var borderWidths: [String: DimensionToken] = [:]
+        var shadows: [String: ShadowToken] = [:]
+        var metrics: [String: DimensionToken] = [:]
+        var opacities: [String: OpacityToken] = [:]
+        var materials: [String: MaterialToken] = [:]
+        var symbols: [String: SymbolToken] = [:]
+        var motion: [String: MotionToken] = [:]
+        var dynamicColors: [String: ColorToken] = [:]
+        var dynamicNumbers: [String: ThemedValueToken<Double>] = [:]
+        var dynamicStrings: [String: ThemedValueToken<String>] = [:]
+        var dynamicBooleans: [String: ThemedValueToken<Bool>] = [:]
+        var owners: [String: String] = [:]
+        var issues: [String] = []
+
+        for source in sources {
+            let document = source.document
+            if document.schemaVersion != first.document.schemaVersion {
+                issues.append("\(source.identifier): schemaVersion does not match \(first.identifier)")
+            }
+            if document.defaultTheme != first.document.defaultTheme {
+                issues.append("\(source.identifier): defaultTheme does not match \(first.identifier)")
+            }
+            if document.themes != first.document.themes {
+                issues.append("\(source.identifier): themes do not match \(first.identifier)")
+            }
+
+            mergeTokenMap(
+                document.tokens.colors, category: "colors", source: source.identifier,
+                into: &colors, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.typography, category: "typography", source: source.identifier,
+                into: &typography, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.spacing, category: "spacing", source: source.identifier,
+                into: &spacing, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.cornerRadii, category: "cornerRadii", source: source.identifier,
+                into: &cornerRadii, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.borderWidths, category: "borderWidths", source: source.identifier,
+                into: &borderWidths, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.shadows, category: "shadows", source: source.identifier,
+                into: &shadows, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.metrics, category: "metrics", source: source.identifier,
+                into: &metrics, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.opacities, category: "opacities", source: source.identifier,
+                into: &opacities, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.materials, category: "materials", source: source.identifier,
+                into: &materials, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.symbols, category: "symbols", source: source.identifier,
+                into: &symbols, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.motion, category: "motion", source: source.identifier,
+                into: &motion, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.dynamic.colors, category: "dynamic.colors", source: source.identifier,
+                into: &dynamicColors, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.dynamic.numbers, category: "dynamic.numbers", source: source.identifier,
+                into: &dynamicNumbers, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.dynamic.strings, category: "dynamic.strings", source: source.identifier,
+                into: &dynamicStrings, owners: &owners, issues: &issues
+            )
+            mergeTokenMap(
+                document.tokens.dynamic.booleans, category: "dynamic.booleans", source: source.identifier,
+                into: &dynamicBooleans, owners: &owners, issues: &issues
+            )
+        }
+
+        guard issues.isEmpty else { throw TokenMergeError(issues: issues) }
+
+        let merged = TokenDocument(
+            schemaURL: first.document.schemaURL,
+            schemaVersion: first.document.schemaVersion,
+            name: sources.map(\.document.name).joined(separator: " + "),
+            defaultTheme: first.document.defaultTheme,
+            themes: first.document.themes,
+            tokens: TokenCollection(
+                colors: colors,
+                typography: typography,
+                spacing: spacing,
+                cornerRadii: cornerRadii,
+                borderWidths: borderWidths,
+                shadows: shadows,
+                metrics: metrics,
+                opacities: opacities,
+                materials: materials,
+                symbols: symbols,
+                motion: motion,
+                dynamic: DynamicTokenCollection(
+                    colors: dynamicColors,
+                    numbers: dynamicNumbers,
+                    strings: dynamicStrings,
+                    booleans: dynamicBooleans
+                )
+            )
+        )
+        try merged.validate()
+        return merged
+    }
+}
+
+private struct TokenDocumentSource {
+    let identifier: String
+    let document: TokenDocument
+}
+
+private func mergeTokenMap<Value>(
+    _ incoming: [String: Value],
+    category: String,
+    source: String,
+    into result: inout [String: Value],
+    owners: inout [String: String],
+    issues: inout [String]
+) {
+    for path in incoming.keys.sorted() {
+        let location = "$.tokens.\(category).\(path)"
+        if let existingOwner = owners[location] {
+            issues.append("\(location): declared in both \(existingOwner) and \(source)")
+            continue
+        }
+        result[path] = incoming[path]
+        owners[location] = source
+    }
 }
 
 /// A collection of deterministic validation issues found in a token document.
@@ -47,6 +221,19 @@ public struct SkyfigValidationError: Error, CustomStringConvertible, Equatable, 
 
     public var description: String {
         (["Token validation failed:"] + issues.map { "- \($0)" }).joined(separator: "\n")
+    }
+}
+
+/// A collection of deterministic issues found while combining token documents.
+public struct TokenMergeError: Error, CustomStringConvertible, Equatable, Sendable {
+    public let issues: [String]
+
+    public init(issues: [String]) {
+        self.issues = issues.sorted()
+    }
+
+    public var description: String {
+        (["Token merge failed:"] + issues.map { "- \($0)" }).joined(separator: "\n")
     }
 }
 

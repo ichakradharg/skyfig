@@ -85,12 +85,12 @@ public struct TokenCollection: Codable, Equatable, Sendable {
     }
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        colors = try container.decode([String: ColorToken].self, forKey: .colors)
-        typography = try container.decode([String: TypographyToken].self, forKey: .typography)
-        spacing = try container.decode([String: DimensionToken].self, forKey: .spacing)
-        cornerRadii = try container.decode([String: DimensionToken].self, forKey: .cornerRadii)
-        borderWidths = try container.decode([String: DimensionToken].self, forKey: .borderWidths)
-        shadows = try container.decode([String: ShadowToken].self, forKey: .shadows)
+        colors = try container.decodeIfPresent([String: ColorToken].self, forKey: .colors) ?? [:]
+        typography = try container.decodeIfPresent([String: TypographyToken].self, forKey: .typography) ?? [:]
+        spacing = try container.decodeIfPresent([String: DimensionToken].self, forKey: .spacing) ?? [:]
+        cornerRadii = try container.decodeIfPresent([String: DimensionToken].self, forKey: .cornerRadii) ?? [:]
+        borderWidths = try container.decodeIfPresent([String: DimensionToken].self, forKey: .borderWidths) ?? [:]
+        shadows = try container.decodeIfPresent([String: ShadowToken].self, forKey: .shadows) ?? [:]
         metrics = try container.decodeIfPresent([String: DimensionToken].self, forKey: .metrics) ?? [:]
         opacities = try container.decodeIfPresent([String: OpacityToken].self, forKey: .opacities) ?? [:]
         materials = try container.decodeIfPresent([String: MaterialToken].self, forKey: .materials) ?? [:]
@@ -189,6 +189,27 @@ public struct DynamicTokenCollection: Codable, Equatable, Sendable {
         self.numbers = numbers
         self.strings = strings
         self.booleans = booleans
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case colors, numbers, strings, booleans
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        colors = try container.decodeIfPresent([String: ColorToken].self, forKey: .colors) ?? [:]
+        numbers = try container.decodeIfPresent(
+            [String: ThemedValueToken<Double>].self,
+            forKey: .numbers
+        ) ?? [:]
+        strings = try container.decodeIfPresent(
+            [String: ThemedValueToken<String>].self,
+            forKey: .strings
+        ) ?? [:]
+        booleans = try container.decodeIfPresent(
+            [String: ThemedValueToken<Bool>].self,
+            forKey: .booleans
+        ) ?? [:]
     }
 }
 

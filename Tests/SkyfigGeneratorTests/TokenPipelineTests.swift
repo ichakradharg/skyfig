@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import SkyfigGenerator
+import XCTest
 
 final class TokenPipelineTests: XCTestCase {
     func testCanonicalDocumentGeneratesEveryTokenFamilyDeterministically() throws {

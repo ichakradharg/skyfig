@@ -279,14 +279,6 @@
           "type": "object"
         }
       },
-      "required": [
-        "colors",
-        "typography",
-        "spacing",
-        "cornerRadii",
-        "borderWidths",
-        "shadows"
-      ],
       "type": "object"
     },
     "tokenMap": {
@@ -303,7 +295,6 @@
         "strings": { "$ref": "#/$defs/tokenMap", "additionalProperties": { "$ref": "#/$defs/themedStringToken" }, "type": "object" },
         "booleans": { "$ref": "#/$defs/tokenMap", "additionalProperties": { "$ref": "#/$defs/themedBooleanToken" }, "type": "object" }
       },
-      "required": ["colors", "numbers", "strings", "booleans"],
       "type": "object"
     },
     "themedNumberToken": { "$ref": "#/$defs/themedValueToken", "properties": { "values": { "$ref": "#/$defs/themedNumberValues" } } },
