@@ -6,6 +6,7 @@ All notable consumer-facing changes to Skyfig are recorded here. Skyfig follows 
 
 ### Added
 
+- Multi-file token composition through repeatable `--input` options, with strict duplicate-path detection and SwiftUI-ready generated output.
 - Semantic action, focus, and status color tokens.
 - Dynamic Type-aware typography helper for SwiftUI consumers.
 - Token accessibility guardrails and consumer guidance.

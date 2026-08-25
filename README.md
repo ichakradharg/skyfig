@@ -174,7 +174,29 @@ For an iOS app, add the publisher’s package as a dependency, import `Skyfig`, 
 }
 ```
 
-The schema requires all six token maps; a category may be an empty object. Dimension, typography, and shadow metrics are expressed in points. Unknown properties, malformed identifiers, namespace collisions, invalid weights, non-finite dimensions, and missing theme values are rejected.
+Every canonical file requires the document metadata and `tokens` object. Individual token families are optional, so a shared file can own only colors, layout, typography, or another subset without empty placeholder maps. Dimension, typography, and shadow metrics are expressed in points. Unknown properties, malformed identifiers, namespace collisions, invalid weights, non-finite dimensions, and missing theme values are rejected.
+
+### Compose shared token files
+
+Pass `--input` more than once to validate or generate from independently owned canonical files:
+
+```bash
+swift run skyfig generate \
+  --input Tokens/foundation.tokens.json \
+  --input Tokens/components.tokens.json \
+  --input Tokens/product.tokens.json \
+  --output Sources/Skyfig/Generated
+```
+
+Skyfig validates every file, combines its token maps, and generates one deterministic namespace. Every token path must have exactly one owner across the inputs; duplicates fail with the JSON path and both filenames rather than allowing a later file to override an earlier one. The generated values use the same typed runtime and SwiftUI adapters as single-file generation:
+
+```swift
+@Environment(\.colorScheme) private var colorScheme
+
+Text("Shared tokens")
+    .foregroundStyle(SkyfigTokens.Colors.Brand.primary.color(for: colorScheme))
+    .padding(SkyfigTokens.Spacing.Content.gutter)
+```
 
 ## Command line
 
@@ -190,7 +212,8 @@ swift run skyfig normalize-figma \
 
 # Generate committed Swift source
 swift run skyfig generate \
-  --input Tokens/skyfig.tokens.json \
+  --input Tokens/foundation.tokens.json \
+  --input Tokens/components.tokens.json \
   --output Sources/Skyfig/Generated \
   --namespace TeamATokens
 

@@ -15,6 +15,9 @@ do {
 } catch let error as SkyfigValidationError {
     writeError(error.description)
     exit(EXIT_FAILURE)
+} catch let error as TokenMergeError {
+    writeError(error.description)
+    exit(EXIT_FAILURE)
 } catch let error as GeneratorError {
     writeError(error.description)
     exit(EXIT_FAILURE)
@@ -29,21 +32,28 @@ private func run(arguments: [String]) throws {
 
     switch command {
     case "validate":
-        let input = try required("input", in: parsed)
-        let document = try TokenIO.load(from: URL(fileURLWithPath: input))
-        print("Valid Skyfig schema \(document.schemaVersion): \(document.name)")
+        let inputs = try requiredValues("input", in: parsed)
+        let document = try TokenIO.load(from: inputs.map { URL(fileURLWithPath: $0) })
+        if inputs.count == 1 {
+            print("Valid Skyfig schema \(document.schemaVersion): \(document.name)")
+        } else {
+            print("Valid \(inputs.count) Skyfig token files using schema \(document.schemaVersion): \(document.name)")
+        }
     case "generate":
-        let input = try required("input", in: parsed)
+        let inputs = try requiredValues("input", in: parsed)
         let output = try required("output", in: parsed)
-        let namespace = parsed.values["namespace"] ?? "SkyfigTokens"
-        let document = try TokenIO.load(from: URL(fileURLWithPath: input))
+        let namespace = parsed.values["namespace"]?.last ?? "SkyfigTokens"
+        let document = try TokenIO.load(from: inputs.map { URL(fileURLWithPath: $0) })
         let outputURL = generatedFileURL(for: output)
         try SwiftEmitter.write(document, to: outputURL, namespace: namespace, check: parsed.flags.contains("check"))
-        print(parsed.flags.contains("check") ? "Generated source is current: \(outputURL.path)" : "Generated \(outputURL.path)")
+        let message = parsed.flags.contains("check")
+            ? "Generated source is current: \(outputURL.path)"
+            : "Generated \(outputURL.path)"
+        print(message)
     case "normalize-figma", "normalize":
-        let input = try required("input", in: parsed)
+        let input = try requiredSingleValue("input", in: parsed)
         let output = try required("output", in: parsed)
-        let name = parsed.values["name"] ?? "Skyfig Figma Tokens"
+        let name = parsed.values["name"]?.last ?? "Skyfig Figma Tokens"
         let document = try FigmaImporter.importVariables(
             from: Data(contentsOf: URL(fileURLWithPath: input)),
             name: name
@@ -58,7 +68,7 @@ private func run(arguments: [String]) throws {
 }
 
 private struct ParsedOptions {
-    var values: [String: String] = [:]
+    var values: [String: [String]] = [:]
     var flags: Set<String> = []
 }
 
@@ -77,15 +87,28 @@ private func parseOptions(_ arguments: [String]) throws -> ParsedOptions {
         guard index + 1 < arguments.count, !arguments[index + 1].hasPrefix("--") else {
             throw CLIError.missingValue(argument)
         }
-        result.values[name] = arguments[index + 1]
+        result.values[name, default: []].append(arguments[index + 1])
         index += 2
     }
     return result
 }
 
 private func required(_ name: String, in options: ParsedOptions) throws -> String {
-    guard let value = options.values[name] else { throw CLIError.missingOption("--\(name)") }
+    guard let value = options.values[name]?.last else { throw CLIError.missingOption("--\(name)") }
     return value
+}
+
+private func requiredValues(_ name: String, in options: ParsedOptions) throws -> [String] {
+    guard let values = options.values[name], !values.isEmpty else {
+        throw CLIError.missingOption("--\(name)")
+    }
+    return values
+}
+
+private func requiredSingleValue(_ name: String, in options: ParsedOptions) throws -> String {
+    let values = try requiredValues(name, in: options)
+    guard values.count == 1 else { throw CLIError.repeatedOption("--\(name)") }
+    return values[0]
 }
 
 private func generatedFileURL(for output: String) -> URL {
@@ -100,6 +123,7 @@ private enum CLIError: Error, CustomStringConvertible {
     case unexpectedArgument(String)
     case missingValue(String)
     case missingOption(String)
+    case repeatedOption(String)
 
     var description: String {
         switch self {
@@ -108,6 +132,7 @@ private enum CLIError: Error, CustomStringConvertible {
         case .unexpectedArgument(let argument): "Unexpected argument: \(argument)"
         case .missingValue(let option): "Missing value for \(option)"
         case .missingOption(let option): "Missing required option \(option)"
+        case .repeatedOption(let option): "Option may only be provided once: \(option)"
         }
     }
 }
@@ -117,9 +142,10 @@ private func usageText() -> String {
 Skyfig — Figma design tokens to typed Swift
 
 USAGE
-  skyfig validate --input <tokens.json>
+  skyfig validate --input <tokens.json> [--input <more-tokens.json> ...]
   skyfig normalize-figma --input <figma-response.json> --output <tokens.json> [--name <name>]
-  skyfig generate --input <tokens.json> --output <file-or-directory> [--namespace <SwiftTypeName>] [--check]
+  skyfig generate --input <tokens.json> [--input <more-tokens.json> ...] --output <file-or-directory>
+      [--namespace <SwiftTypeName>] [--check]
 """
 }
 

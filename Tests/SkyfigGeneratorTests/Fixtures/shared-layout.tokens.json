@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../Schema/skyfig.tokens.schema.json",
+  "schemaVersion": "1.0.0",
+  "name": "Shared layout",
+  "defaultTheme": "light",
+  "themes": ["light", "dark"],
+  "tokens": {
+    "spacing": {
+      "shared.gutter": {
+        "value": 24
+      }
+    },
+    "cornerRadii": {
+      "shared.card": {
+        "value": 16
+      }
+    }
+  }
+}

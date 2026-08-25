@@ -19,4 +19,4 @@ This design prevents a design-system change from silently changing a shipped app
 
 ## Inspect the source of a token
 
-The publisher keeps reviewed canonical input in `Tokens/skyfig.tokens.json` and generated API source in `Sources/Skyfig/Generated/Tokens.generated.swift`. Consumers should reference only the public generated API—`SkyfigTokens` by default or the team-specific namespace in a fork; do not copy generated values into an app.
+The publisher keeps reviewed canonical input in one or more JSON files under `Tokens` and generated API source in `Sources/Skyfig/Generated/Tokens.generated.swift`. Repeat `--input` when a foundation, component library, or product owns a separate canonical file; Skyfig rejects duplicate paths instead of applying file-order precedence. Consumers should reference only the public generated API—`SkyfigTokens` by default or the team-specific namespace in a fork; do not copy generated values into an app.

@@ -37,7 +37,7 @@ The canonical document carries both the established semantic families and a stru
 ## Change lifecycle
 
 1. A maintainer syncs Figma or updates the committed fixture-backed canonical JSON.
-2. Skyfig validates the document and generates the corresponding Swift API.
+2. Skyfig validates one canonical document, or strictly composes several documents with non-overlapping token paths, and generates the corresponding Swift API.
 3. A pull request reviews canonical JSON and generated Swift together; CI verifies freshness, documentation, and consumer UI coverage. Rendered consumer changes receive separate dedicated-Mac visual-baseline review.
 4. A reviewed release publishes one tested package version.
 5. Each application updates that version in its own pull request and verifies the visual change before adoption.

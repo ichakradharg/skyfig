@@ -36,6 +36,9 @@ expect_failure() {
 valid_tokens="$root/Tokens/skyfig.tokens.json"
 generated="$temporary_directory/Tokens.generated.swift"
 normalized="$temporary_directory/normalized.tokens.json"
+shared_generated="$temporary_directory/SharedTokens.generated.swift"
+shared_colors="$root/Tests/SkyfigGeneratorTests/Fixtures/shared-colors.tokens.json"
+shared_layout="$root/Tests/SkyfigGeneratorTests/Fixtures/shared-layout.tokens.json"
 
 expect_failure "missing command" "USAGE" "$cli"
 expect_failure "unknown command" "Unknown command: unknown" "$cli" unknown
@@ -45,6 +48,26 @@ expect_failure "missing required option" "Missing required option --input" "$cli
 "$cli" generate --input "$valid_tokens" --output "$generated"
 test -f "$generated"
 "$cli" generate --input "$valid_tokens" --output "$generated" --check
+
+"$cli" validate --input "$shared_colors" --input "$shared_layout" \
+  | grep -Fq "Valid 2 Skyfig token files using schema 1.0.0"
+"$cli" generate \
+  --input "$shared_colors" \
+  --input "$shared_layout" \
+  --output "$shared_generated"
+grep -Fq "public static let accent = SkyfigColorToken" "$shared_generated"
+grep -Fq "public static let gutter: Double = 24" "$shared_generated"
+module_cache="$temporary_directory/clang-module-cache"
+mkdir -p "$module_cache"
+CLANG_MODULE_CACHE_PATH="$module_cache" swiftc -typecheck \
+  "$root/Sources/Skyfig/Runtime/TokenTypes.swift" \
+  "$root/Sources/Skyfig/Runtime/SwiftUI+Skyfig.swift" \
+  "$shared_generated"
+expect_failure "duplicate shared token path" "$.tokens.colors.shared.accent: declared in both" \
+  "$cli" generate \
+    --input "$shared_colors" \
+    --input "$shared_colors" \
+    --output "$shared_generated"
 
 printf '\n// stale fixture\n' >> "$generated"
 expect_failure "stale generated source" "Generated output is stale" \
