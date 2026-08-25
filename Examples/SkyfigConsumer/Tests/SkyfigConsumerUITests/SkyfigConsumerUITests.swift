@@ -73,6 +73,11 @@ final class SkyfigConsumerUITests: XCTestCase {
     }
 
     func testCaptureSnapshotTabs() {
+        app.terminate()
+        app.launchArguments.append("-SkyfigSnapshotMode")
+        app.launch()
+        XCTAssertTrue(app.staticTexts["Design system preview"].waitForExistence(timeout: 5))
+
         let expectations = [
             (tab: "Overview", content: "Design system preview"),
             (tab: "Components", content: "Button states"),

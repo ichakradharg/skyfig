@@ -75,6 +75,95 @@ final class TokenPipelineTests: XCTestCase {
         }
     }
 
+    func testDynamicPrimitiveFamiliesShareOneCollisionNamespace() throws {
+        let document = TokenDocument(
+            name: "Dynamic collision",
+            tokens: TokenCollection(dynamic: DynamicTokenCollection(
+                colors: [
+                    "brand": ColorToken(values: colors("#FFFFFFFF", "#000000FF")),
+                ],
+                numbers: [
+                    "brand.primary": ThemedValueToken(values: ["light": 1, "dark": 2]),
+                ]
+            ))
+        )
+
+        XCTAssertThrowsError(try document.validate()) { error in
+            XCTAssertTrue(String(describing: error).contains("brand cannot be both a token and a namespace"))
+        }
+    }
+
+    func testDynamicRootsCannotShadowGeneratedTokenFamilies() throws {
+        let document = TokenDocument(
+            name: "Reserved root",
+            tokens: TokenCollection(dynamic: DynamicTokenCollection(strings: [
+                "colors.brandName": ThemedValueToken(values: ["light": "Day", "dark": "Night"]),
+            ]))
+        )
+
+        XCTAssertThrowsError(try document.validate()) { error in
+            XCTAssertTrue(String(describing: error).contains("root colors conflicts with a generated token family"))
+        }
+    }
+
+    func testDescriptionsRoundTripForExtendedTokenFamilies() throws {
+        let data = Data("""
+        {
+          "$schema": "../Schema/skyfig.tokens.schema.json",
+          "schemaVersion": "1.0.0",
+          "name": "Descriptions",
+          "defaultTheme": "light",
+          "themes": ["light", "dark"],
+          "tokens": {
+            "colors": {
+              "action.primary": {"values": {"light": "#0369A1FF", "dark": "#38BDF8FF"}}
+            },
+            "opacities": {"disabled": {"description": "Disabled state", "value": 0.45}},
+            "materials": {"panel": {"description": "Panel material", "value": "regular"}},
+            "symbols": {
+              "action": {
+                "description": "Primary action symbol",
+                "name": "arrow.right",
+                "weight": 600,
+                "scale": "medium",
+                "renderingMode": "hierarchical",
+                "tint": "action.primary"
+              }
+            },
+            "motion": {
+              "standard": {
+                "description": "Standard transition",
+                "duration": 0.24,
+                "curve": "easeInOut",
+                "reduceMotionDuration": 0
+              }
+            }
+          }
+        }
+        """.utf8)
+
+        let decoded = try TokenIO.decode(data)
+        let roundTripped = try TokenIO.decode(TokenIO.canonicalData(for: decoded))
+
+        XCTAssertEqual(roundTripped.tokens.opacities["disabled"]?.description, "Disabled state")
+        XCTAssertEqual(roundTripped.tokens.materials["panel"]?.description, "Panel material")
+        XCTAssertEqual(roundTripped.tokens.symbols["action"]?.description, "Primary action symbol")
+        XCTAssertEqual(roundTripped.tokens.motion["standard"]?.description, "Standard transition")
+    }
+
+    func testSymbolTintMustReferenceAColorToken() throws {
+        let document = TokenDocument(
+            name: "Symbol tint",
+            tokens: TokenCollection(symbols: [
+                "action": SymbolToken(name: "arrow.right", tint: "missing.color"),
+            ])
+        )
+
+        XCTAssertThrowsError(try SwiftEmitter.generate(document)) { error in
+            XCTAssertTrue(String(describing: error).contains("must reference an existing color token"))
+        }
+    }
+
     func testCheckModeFailsWithoutChangingStaleOutput() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let output = directory.appendingPathComponent("Tokens.generated.swift")

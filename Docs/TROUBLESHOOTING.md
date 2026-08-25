@@ -18,16 +18,17 @@ Weekly synchronization is opt-in. After a manual sync succeeds, set the reposito
 From the repository root, run the commands in this order:
 
 ```bash
-swift run skyfig validate --input Tokens/skyfig.tokens.json
+source Scripts/canonical-token-inputs.sh
+swift run skyfig validate "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}"
 swift run skyfig generate \
-  --input Tokens/skyfig.tokens.json \
+  "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
   --output Sources/Skyfig/Generated \
   --check
 ```
 
 | Symptom | Likely cause | Resolution |
 | --- | --- | --- |
-| Validation reports a JSON path | A canonical token is missing, malformed, or uses an unsupported value. | Correct the cited value in `Tokens/skyfig.tokens.json`, then validate again. |
+| Validation reports a JSON path | A canonical token is missing, malformed, or uses an unsupported value. | Correct the cited file under `Tokens/`, then validate the composed set again. |
 | Generation check reports stale output | The canonical JSON changed without regenerating the committed Swift source. | Run the same `generate` command without `--check`, review `Tokens.generated.swift`, and commit both files together. |
 | Generated names collide | Two paths normalize to the same Swift identifier. | Rename the conflicting token path in the canonical JSON; do not hand-edit generated Swift. |
 | A token family is unexpectedly empty | The source document is missing that family or its composite fields. | Check the canonical JSON or the Figma naming convention, then validate before generating. |

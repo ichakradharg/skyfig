@@ -52,7 +52,7 @@ jobs:
             ~/.swiftpm
           key: ${{ runner.os }}-swiftpm-${{ hashFiles('Package.swift') }}
       - name: Lint Swift source
-        run: swift package plugin --allow-writing-to-package-directory swiftlint lint
+        run: swift package plugin --allow-writing-to-package-directory swiftlint lint --strict
 
   linux-toolchain:
     runs-on: ubuntu-24.04
@@ -76,9 +76,10 @@ jobs:
           swift test --parallel
       - name: Verify generator toolchain
         run: |
-          swift run skyfig validate --input Tokens/skyfig.tokens.json
+          source Scripts/canonical-token-inputs.sh
+          swift run skyfig validate "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}"
           swift run skyfig generate \
-            --input Tokens/skyfig.tokens.json \
+            "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
             --output Sources/Skyfig/Generated \
             --namespace "$TOKEN_NAMESPACE" \
             --check

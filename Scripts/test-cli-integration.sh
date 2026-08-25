@@ -33,9 +33,11 @@ expect_failure() {
   fi
 }
 
-valid_tokens="$root/Tokens/skyfig.tokens.json"
+source "$root/Scripts/canonical-token-inputs.sh"
+valid_tokens="${SKYFIG_CANONICAL_TOKEN_FILES[0]}"
 generated="$temporary_directory/Tokens.generated.swift"
 normalized="$temporary_directory/normalized.tokens.json"
+split_directory="$temporary_directory/split-tokens"
 shared_generated="$temporary_directory/SharedTokens.generated.swift"
 shared_colors="$root/Tests/SkyfigGeneratorTests/Fixtures/shared-colors.tokens.json"
 shared_layout="$root/Tests/SkyfigGeneratorTests/Fixtures/shared-layout.tokens.json"
@@ -43,11 +45,23 @@ shared_layout="$root/Tests/SkyfigGeneratorTests/Fixtures/shared-layout.tokens.js
 expect_failure "missing command" "USAGE" "$cli"
 expect_failure "unknown command" "Unknown command: unknown" "$cli" unknown
 expect_failure "missing required option" "Missing required option --input" "$cli" validate
+expect_failure "unknown validate option" "Unknown option: --typo" \
+  "$cli" validate --input "$valid_tokens" --typo value
+expect_failure "invalid validate flag" "Unknown option: --check" \
+  "$cli" validate --input "$valid_tokens" --check
+expect_failure "repeated output" "Option may only be provided once: --output" \
+  "$cli" generate --input "$valid_tokens" --output "$generated" --output "$shared_generated"
 
 "$cli" validate --input "$valid_tokens" | grep -Fq "Valid Skyfig schema 1.0.0"
 "$cli" generate --input "$valid_tokens" --output "$generated"
 test -f "$generated"
 "$cli" generate --input "$valid_tokens" --output "$generated" --check
+
+"$cli" validate "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
+  | grep -Fq "Valid 3 Skyfig token files using schema 1.0.0"
+"$cli" generate "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" --output "$generated"
+grep -Fq "public enum Colors" "$generated"
+grep -Fq "public enum Symbols" "$generated"
 
 "$cli" validate --input "$shared_colors" --input "$shared_layout" \
   | grep -Fq "Valid 2 Skyfig token files using schema 1.0.0"
@@ -78,5 +92,11 @@ expect_failure "stale generated source" "Generated output is stale" \
   --output "$normalized" \
   --name "CLI Integration Fixture"
 "$cli" validate --input "$normalized" | grep -Fq "CLI Integration Fixture"
+"$root/Scripts/split-canonical-tokens.sh" "$normalized" "$split_directory"
+"$cli" validate \
+  --input "$split_directory/foundations.tokens.json" \
+  --input "$split_directory/semantic.tokens.json" \
+  --input "$split_directory/components.tokens.json" \
+  | grep -Fq "Valid 3 Skyfig token files using schema 1.0.0"
 
 echo "CLI integration tests passed."

@@ -9,9 +9,10 @@ Use Swift 6.0 or newer on macOS. Clone the repository, create a focused branch, 
 ```bash
 swift build
 swift test --parallel
-swift run skyfig validate --input Tokens/skyfig.tokens.json
+source Scripts/canonical-token-inputs.sh
+swift run skyfig validate "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}"
 swift run skyfig generate \
-  --input Tokens/skyfig.tokens.json \
+  "${SKYFIG_CANONICAL_TOKEN_ARGS[@]}" \
   --output Sources/Skyfig/Generated \
   --check
 ```

@@ -6,6 +6,7 @@ target="${2:-all}"
 simulator_os="${SKYFIG_SIMULATOR_OS:-latest}"
 iphone_simulator="${SKYFIG_IPHONE_SIMULATOR:-iPhone 17 Pro}"
 ipad_simulator="${SKYFIG_IPAD_SIMULATOR:-iPad Pro 13-inch (M5)}"
+snapshot_time="${SKYFIG_SNAPSHOT_TIME:-9:41}"
 snapshot_directory="Examples/SkyfigConsumer/Snapshots"
 derived_data_path="${SKYFIG_SNAPSHOT_DERIVED_DATA:-/private/tmp/skyfig-consumer-snapshots}"
 capture_test="SkyfigConsumerUITests/SkyfigConsumerUITests/testCaptureSnapshotTabs"
@@ -34,7 +35,7 @@ prepare_simulator() {
   xcrun simctl bootstatus "$simulator" -b
   xcrun simctl ui "$simulator" appearance light
   xcrun simctl status_bar "$simulator" override \
-    --time "9:41" \
+    --time "$snapshot_time" \
     --dataNetwork wifi \
     --wifiBars 3 \
     --cellularBars 4 \
@@ -91,7 +92,7 @@ record_or_verify_snapshot() {
   fi
 }
 
-capture_device() {
+capture_device() (
   local simulator="$1"
   local device="$2"
   local result_root
@@ -99,6 +100,8 @@ capture_device() {
   local result_bundle="$result_root/results.xcresult"
   local attachments_directory="$result_root/attachments"
   local manifest="$attachments_directory/manifest.json"
+
+  trap 'rm -rf "$result_root"' EXIT
 
   prepare_simulator "$simulator"
 
@@ -135,7 +138,8 @@ capture_device() {
       "$snapshot_directory/${snapshot_name}.png" \
       "$snapshot_name"
   done
-}
+
+)
 
 mkdir -p "$snapshot_directory"
 

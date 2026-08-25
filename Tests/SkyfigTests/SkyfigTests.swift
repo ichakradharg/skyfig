@@ -1,5 +1,5 @@
-import XCTest
 @testable import Skyfig
+import XCTest
 
 final class SkyfigTests: XCTestCase {
     func testCommittedGeneratedTokensExposeEveryFamily() {

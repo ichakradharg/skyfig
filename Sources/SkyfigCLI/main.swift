@@ -32,6 +32,7 @@ private func run(arguments: [String]) throws {
 
     switch command {
     case "validate":
+        try validateOptions(parsed, values: ["input"], repeatable: ["input"])
         let inputs = try requiredValues("input", in: parsed)
         let document = try TokenIO.load(from: inputs.map { URL(fileURLWithPath: $0) })
         if inputs.count == 1 {
@@ -40,8 +41,14 @@ private func run(arguments: [String]) throws {
             print("Valid \(inputs.count) Skyfig token files using schema \(document.schemaVersion): \(document.name)")
         }
     case "generate":
+        try validateOptions(
+            parsed,
+            values: ["input", "output", "namespace"],
+            flags: ["check"],
+            repeatable: ["input"]
+        )
         let inputs = try requiredValues("input", in: parsed)
-        let output = try required("output", in: parsed)
+        let output = try requiredSingleValue("output", in: parsed)
         let namespace = parsed.values["namespace"]?.last ?? "SkyfigTokens"
         let document = try TokenIO.load(from: inputs.map { URL(fileURLWithPath: $0) })
         let outputURL = generatedFileURL(for: output)
@@ -51,8 +58,9 @@ private func run(arguments: [String]) throws {
             : "Generated \(outputURL.path)"
         print(message)
     case "normalize-figma", "normalize":
+        try validateOptions(parsed, values: ["input", "output", "name"])
         let input = try requiredSingleValue("input", in: parsed)
-        let output = try required("output", in: parsed)
+        let output = try requiredSingleValue("output", in: parsed)
         let name = parsed.values["name"]?.last ?? "Skyfig Figma Tokens"
         let document = try FigmaImporter.importVariables(
             from: Data(contentsOf: URL(fileURLWithPath: input)),
@@ -61,6 +69,7 @@ private func run(arguments: [String]) throws {
         try TokenIO.writeCanonical(document, to: URL(fileURLWithPath: output))
         print("Normalized \(output)")
     case "help", "--help", "-h":
+        try validateOptions(parsed)
         print(usageText)
     default:
         throw CLIError.unknownCommand(command)
@@ -93,9 +102,23 @@ private func parseOptions(_ arguments: [String]) throws -> ParsedOptions {
     return result
 }
 
-private func required(_ name: String, in options: ParsedOptions) throws -> String {
-    guard let value = options.values[name]?.last else { throw CLIError.missingOption("--\(name)") }
-    return value
+private func validateOptions(
+    _ options: ParsedOptions,
+    values allowedValues: Set<String> = [],
+    flags allowedFlags: Set<String> = [],
+    repeatable repeatableValues: Set<String> = []
+) throws {
+    for name in options.values.keys.sorted() where !allowedValues.contains(name) {
+        throw CLIError.unknownOption("--\(name)")
+    }
+    for name in options.flags.sorted() where !allowedFlags.contains(name) {
+        throw CLIError.unknownOption("--\(name)")
+    }
+    for name in options.values.keys.sorted() where !repeatableValues.contains(name) {
+        if options.values[name, default: []].count > 1 {
+            throw CLIError.repeatedOption("--\(name)")
+        }
+    }
 }
 
 private func requiredValues(_ name: String, in options: ParsedOptions) throws -> [String] {
@@ -120,6 +143,7 @@ private func generatedFileURL(for output: String) -> URL {
 private enum CLIError: Error, CustomStringConvertible {
     case usage
     case unknownCommand(String)
+    case unknownOption(String)
     case unexpectedArgument(String)
     case missingValue(String)
     case missingOption(String)
@@ -129,6 +153,7 @@ private enum CLIError: Error, CustomStringConvertible {
         switch self {
     case .usage: usageText()
     case .unknownCommand(let command): "Unknown command: \(command)\n\n\(usageText())"
+        case .unknownOption(let option): "Unknown option: \(option)"
         case .unexpectedArgument(let argument): "Unexpected argument: \(argument)"
         case .missingValue(let option): "Missing value for \(option)"
         case .missingOption(let option): "Missing required option \(option)"

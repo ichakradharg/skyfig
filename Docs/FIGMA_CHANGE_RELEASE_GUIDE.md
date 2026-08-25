@@ -18,7 +18,7 @@ Before starting, confirm the publisher repository has the correct `FIGMA_ACCESS_
 1. Confirm the UX team has finished its Figma Variables change. Check the expected token families, light and dark modes, and any renamed or removed tokens.
 2. In the publisher repository, open **Actions → Sync Figma tokens → Run workflow**.
 3. The workflow fetches Figma Variables, normalizes the canonical JSON, generates Swift, runs tests, and opens or updates a draft pull request. It does **not** release a package.
-4. Review the pull request as a single change set: `Tokens/skyfig.tokens.json` explains the design values and `Sources/Skyfig/Generated/Tokens.generated.swift` shows the public Swift API.
+4. Review the pull request as a single change set: the composed files under `Tokens/` explain the design values and `Sources/Skyfig/Generated/Tokens.generated.swift` shows the public Swift API.
 5. Confirm a fork’s generated namespace is correct. New app code should use the configured name, such as `TeamATokens`; `SkyfigTokens` remains only as compatibility support for bundled examples.
 
 If Figma access is not available, use the fixture path for generator and CI work, but do not describe it as a live design sync.

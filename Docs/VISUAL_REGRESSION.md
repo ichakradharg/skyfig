@@ -14,8 +14,11 @@ device has one image for every tab:
 - Accessibility: `iphone-accessibility-light.png` and `ipad-accessibility-light.png`
 
 The workflow fixes simulator appearance and status-bar state, then runs a
-capture-specific UI test. Each tab starts from a fresh app launch, is selected
-through the native tab control, and is exported from the XCTest result bundle.
+capture-specific UI test. The capture launch hides the iPad status bar because
+iPadOS renders the host's current date separately from the overridable time;
+this prevents unrelated daily baseline churn. Each tab starts from a fresh app
+launch, is selected through the native tab control, and is exported from the
+XCTest result bundle.
 The normal UI-test script skips this capture-only test. Coverage is deliberately
 limited to light appearance for the first baseline set. Dark-mode visual review
 is deferred; do not interpret a passing visual-regression run as dark-mode

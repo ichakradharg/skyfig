@@ -22,7 +22,7 @@ Apps should normally consume semantic tokens. Component tokens are appropriate o
 
 Keep interaction metrics separate from general spacing. The fixture exposes preferred and compact touch targets, bezel and unbezeled gaps, component heights/insets, readable content width, and iPad sidebar/panel widths. These are layout guidance for adaptive SwiftUI composition; do not encode safe-area insets, device dimensions, or breakpoint values as tokens.
 
-Use `materials` only for constrained SwiftUI system materials (`ultraThin`, `thin`, `regular`, and `thick`), not approximate RGBA replacements. `symbols` describe an SF Symbol name, weight, scale, rendering mode, semantic tint role, and optional availability. `motion` carries a standard duration/curve and a reduce-motion duration so views can opt out when `accessibilityReduceMotion` is true.
+Use `materials` only for constrained SwiftUI system materials (`ultraThin`, `thin`, `regular`, and `thick`), not approximate RGBA replacements. `symbols` describe an SF Symbol name, weight, scale, rendering mode, semantic tint role, and optional availability; the tint role must resolve to a color in the composed token set. `motion` carries a standard duration/curve and a reduce-motion duration; pass `accessibilityReduceMotion` to `animation(reduceMotion:)` so the adapter selects the accessible behavior.
 
 Semantic colors include foreground/action contracts that Skyfig tests at 4.5:1, plus non-text focus support tested at 3:1. Component state tokens describe shared branded controls such as buttons, search, segmented controls, list rows, tabs, toolbars, and sidebars. They are additive public API: document intended use and preserve names during consumer migrations.
 

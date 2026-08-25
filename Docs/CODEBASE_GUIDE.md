@@ -21,8 +21,8 @@ Skyfig is a central publisher for typed SwiftUI design tokens. This guide explai
 ## Token flow
 
 1. Figma Variables are fetched only by the Skyfig repository workflow.
-2. `FigmaImporter` converts the API response into `Tokens/skyfig.tokens.json`.
-3. `TokenIO` validates the canonical document.
+2. `FigmaImporter` converts the API response into a normalized temporary document, which the split script routes into the canonical files under `Tokens/`.
+3. `TokenIO` validates and composes the canonical documents.
 4. `SwiftEmitter` produces `Sources/Skyfig/Generated/Tokens.generated.swift`.
 5. CI verifies that the committed generated source is current.
 6. A reviewed release publishes a versioned Swift package for iOS consumers.

@@ -40,7 +40,7 @@ Use `SkyfigRGBAColor.contrastRatio(against:)` to check an opaque composed pair. 
 
 Use `Metrics.Control.minHitTarget` (44 pt) for primary touch targets and reserve the 28 pt compact target for tightly constrained, supplementary controls. Treat the values as a component contract, not a substitute for testing real content at larger Dynamic Type sizes.
 
-The fixture's `Motion` tokens provide a standard animation and a `reduceMotionDuration`. A view should disable or simplify nonessential animation when SwiftUI's `accessibilityReduceMotion` is enabled. `Materials` map only to system material choices; verify Reduce Transparency separately because materials must never be the sole carrier of meaning. Use semantic foreground/action/status colors and `Focus.ring`, and keep text or an SF Symbol alongside color-based status.
+The fixture's `Motion` tokens provide a standard animation and a `reduceMotionDuration`. Pass SwiftUI's `accessibilityReduceMotion` value to `token.animation(reduceMotion:)`; the adapter returns `nil` for a zero reduced duration and otherwise uses the reduced duration with the declared curve. `Materials` map only to system material choices; verify Reduce Transparency separately because materials must never be the sole carrier of meaning. Use semantic foreground/action/status colors and `Focus.ring`, and keep text or an SF Symbol alongside color-based status.
 - Use semantic control labels and traits so VoiceOver presents the intended action.
 - Test at least one key flow with VoiceOver, larger Dynamic Type, light and dark appearance, and increased contrast.
 

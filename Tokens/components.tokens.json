@@ -1,0 +1,56 @@
+{
+  "$schema": "../Schema/skyfig.tokens.schema.json",
+  "defaultTheme": "light",
+  "name": "Skyfig Components",
+  "schemaVersion": "1.0.0",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "tokens": {
+    "symbols": {
+      "accessibility.motion": {
+        "name": "figure.wave",
+        "renderingMode": "hierarchical",
+        "scale": "large",
+        "tint": "focus.ring",
+        "weight": 500
+      },
+      "accessibility.text": {
+        "name": "textformat.size",
+        "renderingMode": "hierarchical",
+        "scale": "large",
+        "tint": "focus.ring",
+        "weight": 500
+      },
+      "component.search": {
+        "name": "magnifyingglass",
+        "renderingMode": "hierarchical",
+        "scale": "medium",
+        "tint": "text.secondary",
+        "weight": 500
+      },
+      "navigation.overview": {
+        "name": "square.grid.2x2.fill",
+        "renderingMode": "hierarchical",
+        "scale": "medium",
+        "tint": "action.primary",
+        "weight": 600
+      },
+      "navigation.planning": {
+        "name": "calendar",
+        "renderingMode": "hierarchical",
+        "scale": "medium",
+        "tint": "action.primary",
+        "weight": 600
+      },
+      "status.success": {
+        "name": "checkmark.circle.fill",
+        "renderingMode": "hierarchical",
+        "scale": "medium",
+        "tint": "status.success",
+        "weight": 600
+      }
+    }
+  }
+}
